@@ -281,7 +281,7 @@ public:
   Si5351(uint8_t i2c_addr = SI5351_BUS_BASE_ADDR);
 	bool init(uint8_t, uint32_t, int32_t);
 	void reset(void);
-	uint8_t set_freq(uint64_t, enum si5351_clock);
+	uint8_t set_freq(uint64_t, enum si5351_clock, uint8_t reset_pll = 0);
 	uint8_t set_freq_manual(uint64_t, uint64_t, enum si5351_clock);
 	void set_pll(uint64_t, enum si5351_pll);
 	void set_ms(enum si5351_clock, struct Si5351RegSet, uint8_t, uint8_t, uint8_t);
@@ -324,11 +324,13 @@ private:
 	void update_int_status(struct Si5351IntStatus *);
 	void ms_div(enum si5351_clock, uint8_t, uint8_t);
 	uint8_t select_r_div(uint64_t *);
-	uint8_t select_r_div_ms67(uint64_t *);
-	int32_t ref_correction[2];
-  uint8_t clkin_div;
-  uint8_t i2c_bus_addr;
-  bool clk_first_set[8];
+	
+	uint8_t		 		select_r_div_ms67(uint64_t *);
+	int32_t 			ref_correction[2];
+	uint8_t 			clkin_div;
+	uint8_t 			i2c_bus_addr;
+	bool 				clk_first_set[8];
+	struct Si5351RegSet ms_reg_save[8];
 };
 
 #endif /* SI5351_H_ */

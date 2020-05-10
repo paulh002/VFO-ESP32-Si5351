@@ -145,8 +145,8 @@ void Si5351::reset(void)
 
 	// Make PLL to CLK assignments for automatic tuning
 	pll_assignment[0] = SI5351_PLLA;
-	pll_assignment[1] = SI5351_PLLA;
-	pll_assignment[2] = SI5351_PLLA;
+	pll_assignment[1] = SI5351_PLLB;
+	pll_assignment[2] = SI5351_PLLB;
 	pll_assignment[3] = SI5351_PLLA;
 	pll_assignment[4] = SI5351_PLLA;
 	pll_assignment[5] = SI5351_PLLA;
@@ -154,8 +154,8 @@ void Si5351::reset(void)
 	pll_assignment[7] = SI5351_PLLB;
 
 	set_ms_source(SI5351_CLK0, SI5351_PLLA);
-	set_ms_source(SI5351_CLK1, SI5351_PLLA);
-	set_ms_source(SI5351_CLK2, SI5351_PLLA);
+	set_ms_source(SI5351_CLK1, SI5351_PLLB);
+	set_ms_source(SI5351_CLK2, SI5351_PLLB);
 	set_ms_source(SI5351_CLK3, SI5351_PLLA);
 	set_ms_source(SI5351_CLK4, SI5351_PLLA);
 	set_ms_source(SI5351_CLK5, SI5351_PLLA);
@@ -178,6 +178,9 @@ void Si5351::reset(void)
 		clk_freq[i] = 0;
 		output_enable((enum si5351_clock)i, 0);
 		clk_first_set[i] = false;
+		ms_reg_save[i].p1 = 0;
+		ms_reg_save[i].p2 = 0;
+		ms_reg_save[i].p3 = 0;
 	}
 }
 
@@ -191,13 +194,14 @@ void Si5351::reset(void)
  * clk - Clock output
  *   (use the si5351_clock enum)
  */
-uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
+uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk,uint8_t reset_pll)
 {
 	struct Si5351RegSet ms_reg;
 	uint64_t pll_freq;
 	uint8_t int_mode = 0;
 	uint8_t div_by_4 = 0;
 	uint8_t r_div = 0;
+	uint8_t	ms_change = 0;
 
 	// Check which Multisynth is being set
 	if((uint8_t)clk <= (uint8_t)SI5351_CLK5)
@@ -240,6 +244,7 @@ uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
 			{
 				output_enable(clk, 1);
 				clk_first_set[(uint8_t)clk] = true;
+				reset_pll = 1;
 			}
 
 			// Set the freq in memory
@@ -251,7 +256,7 @@ uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
 			// Set PLL
 			set_pll(pll_freq, pll_assignment[clk]);
 
-			// Recalculate params for other synths on same PLL
+			// Recalculate params for all synths on same PLL
 			for(i = 0; i < 6; i++)
 			{
 				if(clk_freq[i] != 0)
@@ -266,6 +271,13 @@ uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
 						r_div = select_r_div(&temp_freq);
 
 						multisynth_calc(temp_freq, pll_freq, &temp_reg);
+						if (ms_reg_save[i].p1 != temp_reg.p1)
+							ms_change = 1;
+						if (ms_reg_save[i].p2 != temp_reg.p2)
+							ms_change = 1;
+						if (ms_reg_save[i].p3 != temp_reg.p3)
+							ms_change = 1;
+						ms_reg_save[i] = temp_reg;
 
 						// If freq > 150 MHz, we need to use DIVBY4 and integer mode
 						if(temp_freq >= SI5351_MULTISYNTH_DIVBY4_FREQ * SI5351_FREQ_MULT)
@@ -280,13 +292,15 @@ uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
 						}
 
 						// Set multisynth registers
-						set_ms((enum si5351_clock)i, temp_reg, int_mode, r_div, div_by_4);
+						if (ms_change == 1)
+							set_ms((enum si5351_clock)i, temp_reg, int_mode, r_div, div_by_4);
 					}
 				}
 			}
 
 			// Reset the PLL
-			pll_reset(pll_assignment[clk]);
+			if (reset_pll)
+				pll_reset(pll_assignment[clk]);
 		}
 		else
 		{
@@ -314,9 +328,6 @@ uint8_t Si5351::set_freq(uint64_t freq, enum si5351_clock clk)
 
 			// Set multisynth registers
 			set_ms(clk, ms_reg, int_mode, r_div, div_by_4);
-
-			// Reset the PLL
-			//pll_reset(pll_assignment[clk]);
 		}
 
 		return 0;
@@ -1509,6 +1520,23 @@ uint64_t Si5351::multisynth_calc(uint64_t freq, uint64_t pll_freq, struct Si5351
     p2 = 128 * b - c * ((128 * b) / c);
     p3 = c;
 	}
+/*
+	Serial.print("Devider :");
+	Serial.println(a);
+
+	Serial.print("b :");
+	Serial.println(b);
+	
+	Serial.print("c :");
+	Serial.println(c);
+
+	Serial.print("p1 :");
+	Serial.println(p1);
+	Serial.print("p2 :");
+	Serial.println(p2);
+	Serial.print("p3 :");
+	Serial.println(p3);
+*/
 
 	reg->p1 = p1;
 	reg->p2 = p2;
