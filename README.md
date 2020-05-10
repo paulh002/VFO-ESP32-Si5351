@@ -16,3 +16,6 @@ Also if used above 100 Mhz a lot of click noise was heard, this is fixed by movi
 
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/master/VFO_PCB1.jpg)
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/master/VFO_PCB2.jpg)
+
+The crosstalk measured is about -52db Clock 0 12Mhz, Clock 1 8.998 Mhz
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/master/DS0013.jpg)
