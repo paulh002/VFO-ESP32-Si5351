@@ -5,7 +5,7 @@ If you are using diode double balanced mixers than a square wave is no problem. 
 
 
 # VFO-ESP32-Si5351 v 1.0
-VFO ESP32 Si5351
+VFO ESP32 Si5351 (old master branch)
 
 VFO using ESP32 and ILI9341 display, based on development of T.Uebo / JF3HZB.
 
