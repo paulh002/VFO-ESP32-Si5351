@@ -32,11 +32,11 @@ CLK2 : Lo Signal
 #include "Fonts/FreeSans9pt7b.h"
 #include "Fonts/FreeMonoBold24pt7b.h"
 
-#include <ESP32Encoder.h>
+#define   OLDPCB
+#undef    NEWPCB
 
 #include "driver/pcnt.h"
 #include "si5351.h"
-#include <EEPROM.h>      // Contains Si5351 crystal calibration frequency
 
 #define Xw 320
 #define Yw 240
@@ -48,20 +48,20 @@ CLK2 : Lo Signal
    S-Meter Connection and TXRX switch
 --------------------------------------------------------*/
 
-//#define RIT_SWITCH  32  
-#define TXRX_SWITCH   39
-#define S_METER       27 
-#define T_METER       26
+#define RIT_SWITCH  32
+#define TXRX_SWITCH 33
+#define S_METER     36 
+#define T_METER     39
 
 #define SMETER_X     40
 #define SMETER_Y     200
 #define TMETER_X     40
 #define TMETER_Y     165
 
-uint16_t smeterval=0;
-uint16_t tmeterval=0;
-uint16_t smeterval_old=0;
-uint16_t tmeterval_old=0;
+int smeterval=0;
+int tmeterval=0;
+int smeterval_old=0;
+int tmeterval_old=0;
 
 #define SMETER_TEXT_COLOR2 tft.color565(255,0,0)
 #define SMETER_TEXT_COLOR1 tft.color565(0,255,255)
@@ -75,7 +75,7 @@ uint16_t tmeterval_old=0;
 
 #define SER   13  // (pin 14)
 #define SRCLK 12  // (pin 11)
-#define RCLK  25  // (pin 12)
+#define RCLK 25  // (pin 12)
 
 /*-------------------------------------------------------
    Adafruit_ILI9341 hardware connection
@@ -93,30 +93,29 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(CS, DC);
 /*-------------------------------------------------------
    Rotary hardware connection (used for bandswitching, and mode switching)
 --------------------------------------------------------*/
+#ifdef NEWPCB
+#define ROTARY_A  27      //  pin
+#define ROTARY_B  26      //  pin
+#define ROTARY_PRESS  14  //  pin
+#endif
 
-#define ROTARY_A      19      //      27  //  pin
-#define ROTARY_B      17      //      26  //  pin
-#define ROTARY_PRESS  16      //      14  //  pin
+#ifdef OLDPCB
+#define ROTARY_A  27      //  pin
+#define ROTARY_B  26      //  pin
+#define ROTARY_PRESS  14  //  pin
+#endif
+
+
 
 volatile int rotState = 0;
 volatile int rotAval = 1;
 volatile int rotBval = 1;
-
-ESP32Encoder   Enc_band;
 
 /*-------------------------------------------------------
    Optical Rotary encoder settings (used for frequency)
 --------------------------------------------------------*/
 #define PULSE_INPUT_PIN 34  // Rotaty Encoder A
 #define PULSE_CTRL_PIN  35  // Rotaty Encoder B
-
-ESP32Encoder   Enc_vfo;
-
-/*-------------------------------------------------------
-   Si5351
---------------------------------------------------------*/
-
-Si5351 si5351;
 
 /*-------------------------------------------------------
    Frequency settings
@@ -129,7 +128,7 @@ const unsigned long freqswitch_high[] = {1880000,3800000,7200000,14350000,214500
 
 uint8_t f_band = 1;  // initital band
 uint8_t c_band = 0;  // detect band change
-uint8_t c_rxtx = -1;  // detect rx_tx change
+uint8_t c_rxtx = 1;  // detect rx_tx change
 uint8_t f_rxtx = 0;  // initial rx
 #define band_x 250 
 #define band_y 82 
@@ -158,9 +157,10 @@ uint8_t f_mode = 0;  //
 
 #define USB_FREQUENCY 8998000 
 #define LSB_FREQUENCY 8995000 
-#define MF_FREQUENCY  (26000000L)
-#define OFFSET_FREQUENCY  (35000000L)
-
+//#define USB_FREQUENCY_TX 899430 
+//#define LSB_FREQUENCY_TX 899730 
+#define USB_FREQUENCY_TX 8998000 // 899430 
+#define LSB_FREQUENCY_TX 8995000 //899730 
 #define F_MAX_MODE  1
 #define BFO_STEP 10  // BFO adjust 10Hz
 #define BFO_MIN 8900000 
@@ -169,20 +169,12 @@ uint8_t f_mode = 0;  //
 #define BFO_Y 60
 #define BFO_X 5
 
-#define EEPROM_SIZE    64   // Size of EEPROM block
-int32_t       correction =  0;      // Si5351 correction factor
-int16_t       corrAddr   =  0;      // EEPROM address of crystal frequency
-
 /*-------------------------------------------------------
    Bandswitching and RX/TX switching
 --------------------------------------------------------*/
-// SMD PCB
-#define SW_RX 0x01
-#define SW_TX 0x02
 
-//Thrue hole PCB
-//#define SW_RX 0x00
-//#define SW_TX 0x03
+#define SW_RX 0x00
+#define SW_TX 0x03
 #define BP_TX 0x24
 
 // Band pass filter
@@ -205,28 +197,31 @@ int16_t       corrAddr   =  0;      // EEPROM address of crystal frequency
    Frequency offsets
 --------------------------------------------------------*/
 
-uint32_t   offset_frq = OFFSET_FREQUENCY;  // Offset Frequency[Hz]
-uint32_t   bfo_frq    = LSB_FREQUENCY;     // BFO Frequency[Hz]
-uint32_t   mfo_frq    = 26000000UL;        // MF frequency [HZ]
+int32_t   offset_frq = LSB_FREQUENCY;  // Offset Frequency[Hz]
+int32_t   bfo_frq    = LSB_FREQUENCY;  // BFO Frequency[Hz]
 
 #define freq_step 10           // step[Hz]
 
 /*----------------------------------------------------------------------------------
     Control flags
 -----------------------------------------------------------------------------------*/
-uint8_t f_fchange = 1;  // if frequency changed, set this flag to 1
-uint8_t f_bchange = 1;  // if bfo frequency changed set this flag to 1
+uint8_t f_fchange = 0;  // if frequency changed, set this flag to 1
+uint8_t f_bchange = 0;  // if bfo frequency changed set this flag to 1
 uint8_t f_dchange = 0;  // if need to renew display, set this flag to 1
-uint8_t f_mchange = 1;
+
 /*-----------------------------------------------------------------------------
  *       Global
 -----------------------------------------------------------------------------*/
 long    frq;      // Contains vfo frequency
 int16_t RE_Count = 0;
 uint8_t f_redraw; 
-//char    f_rev = 0;
 uint8_t c_mhz=0;  // Only draw Mhz once
 
+/*--------------------------------------------------------------------------
+        Timer ISR
+---------------------------------------------------------------------------*/
+hw_timer_t * timer = NULL;
+void IRAM_ATTR onTimer(){}
 
 /*--------------------------------------------------------------------------
         Initialize 74HC595
@@ -250,7 +245,7 @@ void shiftOut(byte bpf, byte lpf) {
   //clock idles low
   byte myDataOut;
 
-//  Serial.println("Shift Out"); 
+  Serial.println("Shift Out"); 
 
 
 //internal function setup
@@ -271,11 +266,11 @@ void shiftOut(byte bpf, byte lpf) {
     switch (ii)
     {
       case 0:
-//        Serial.println("lpf"); 
+        Serial.println("lpf"); 
         myDataOut = lpf;
         break;
       case 1:
-//        Serial.println("bpf"); 
+        Serial.println("bpf"); 
         if (f_rxtx)
           { // TX
           myDataOut = bpf | BP_TX;
@@ -288,12 +283,12 @@ void shiftOut(byte bpf, byte lpf) {
       case 2:
         if (f_rxtx)
           {
-//          Serial.println("TX"); 
+          Serial.println("TX"); 
           myDataOut = SW_TX;
           }
         else
           {
-//          Serial.println("RX"); 
+          Serial.println("RX"); 
           myDataOut = SW_RX;
           }
         break;
@@ -322,15 +317,13 @@ void shiftOut(byte bpf, byte lpf) {
       //zero the data pin after shift to prevent bleed through
       digitalWrite(dataPin, 0);
     }
-//  Serial.println(myDataOut);
+  Serial.println(myDataOut);
   }
   //stop shifting
   digitalWrite(clockPin, 0);
   digitalWrite(latchPin, 1);
 }
 
-
-  
 /*--------------------------------------------------------------------------
         Initialize and clear Display
 ---------------------------------------------------------------------------*/
@@ -351,9 +344,13 @@ void display_smeter(){
   int16_t x1, y1; 
   uint16_t w, h;
   
+ adcAttachPin(S_METER);
+ adcStart(S_METER);
+ while ( adcBusy(S_METER));
+ adcEnd(S_METER);
  smeterval=analogRead(S_METER);
 // Serial.print(" S METER: ");
-// Serial.println(smeterval);
+// Serial.println(tmeterval);
  smeterval=(10 * smeterval)/4096;
  if (smeterval_old == smeterval)
   return;
@@ -373,13 +370,16 @@ void display_smeter(){
       tft.print("-");
     }
   }
-vTaskDelay(10); 
 }
 
 void display_tmeter(){
   int16_t x1, y1; 
   uint16_t w, h;
   
+ adcAttachPin(T_METER);
+ adcStart(S_METER);
+ while ( adcBusy(S_METER));
+ adcEnd(S_METER);
  tmeterval=analogRead(T_METER);
 // Serial.print(" T METER: ");
 // Serial.println(tmeterval);
@@ -402,7 +402,6 @@ void display_tmeter(){
       tft.print("-");
     }
   }
-vTaskDelay(10); 
 }
 
 /*--------------------------------------------------------------------------
@@ -416,6 +415,8 @@ void display_bfo()
     
   if(f_bchange==1)
   {
+    f_bchange=0;
+    set_bfo_freq((unsigned long)bfo_frq);                         
     tft.setFont(&FreeSans9pt7b);
     tft.getTextBounds("9.000,00 Mhz", (int16_t) BFO_X, (int16_t) BFO_Y, &x1, &y1, &w, &h);
     tft.setCursor(BFO_X, BFO_Y);
@@ -435,12 +436,7 @@ void display_rx_tx()
   int16_t x1, y1; 
   uint16_t w, h;
   
- if (digitalRead(TXRX_SWITCH))
-   f_rxtx = 0;
- else
-   f_rxtx = 1;
- 
- if (c_rxtx != f_rxtx)
+  if (c_rxtx != f_rxtx)
   {
     c_rxtx = f_rxtx;
     
@@ -452,11 +448,20 @@ void display_rx_tx()
     if (c_rxtx == 0)
       {
         tft.print("RX");
+        if (f_mode == 0)
+          bfo_frq = LSB_FREQUENCY;
+        else
+          bfo_frq = USB_FREQUENCY; 
       }
     else
       {
         tft.print("TX");
-      }    
+        if (f_mode == 0)
+          bfo_frq = LSB_FREQUENCY_TX;
+        else
+          bfo_frq = USB_FREQUENCY_TX;    
+        }    
+    f_bchange = 1; // bfo has changed
   }
 }      
 
@@ -568,8 +573,11 @@ if (c_mode != f_mode)
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,MODE_BACKGROUND_COLOR);
       tft.setTextColor(MODE_SELTEXT_COLOR);
       tft.print("LSB");
-      offset_frq = OFFSET_FREQUENCY;
-      bfo_frq = LSB_FREQUENCY;
+      offset_frq = LSB_FREQUENCY;
+      if (c_rxtx == 0)
+          bfo_frq = LSB_FREQUENCY;
+      else
+          bfo_frq = LSB_FREQUENCY_TX;  
       f_bchange = 1;
       break;
   
@@ -585,8 +593,11 @@ if (c_mode != f_mode)
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,MODE_BACKGROUND_COLOR);
       tft.setTextColor(MODE_NSELTEXT_COLOR);
       tft.print("LSB");
-      offset_frq = OFFSET_FREQUENCY;
-      bfo_frq = USB_FREQUENCY; 
+      offset_frq = USB_FREQUENCY;
+      if (c_rxtx == 0)
+          bfo_frq = USB_FREQUENCY;
+      else
+          bfo_frq = USB_FREQUENCY_TX;  
       f_bchange = 1;
       break;
 
@@ -597,6 +608,55 @@ if (c_mode != f_mode)
       break;
     }
   }
+}
+
+
+void UpdateRot()
+{
+  char str[64];
+  uint16_t i;
+ 
+  i = digitalRead(ROTARY_PRESS);
+  if (digitalRead(ROTARY_PRESS) == LOW)
+  {
+    f_mode++;
+    if (f_mode > F_MAX_MODE) f_mode = 0;
+    f_dchange=1;
+    f_bchange=1;
+  }
+  else
+  {
+// Switch band
+  if(rotAval) 
+    { if (f_band == 0) {f_band = bmax; } else {f_band--;}  frq= freqswitch_low[f_band];}
+  else
+    { f_band++; if (f_band > bmax) {f_band = 0; } frq= freqswitch_low[f_band];} 
+  f_dchange=1;
+  }
+}
+
+
+volatile int lastEncoding3 = 0;
+void IRAM_ATTR ISRXChange()
+{
+  int currMillis = millis();
+  if (currMillis - lastEncoding3 > 50)
+    {
+      // 0 = TX
+      if (digitalRead(TXRX_SWITCH))
+        {
+        f_rxtx = 0;
+        f_dchange=1;
+        c_band = -1;
+        }
+      else 
+      {
+        f_rxtx = 1;
+        f_dchange=1;
+        c_band = -1;
+      }
+    lastEncoding3 = currMillis;
+    }
 }
 
 /*--------------------------------------------------------------------------
@@ -630,7 +690,14 @@ void UpdateDisplay()
     tft.getTextBounds("29.000,00 ", Nx /2 - (w / 2), (int16_t) h, &x1, &y1, &w, &h);
     tft.setCursor(x1+w, h);
     tft.print("Mhz");
-  }       
+  }
+ //------------------------------------- update vfo frequency 
+ if(f_fchange==1){
+    f_fchange=0;
+    // Output Lo freq
+    set_vfo_freq( (unsigned long)(frq + offset_frq) );                
+  }
+         
   display_band(); // first band 
   display_mode(); // also changes usb / lsb if band changes
   display_rx_tx(); // rx_tx can change bfo frequencies
@@ -657,37 +724,6 @@ void setup_display()
  }
 
 
-void setmfo()
-{
-  if (f_mchange)
-    {
-    f_mchange = 0;
-    uint64_t freq = (uint64_t)mfo_frq * SI5351_FREQ_MULT;
-    si5351.set_freq(freq, SI5351_CLK2); 
-    }
-}
-  
-
-void setbfo()
-{
-  if (f_bchange)
-    {
-    f_bchange = 0;
-    uint64_t freq = (uint64_t)bfo_frq * SI5351_FREQ_MULT;
-    si5351.set_freq(freq, SI5351_CLK1);
-    }
-}
-
-void setvfo()
-{
- if(f_fchange==1)
-    {
-    f_fchange=0;
-    uint64_t freq = (uint64_t)(frq + offset_frq) * SI5351_FREQ_MULT;
-    si5351.set_freq(freq, SI5351_CLK0);
-    }
- }
-      
 void setup() {
   bool i2c_found;
   uint64_t reg_a;
@@ -698,93 +734,111 @@ void setup() {
   Serial.println("VFO PA0PHH !"); 
   frq = freqswitch_low[f_band];
   
- // set pin modes before display updates
-  pinMode(TXRX_SWITCH, INPUT);
-  pinMode(S_METER, ANALOG);
-  pinMode(T_METER, ANALOG);
-  
   display_init();
   setup_display();
   filter_init();
-
-  ESP32Encoder::useInternalWeakPullResistors=false;
-  Enc_vfo.attachHalfQuad(PULSE_INPUT_PIN, PULSE_CTRL_PIN);
-  Enc_band.attachHalfQuad(ROTARY_A, ROTARY_B);
-
-  Enc_vfo.clearCount();
-  Enc_band.clearCount();
-  
   xTaskCreatePinnedToCore(task0, "Task0", 4096, NULL, 1, NULL, 0);
         
-  analogSetAttenuation(ADC_11db);
-  analogReadResolution(12);
+  //--------- Set up Interrupt Timer -------------------------------
+  timer = timerBegin(0, 80, true); //use Timer0, div80 for 1us clock
+  timerAttachInterrupt(timer, &onTimer, true);
+  timerAlarmWrite(timer, 10000, true); // T=10000us
+  timerAlarmEnable(timer); // Start Timer
+    
+  //--- Counter setup for Rotary Encoder ---------------------
+  pcnt_config_t pcnt_config_A;// structure for A   
+  pcnt_config_t pcnt_config_B;// structure for B
+  //
+  pcnt_config_A.pulse_gpio_num = PULSE_INPUT_PIN;
+  pcnt_config_A.ctrl_gpio_num = PULSE_CTRL_PIN;
+  pcnt_config_A.lctrl_mode = PCNT_MODE_REVERSE;
+  pcnt_config_A.hctrl_mode = PCNT_MODE_KEEP;
+  pcnt_config_A.channel = PCNT_CHANNEL_0;
+  pcnt_config_A.unit = PCNT_UNIT_0;
+  pcnt_config_A.pos_mode = PCNT_COUNT_INC;
+  pcnt_config_A.neg_mode = PCNT_COUNT_DEC;
+  pcnt_config_A.counter_h_lim = 10000;
+  pcnt_config_A.counter_l_lim = -10000;
+//
+  pcnt_config_B.pulse_gpio_num = PULSE_CTRL_PIN;
+  pcnt_config_B.ctrl_gpio_num = PULSE_INPUT_PIN;
+  pcnt_config_B.lctrl_mode = PCNT_MODE_KEEP;
+  pcnt_config_B.hctrl_mode = PCNT_MODE_REVERSE;
+  pcnt_config_B.channel = PCNT_CHANNEL_1;
+  pcnt_config_B.unit = PCNT_UNIT_0;
+  pcnt_config_B.pos_mode = PCNT_COUNT_INC;
+  pcnt_config_B.neg_mode = PCNT_COUNT_DEC;
+  pcnt_config_B.counter_h_lim = 10000;
+  pcnt_config_B.counter_l_lim = -10000;
+//
+  pcnt_unit_config(&pcnt_config_A);//Initialize A
+  pcnt_unit_config(&pcnt_config_B);//Initialize B
+  pcnt_counter_pause(PCNT_UNIT_0);
+  pcnt_counter_clear(PCNT_UNIT_0);
+  pcnt_counter_resume(PCNT_UNIT_0); //Start
 
+
+//--- Counter setup for 2nd Rotary Encoder ---------------------
+  pcnt_config_t pcnt_config_C;// structure for A   
+  pcnt_config_t pcnt_config_D;// structure for B
+  //
+  pcnt_config_C.pulse_gpio_num = ROTARY_A;
+  pcnt_config_C.ctrl_gpio_num = ROTARY_B;
+  pcnt_config_C.lctrl_mode = PCNT_MODE_REVERSE;
+  pcnt_config_C.hctrl_mode = PCNT_MODE_KEEP;
+  pcnt_config_C.channel = PCNT_CHANNEL_0;
+  pcnt_config_C.unit = PCNT_UNIT_1;
+  pcnt_config_C.pos_mode = PCNT_COUNT_INC;
+  pcnt_config_C.neg_mode = PCNT_COUNT_DEC;
+  pcnt_config_C.counter_h_lim = 10000;
+  pcnt_config_C.counter_l_lim = -10000;
+//
+  pcnt_config_D.pulse_gpio_num = ROTARY_B;
+  pcnt_config_D.ctrl_gpio_num = ROTARY_A;
+  pcnt_config_D.lctrl_mode = PCNT_MODE_KEEP;
+  pcnt_config_D.hctrl_mode = PCNT_MODE_REVERSE;
+  pcnt_config_D.channel = PCNT_CHANNEL_1;
+  pcnt_config_D.unit = PCNT_UNIT_1;
+  pcnt_config_D.pos_mode = PCNT_COUNT_INC;
+  pcnt_config_D.neg_mode = PCNT_COUNT_DEC;
+  pcnt_config_D.counter_h_lim = 10000;
+  pcnt_config_D.counter_l_lim = -10000;
+//
+  pcnt_unit_config(&pcnt_config_C);//Initialize A
+  pcnt_unit_config(&pcnt_config_D);//Initialize B
+  pcnt_counter_pause(PCNT_UNIT_1);
+  pcnt_counter_clear(PCNT_UNIT_1);
+  pcnt_counter_resume(PCNT_UNIT_1); //Start
+
+
+  // set tx rx and rit switch ports
+  pinMode(TXRX_SWITCH, INPUT);
+  pinMode(RIT_SWITCH, INPUT);
+  analogReadResolution(12);
+ 
     
   // Set pushbutton rotary encoder
   pinMode(ROTARY_PRESS, INPUT);
-
-  if ( !EEPROM.begin ( EEPROM_SIZE ))            // Start up the EEPROM library
-  {
-    Serial.println ( "\nFailed to initialise EEPROM" ); // It failed!
-    Serial.print   ( "Initializing the correction factor to: " );
-    Serial.println ( correction );
-  }
-  else
-  {
-    Serial.println ( "\nChecking for previous correction factor." );
-
-    correction = EEPROM.readLong ( corrAddr );        // Read what's there
-
-#define LIMIT 10000000L                     // I think this is reasonable
-
-    if (( correction < -LIMIT ) || ( correction > LIMIT ) // Invalid correction factor?
-                  || ( correction == -1 ))  // '-1' indicates virgin EEPROM
-    {
-      correction =0;
-      Serial.println ( "\nEEPROM does not contain a valid correction factor." );
-      Serial.print   ( "Initializing the correction factor to: " );
-      Serial.println ( correction );
-    }
-
-    else
-    {
-      Serial.print ( "EEPROM contains correction factor: " );
-      Serial.println ( correction );
-      Serial.println ( "We will use that value." );
-    }
-  }
+  digitalWrite(ROTARY_PRESS, HIGH);
   
-  if (si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0) == false)
-  {  Serial.print ( "SI5351 not found" ); }
-
-  si5351.set_correction(correction, SI5351_PLL_INPUT_XO);
-  si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_4MA);
-  si5351.drive_strength(SI5351_CLK1, SI5351_DRIVE_4MA);
-  si5351.drive_strength(SI5351_CLK2, SI5351_DRIVE_4MA);
-
+  // Set up interrupt pins for rxtx
+  attachInterrupt(digitalPinToInterrupt(TXRX_SWITCH), ISRXChange, CHANGE);
   
+  si5351_init();
+   
+  set_vfo_freq((unsigned long) (frq + offset_frq) );
+  set_bfo_freq((unsigned long) bfo_frq);
   shiftOut(BP_80M,LP_80M);
-  setmfo();
-  setbfo();
-  setvfo();
-
-  si5351.output_enable(SI5351_CLK0, 1);
-  si5351.output_enable(SI5351_CLK1, 1);
-  si5351.output_enable(SI5351_CLK2, 1);
-  
 }
 
 
 void loop() {
-
+  // put your main code here, to run repeatedly:
+ 
   if(f_dchange==1){
     f_dchange=0;
     UpdateDisplay();
   }
-
-  setvfo();
-  //setbfo();
-  
   display_smeter();
   display_tmeter();
 }
@@ -793,15 +847,14 @@ void loop() {
 /*-----------------------------------------------------------------------------------------------
         Alternative Loop (core0)
 ------------------------------------------------------------------------------------------------*/
-volatile int lastEncoding = 0;
 
 void task0(void* arg)
 {
-
     while (1)
      {    
-         int count = Enc_vfo.getCount();
-         Enc_vfo.clearCount();
+         pcnt_get_counter_value(PCNT_UNIT_0, &RE_Count); // Poll the counter
+         int count=RE_Count;
+         pcnt_counter_clear(PCNT_UNIT_0);
          
          if (count!=0)
          {                           
@@ -812,23 +865,19 @@ void task0(void* arg)
             if(frq<freqswitch_low[f_band]) { if (f_band == 0) {f_band = bmax; } else {f_band--;}  frq= freqswitch_high[f_band];}
          }
 
-         count = 0;
-         count = Enc_band.getCount();
-         Enc_band.clearCount();
+         pcnt_get_counter_value(PCNT_UNIT_1, &RE_Count); // Poll the counter of 2nd Rotary
+         count=RE_Count;
+         pcnt_counter_clear(PCNT_UNIT_1);
          if (count!=0)
-             {
-              int currMillis = millis();
-              if (currMillis - lastEncoding > 50)
-                {
-                 // Switch band
-                if(count > 0) 
-                  { if (f_band == 0) {f_band = bmax; } else {f_band--;}  frq= freqswitch_low[f_band];}
-                else
-                  { f_band++; if (f_band > bmax) {f_band = 0; } frq= freqswitch_low[f_band];} 
-                f_dchange=1;
-                lastEncoding = currMillis;
-               }
-           }
+         {
+          if (count > 0)
+            rotAval =1;
+          else
+            rotAval = 0;
+          UpdateRot(); 
+          delay(50);                          
+          pcnt_counter_clear(PCNT_UNIT_1);
+         }
       delay(1);
      }
 }

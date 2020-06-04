@@ -25,7 +25,6 @@
 #include <stdint.h>
 
 #include "Arduino.h"
-#include "i2c.h"
 #include "si5351.h"
 
 
@@ -33,10 +32,13 @@
 /* Public functions */
 /********************/
 
-Si5351::Si5351(uint8_t i2c_addr):
-	i2c_bus_addr(i2c_addr)
+Si5351::Si5351(uint8_t i2c_addr, uint8_t i2c_sda, uint8_t i2c_scl)
 {
+	i2c_bus_addr = i2c_addr;
 	xtal_freq[0] = SI5351_XTAL_FREQ;
+	
+	// Start i2c.i2c comms
+	i2c.i2c_init(i2c_sda, i2c_scl);
 
 	// Start by using XO ref osc as default for each PLL
 	plla_ref_osc = SI5351_PLL_INPUT_XO;
@@ -57,22 +59,19 @@ Si5351::Si5351(uint8_t i2c_addr):
  * corr - Frequency correction constant in parts-per-billion
  *
  * Returns a boolean that indicates whether a device was found on the desired
- * I2C address.
+ * i2c.i2c address.
  *
  */
  
-#define SI_SDA    21
-#define SI_SCL    22
 
 bool Si5351::init(uint8_t xtal_load_c, uint32_t xo_freq, int32_t corr)
 {
-	// Start I2C comms
-	i2c_init();
+
 
 	// Check for a device on the bus, bail out if it is not there
 	uint8_t reg_val = 1;
 	
-	if (i2c_send_byte( SI5351_BUS_BASE_ADDR, 0 ))
+	if (i2c.i2c_send_byte( SI5351_BUS_BASE_ADDR, 0 ))
 		reg_val = 0;
 	
 	if(reg_val == 0)
@@ -1324,7 +1323,7 @@ void Si5351::set_ref_freq(uint32_t ref_freq, enum si5351_pll_input ref_osc)
 
 uint8_t Si5351::si5351_write_bulk(uint8_t addr, uint8_t bytes, uint8_t *data)
 {
-	if (i2c_send_byte_data_bulk( i2c_bus_addr,addr,bytes, data ))
+	if (i2c.i2c_send_byte_data_bulk( i2c_bus_addr,addr,bytes, data ))
 		return 0;
 return 1;
 }
@@ -1332,7 +1331,7 @@ return 1;
 uint8_t Si5351::si5351_write(uint8_t addr, uint8_t data)
 {
 	
-	if (i2c_send_byte_data( i2c_bus_addr, addr, data ))
+	if (i2c.i2c_send_byte_data( i2c_bus_addr, addr, data ))
 		return 0;
 	
 	return 1;
@@ -1343,7 +1342,7 @@ uint8_t Si5351::si5351_read(uint8_t addr)
 {
 	uint8_t reg_val = 0;
 
-	reg_val = i2c_receive_byte_data( i2c_bus_addr,  addr );
+	reg_val = i2c.i2c_receive_byte_data( i2c_bus_addr,  addr );
 	return reg_val;
 }
 

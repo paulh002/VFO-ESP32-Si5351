@@ -1,10 +1,10 @@
-#include <Arduino.h>            // General Arduino definitions
+#include "i2c.h"
 
-uint8_t si_sda = 21;
-uint8_t si_scl = 22;
+I2c_direct::I2c_direct()
+{
+}
 
-
-void i2c_init(uint8_t sda,uint8_t scl)
+void I2c_direct::i2c_init(uint8_t sda,uint8_t scl)
 {
   si_sda = sda ;
   si_scl = scl ;  
@@ -18,7 +18,7 @@ void i2c_init(uint8_t sda,uint8_t scl)
 }
 
 
-void i2c_start_condition()
+void I2c_direct::i2c_start_condition()
 {
   digitalWrite ( si_scl, HIGH );        
   digitalWrite ( si_sda, HIGH );  
@@ -29,7 +29,7 @@ void i2c_start_condition()
   delayMicroseconds ( 1 );  
 }
 
-void i2c_stop_condition()
+void I2c_direct::i2c_stop_condition()
 {
   digitalWrite ( si_sda, LOW );       // Startcondition with the data pin LOW
   delayMicroseconds ( 1 );
@@ -39,7 +39,7 @@ void i2c_stop_condition()
   delayMicroseconds ( 1 );
 }
 
-void i2c_write_bit(uint8_t bit)
+void I2c_direct::i2c_write_bit(uint8_t bit)
 {
   if ( bit > 0 )              // Is the current bit a '1'?
     digitalWrite ( si_sda, HIGH );    // Yes, then send a '1'
@@ -54,7 +54,7 @@ void i2c_write_bit(uint8_t bit)
     digitalWrite ( si_scl, LOW );     // Pulsing the clock pin
 }
 
-uint8_t i2c_read_bit( void )
+uint8_t I2c_direct::i2c_read_bit( void )
 {
     uint8_t b;
     
@@ -73,7 +73,7 @@ uint8_t i2c_read_bit( void )
     return b;
 }
 
-bool i2c_write_byte( uint8_t B,
+bool I2c_direct::i2c_write_byte( uint8_t B,
                      bool start,
                      bool stop )
 {
@@ -98,7 +98,7 @@ bool i2c_write_byte( uint8_t B,
     return ack;
 }
 
-uint8_t i2c_read_byte( bool ack,
+uint8_t I2c_direct::i2c_read_byte( bool ack,
                        bool stop )
 {
     uint8_t B = 0;
@@ -118,7 +118,7 @@ uint8_t i2c_read_byte( bool ack,
     return B;
 }
 
-bool i2c_send_byte( uint8_t address,
+bool I2c_direct::i2c_send_byte( uint8_t address,
                     uint8_t data )
 {
     if( i2c_write_byte( address << 1, true, false ) )   // start, send address, write
@@ -133,7 +133,7 @@ bool i2c_send_byte( uint8_t address,
 }
 
 // Receiving a byte with a I2C:
-uint8_t i2c_receive_byte( uint8_t address )
+uint8_t I2c_direct::i2c_receive_byte( uint8_t address )
 {
     if( i2c_write_byte( ( address << 1 ) | 0x01, true, false ) )   // start, send address, read
     {
@@ -143,7 +143,7 @@ uint8_t i2c_receive_byte( uint8_t address )
     return 0;   // return zero if NAK'd
 }
 
-bool i2c_send_byte_data( uint8_t address,
+bool I2c_direct::i2c_send_byte_data( uint8_t address,
                          uint8_t reg,
                          uint8_t data )
 {
@@ -159,9 +159,10 @@ bool i2c_send_byte_data( uint8_t address,
     return false;
 }
 
-bool i2c_send_byte_data_bulk( uint8_t address, uint8_t reg, uint8_t bytes, uint8_t *data )
+bool I2c_direct::i2c_send_byte_data_bulk( uint8_t address, uint8_t reg, uint8_t bytes, uint8_t *data )
 {
-    if( i2c_write_byte( address << 1, true, false ) )   // start, send address, write
+ 
+	if( i2c_write_byte( address << 1, true, false ) )   // start, send address, write
     {
         if( i2c_write_byte( reg, false, false ) )   // send desired register
         {
@@ -179,7 +180,7 @@ bool i2c_send_byte_data_bulk( uint8_t address, uint8_t reg, uint8_t bytes, uint8
 }
 
 
-uint8_t i2c_receive_byte_data( uint8_t address,
+uint8_t I2c_direct::i2c_receive_byte_data( uint8_t address,
                                uint8_t reg )
 {
     if( i2c_write_byte( address << 1, true, false ) )   // start, send address, write

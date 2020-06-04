@@ -31,8 +31,11 @@
 
 #include "Arduino.h"
 #include <stdint.h>
+#include "i2c.h"
 
 /* Define definitions */
+#define SI_SDA    21
+#define SI_SCL    22
 
 #define SI5351_BUS_BASE_ADDR            0x60
 #define SI5351_XTAL_FREQ                25000000
@@ -278,7 +281,8 @@ struct Si5351IntStatus
 class Si5351
 {
 public:
-  Si5351(uint8_t i2c_addr = SI5351_BUS_BASE_ADDR);
+	Si5351(uint8_t i2c_addr = SI5351_BUS_BASE_ADDR,uint8_t i2c_sda =  SI_SDA,uint8_t i2c_scl = SI_SCL);
+	
 	bool init(uint8_t, uint32_t, int32_t);
 	void reset(void);
 	uint8_t set_freq(uint64_t, enum si5351_clock, uint8_t reset_pll = 0);
@@ -313,9 +317,10 @@ public:
 	uint64_t clk_freq[8];
 	uint64_t plla_freq;
 	uint64_t pllb_freq;
-  enum si5351_pll_input plla_ref_osc;
-  enum si5351_pll_input pllb_ref_osc;
+	enum si5351_pll_input plla_ref_osc;
+	enum si5351_pll_input pllb_ref_osc;
 	uint32_t xtal_freq[2];
+
 private:
 	uint64_t pll_calc(enum si5351_pll, uint64_t, struct Si5351RegSet *, int32_t, uint8_t);
 	uint64_t multisynth_calc(uint64_t, uint64_t, struct Si5351RegSet *);
@@ -325,12 +330,16 @@ private:
 	void ms_div(enum si5351_clock, uint8_t, uint8_t);
 	uint8_t select_r_div(uint64_t *);
 	
+	I2c_direct			i2c;
+	
 	uint8_t		 		select_r_div_ms67(uint64_t *);
 	int32_t 			ref_correction[2];
 	uint8_t 			clkin_div;
 	uint8_t 			i2c_bus_addr;
 	bool 				clk_first_set[8];
 	struct Si5351RegSet ms_reg_save[8];
+	uint8_t				sda;
+	uint8_t				scl;
 };
 
 #endif /* SI5351_H_ */
