@@ -2,7 +2,7 @@
 The new version v 2.0 uses 2x si5351 on the pcb with buffer transistors to minimize crosstalk. The old version had about 52 db  crosstalk suppression with the new version this is much improved. I cannot hear any injected spurs any more. But will add some measurements later.
 If you are using diode double balanced mixers than a square wave is no problem. But I want to use a jfet balanced mixer for that you need to filter the output of the vfo. For this I developed a filter PCB which is controled by the vfo.
 
-![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/VFO_PCB1.jpg)
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/VFO-PCB1.jpg)
 
 
 # VFO-ESP32-Si5351 v 1.0
