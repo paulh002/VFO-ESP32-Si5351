@@ -1286,7 +1286,7 @@ void Si5351::set_ref_freq(uint32_t ref_freq, enum si5351_pll_input ref_osc)
 	// Clear the bits first
 	//reg_val &= ~(SI5351_CLKIN_DIV_MASK);
 
-	if(ref_freq <= 30000000UL)
+	if(ref_freq <= 35000000UL)
 	{
 		xtal_freq[(uint8_t)ref_osc] = ref_freq;
 		//reg_val |= SI5351_CLKIN_DIV_1;
@@ -1295,7 +1295,7 @@ void Si5351::set_ref_freq(uint32_t ref_freq, enum si5351_pll_input ref_osc)
 			clkin_div = SI5351_CLKIN_DIV_1;
 		}
 	}
-	else if(ref_freq > 30000000UL && ref_freq <= 60000000UL)
+	else if(ref_freq > 35000000UL && ref_freq <= 60000000UL)
 	{
 		xtal_freq[(uint8_t)ref_osc] = ref_freq / 2;
 		//reg_val |= SI5351_CLKIN_DIV_2;
