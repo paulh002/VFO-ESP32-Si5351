@@ -6,6 +6,9 @@ If you are using diode double balanced mixers than a square wave is no problem. 
 
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/VFO-PCB1.jpg)
 
+Spectrum of two seperate si5351 with buffer. (12.5 Mhz and 8.998 Mhz)
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/DS0013.PNG)
+
 
 # VFO-ESP32-Si5351 v 1.0
 VFO ESP32 Si5351 (old master branch)
