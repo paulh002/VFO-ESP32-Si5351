@@ -9,6 +9,10 @@ If you are using diode double balanced mixers than a square wave is no problem. 
 Spectrum of two seperate si5351 with buffer. (12.5 Mhz and 8.998 Mhz)
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/DS0049.PNG)
 
+VFO build in into QRP tranceiver with hycas IF and bandpassfilters managed by esp32
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/IMG_20200825_223043.jpg)
+
+
 
 # VFO-ESP32-Si5351 v 1.0
 VFO ESP32 Si5351 (old master branch)
