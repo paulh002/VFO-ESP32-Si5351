@@ -1,7 +1,9 @@
 /*------Hard ware Configuration ---------------------
  * 
  * HF Multiband SMD 2x SI5351!!
-
+ * AS169 based bpf filter
+ * Need to add lpf for Power amp and RX-Tx relais switch
+ * 
 <<ESP32-DevKitC>>
 pin No.  Connection
   17 :  Rotary Encoder A
@@ -122,7 +124,12 @@ ESP32Encoder   Enc_vfo;
 
 #define I2C_SDA2  16
 #define I2C_SCL2  17
-#define SI5351_XTAL_FREQ1 32000000
+#define SI5351_XTAL_FREQ1 SI5351_XTAL_FREQ //32000000
+#define CLK_BFO_RX           SI5351_CLK2
+#define CLK_VFO_RX           SI5351_CLK2
+#define CLK_BFO_TX           SI5351_CLK1
+#define CLK_VFO_TX           SI5351_CLK1
+
 
 Si5351 si5351;
 Si5351 si5351_bfo(SI5351_BUS_BASE_ADDR, I2C_SDA2, I2C_SCL2);
@@ -131,10 +138,11 @@ Si5351 si5351_bfo(SI5351_BUS_BASE_ADDR, I2C_SDA2, I2C_SCL2);
    Frequency settings
 --------------------------------------------------------*/
 
-const unsigned long bandswitch[] = {160,80,40,20,15,10};
+const unsigned long bandswitch[] = {160,80,40,20,15,10}; 
+const  uint8_t bandconf[] = {0,1,1,1,0,1}; 
 const unsigned long freqswitch_low[] = {1800000,3500000,7000000,14000000,21000000,28000000};
 const unsigned long freqswitch_high[] = {1880000,3800000,7200000,14350000,21450000,29000000};
-
+long  current_frq[] = {1800000,3500000,7000000,14000000,21000000,28000000};
 
 #define bmax 5
 
@@ -167,8 +175,8 @@ uint8_t f_mode = 0;  //
 #define MODE_SELTEXT_COLOR tft.color565(255,255,0)
 #define MODE_NSELTEXT_COLOR 0
 
-#define USB_FREQUENCY 9000500 //8998000 
-#define LSB_FREQUENCY 8998000 //8995000 
+#define USB_FREQUENCY 9000000 //9000500 //8998000 
+#define LSB_FREQUENCY 8997000 //8998000 //8995000 
 
 #define F_MAX_MODE  1
 #define BFO_STEP 10  // BFO adjust 10Hz
@@ -197,16 +205,25 @@ int16_t       corrAddr1   =  8;      // EEPROM address of crystal frequency
 #define BP_80M 0x56     //01010110 
 #define BP_40M 0x59     //01011001
 #define BP_20M 0x65     //01100101
-#define BP_15M 0x95     //10010101  
-#define BP_10M 0x55     //01010101   (all off)
+#define BP_15M 0x55     //01010101  (all off)
+#define BP_10M 0x95     //10010101   
 
 // Low pass filter
-#define LP_160M 0x08
-#define LP_80M 0x10
-#define LP_40M 0x40
-#define LP_20M 0x80
-#define LP_15M 0x02
-#define LP_10M 0x01
+// Pin 1 Q4 0x08   80m
+// Pin 2 Q5 0x10   40m
+// Pin 3 Q7 0x40   20m
+// Pin 4 Q3 0x04   15m
+// Pin 5 Q2 0x02   10m
+// Pin 6 Q1 0x01   Not used / No filter yet fitted
+// Pin 7 Q6 0x20   RX/TX
+#define LP_160M 0x01
+#define LP_80M 0x08
+#define LP_40M 0x10
+#define LP_20M 0x40
+#define LP_15M 0x04
+#define LP_10M 0x02
+
+#define LP_TX  0x20
 
 /*-------------------------------------------------------
    Frequency offsets
@@ -272,19 +289,24 @@ void shiftOut(byte bpf, byte lpf) {
   digitalWrite(latchPin, 0);
 
   // for each 74HC595
-  for (ii=0; ii<2; ii++)
+  for (ii=0; ii<3; ii++)
   {
     switch (ii)
     {
       case 0:
-        Serial.println("Rx-Tx"); 
-        if (f_rxtx == 0)
-          myDataOut = SW_RX;
-        else
-          myDataOut = SW_RX;          
+        myDataOut = lpf;
+        if (f_rxtx)
+          myDataOut |= LP_TX;
         break;
+      
       case 1:
-        Serial.println("bpf"); 
+        if (f_rxtx)
+          myDataOut = SW_TX;   
+        else
+          myDataOut = SW_RX;
+        break;
+
+      case 2:
         myDataOut = bpf;   
         break;
     }   
@@ -311,6 +333,7 @@ void shiftOut(byte bpf, byte lpf) {
       digitalWrite(clockPin, 1);
       //zero the data pin after shift to prevent bleed through
       digitalWrite(dataPin, 0);
+      delay(1);
     }
 //  Serial.println(myDataOut);
   }
@@ -349,11 +372,11 @@ void display_smeter(){
   return;
  smeterval_old = smeterval;
  if (smeterval>10){smeterval=10;}
-  tft.setFont(&FreeMonoBold24pt7b);
-  tft.getTextBounds("----------", (int16_t) SMETER_X, (int16_t) SMETER_Y, &x1, &y1, &w, &h);
-  tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,ILI9341_BLACK);  
-  tft.setCursor(SMETER_X,SMETER_Y);
-  for(int i=1;i<=smeterval;i++){
+ tft.setFont(&FreeMonoBold24pt7b);
+ tft.getTextBounds("----------", (int16_t) SMETER_X, (int16_t) SMETER_Y, &x1, &y1, &w, &h);
+ tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,ILI9341_BLACK);  
+ tft.setCursor(SMETER_X,SMETER_Y);
+  for(int i=1;i<=(10 - smeterval);i++){
     if (i<=6){
       tft.setTextColor(SMETER_TEXT_COLOR1);
       tft.print("-");
@@ -420,6 +443,36 @@ void display_bfo()
   }
 }
 
+void switch_band()
+{
+    switch (c_band)
+    {
+    case 0:
+      shiftOut(BP_160M,LP_160M);
+      break;
+      
+    case 1:    
+      shiftOut(BP_80M,LP_80M);
+      break;
+      
+    case 2:
+      shiftOut(BP_40M,LP_40M);
+      break;
+  
+    case 3:
+      shiftOut(BP_20M,LP_20M);
+      break;
+    
+    case 4:
+      shiftOut(BP_15M,LP_15M);
+      break;
+    
+    case 5:
+      shiftOut(BP_10M,LP_10M);
+      break;
+    }
+}  
+
 void display_rx_tx()
 {
   int16_t x1, y1; 
@@ -435,7 +488,6 @@ void display_rx_tx()
     c_rxtx = f_rxtx;
     
     f_dchange = 1;
-    c_band = -1;
     tft.setFont(&FreeSansBold12pt7b);
     tft.setTextColor(BAND_TEXT_COLOR);
     tft.setCursor(rx_x,rx_y);
@@ -444,11 +496,20 @@ void display_rx_tx()
     if (c_rxtx == 0)
       {
         tft.print("RX");
+        si5351_bfo.output_enable(CLK_BFO_RX, 1);
+        si5351_bfo.output_enable(CLK_BFO_TX, 0);
+        si5351.output_enable(CLK_VFO_RX, 1);
+        si5351.output_enable(CLK_VFO_TX, 0);
       }
     else
       {
         tft.print("TX");
-      }    
+        si5351_bfo.output_enable(CLK_BFO_RX, 0);
+        si5351_bfo.output_enable(CLK_BFO_TX, 1);
+        si5351.output_enable(CLK_VFO_RX, 0);
+        si5351.output_enable(CLK_VFO_TX, 1);
+      }
+    switch_band(); // put bpf and lpf in tx mode
   }
 }      
 
@@ -464,7 +525,8 @@ void display_band()
 if (c_band != f_band)
   {
     c_band = f_band;
-    switch (c_band)
+    
+    switch(c_band)
     {
     case 0:
       f_mode = 0;
@@ -474,7 +536,6 @@ if (c_band != f_band)
       tft.getTextBounds("160 M", (int16_t)band_x,(int16_t)band_y, &x1, &y1, &w, &h); // use enough space to draw background
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,BAND_BACKGROUND_COLOR);  
       tft.print("160 M");
-      shiftOut(BP_160M,LP_160M);
       break;
   
     case 1:
@@ -485,7 +546,6 @@ if (c_band != f_band)
       tft.getTextBounds("160 M", (int16_t)band_x,(int16_t)band_y, &x1, &y1, &w, &h);
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,BAND_BACKGROUND_COLOR);  
       tft.print(" 80 M");
-      shiftOut(BP_80M,LP_80M);
       break;
   
     case 2:
@@ -496,7 +556,6 @@ if (c_band != f_band)
       tft.getTextBounds("160 M", (int16_t)band_x,(int16_t)band_y, &x1, &y1, &w, &h);
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,BAND_BACKGROUND_COLOR);  
       tft.print(" 40 M");
-      shiftOut(BP_40M,LP_40M);
       break;
   
   case 3:
@@ -507,7 +566,6 @@ if (c_band != f_band)
       tft.getTextBounds("160 M", (int16_t)band_x,(int16_t)band_y, &x1, &y1, &w, &h);
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,BAND_BACKGROUND_COLOR);  
       tft.print(" 20 M");
-      shiftOut(BP_20M,LP_20M);
       break;
       
   case 4:
@@ -518,7 +576,6 @@ if (c_band != f_band)
       tft.getTextBounds("160 M", (int16_t)band_x,(int16_t)band_y, &x1, &y1, &w, &h);
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,BAND_BACKGROUND_COLOR);  
       tft.print(" 15 M");
-      shiftOut(BP_15M,LP_15M);
       break;
 
   case 5:
@@ -529,9 +586,9 @@ if (c_band != f_band)
       tft.getTextBounds("160 M", (int16_t)band_x,(int16_t)band_y, &x1, &y1, &w, &h);
       tft.fillRoundRect(x1-2,y1-2,w+4,h+4,5,BAND_BACKGROUND_COLOR);  
       tft.print(" 10 M");
-      shiftOut(BP_10M,LP_10M);
       break;
       }
+   switch_band();
   }
 } 
 /*--------------------------------------------------------------------------
@@ -645,7 +702,7 @@ void setup_display()
  tft.print("1-----3------5----------10--------------");  
  tft.setCursor(10,230);
  tft.setTextColor(tft.color565(100,100,100));
- tft.print("DDS-VFO Ver1.0 PA0PHH");  
+ tft.print("     HF Tranceiver Ver1.0 PA0PHH");  
  }
 
 void setbfo()
@@ -654,7 +711,8 @@ void setbfo()
     {
     f_bchange = 0;
     uint64_t freq = (uint64_t)bfo_frq * SI5351_FREQ_MULT;
-    si5351_bfo.set_freq(freq, SI5351_CLK0);
+    si5351_bfo.set_freq(freq, CLK_BFO_RX);
+    si5351_bfo.set_freq(freq, CLK_BFO_TX);
     }
 }
 
@@ -664,7 +722,8 @@ void setvfo()
     {
     f_fchange=0;
     uint64_t freq = (uint64_t)(frq + offset_frq) * SI5351_FREQ_MULT;
-    si5351.set_freq(freq, SI5351_CLK0);
+    si5351.set_freq(freq, CLK_VFO_RX);
+    si5351.set_freq(freq, CLK_VFO_TX);
     }
  }
       
@@ -756,15 +815,22 @@ void setup() {
   {  Serial.println ( "SI5351 not found" ); }
 
   si5351.set_correction(correction, SI5351_PLL_INPUT_XO);
-  si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_2MA);
-  si5351.output_enable(SI5351_CLK0, 1);
+ 
+  si5351.drive_strength(CLK_VFO_RX, SI5351_DRIVE_2MA);
+  si5351.output_enable(CLK_VFO_RX, 1);
+
+  si5351.drive_strength(CLK_VFO_TX, SI5351_DRIVE_2MA);
+  si5351.output_enable(CLK_VFO_TX, 1);
   
   if (si5351_bfo.init(SI5351_CRYSTAL_LOAD_8PF, SI5351_XTAL_FREQ1, 0) == false)
   {  Serial.println ( "SI5351 bfo not found" ); }
 
   si5351_bfo.set_correction(correction1, SI5351_PLL_INPUT_XO);
-  si5351_bfo.drive_strength(SI5351_CLK0, SI5351_DRIVE_2MA);
-  si5351_bfo.output_enable(SI5351_CLK0, 1);
+  si5351_bfo.drive_strength(CLK_BFO_RX, SI5351_DRIVE_2MA);
+  si5351_bfo.output_enable(CLK_BFO_RX, 1);
+  
+  si5351_bfo.drive_strength(CLK_BFO_TX, SI5351_DRIVE_2MA);
+  si5351_bfo.output_enable(CLK_BFO_TX, 1);
     
   shiftOut(BP_80M,LP_80M);
   setbfo();
@@ -789,11 +855,33 @@ void loop() {
   display_tmeter();
 }
 
-
+void next_band(uint8_t dir, uint8_t &band)
+{
+  if (dir > 0)
+  {
+  for (int i = 0; i < bmax; i++)
+    {
+      if (bandconf[band] == 0) { band++; if (band > bmax) {band = 0; } frq= freqswitch_low[band];} 
+      if (bandconf[band] != 0) 
+        break; 
+    }
+  }
+  else
+  {
+  for (int i = 0; i < bmax; i++)
+    {
+      if (bandconf[band] == 0) { if (band == 0) {band = bmax; } else {band--;}  frq= freqswitch_high[band];} 
+      if (bandconf[band] != 0) 
+        break; 
+    }    
+  }
+}
 /*-----------------------------------------------------------------------------------------------
         Alternative Loop (core0)
 ------------------------------------------------------------------------------------------------*/
-volatile int lastEncoding = 0;
+volatile int lastEncoding = 0, lastEncoding1 = 0;
+uint8_t   pressed = 1, pressed_old =1;
+uint8_t   button_pressed = 0;
 
 void task0(void* arg)
 {
@@ -807,12 +895,43 @@ void task0(void* arg)
          if (count!=0)
          {                           
             frq+= count * freq_step;
-            if(frq>freqswitch_high[band]) { band++; if (band > bmax) {band = 0; } frq= freqswitch_low[band];} 
-            if(frq<freqswitch_low[band]) { if (band == 0) {band = bmax; } else {band--;}  frq= freqswitch_high[band];}
+            if(frq>freqswitch_high[band]) { band++; if (band > bmax) {band = 0; } frq= freqswitch_low[band]; next_band(1,band); } 
+            if(frq<freqswitch_low[band]) { if (band == 0) {band = bmax; } else {band--;}  frq= freqswitch_high[band]; next_band(0,band);}
+            current_frq[band] = frq;
+
+            
             f_band   = band; // to make it more thread save
             f_dchange=1; // send for update display
             f_fchange=1; // update the si5351 vfo frequency
          }
+
+
+        pressed = digitalRead(ROTARY_PRESS); 
+        if (pressed == 0 && pressed_old != 0)
+        {
+            int currMillis = millis();
+            if (currMillis - lastEncoding1 > 100)
+            {
+            pressed_old = 0;
+            button_pressed++;
+            if (button_pressed > 1)
+              button_pressed = 0;           
+            lastEncoding1 = currMillis;
+            }
+        }
+        else
+        {
+            if (pressed_old == 0)
+            {
+              int currMillis = millis();
+              if (currMillis - lastEncoding1 > 100)
+              {
+              pressed_old = 1;
+              lastEncoding1 = currMillis;
+              } 
+            }      
+        }
+               
 
          count = 0;
          count = Enc_band.getCount();
@@ -820,17 +939,32 @@ void task0(void* arg)
          if (count!=0)
              {
               int currMillis = millis();
-              if (currMillis - lastEncoding > 50)
-                {
-                 // Switch band
-                band = f_band;
-                if(count > 0) 
-                  { if (band == 0) {band = bmax; } else {band--;}  frq= freqswitch_low[band];}
-                else
-                  { band++; if (band > bmax) {band = 0; } frq= freqswitch_low[band];} 
-                f_band   = band; // to make it more thread save
-                f_dchange=1;
-                f_fchange=1; // update the si5351 vfo frequency
+              if (currMillis - lastEncoding > 100)
+                {     
+                    if (button_pressed)
+                    {
+                        // Switch band
+                        band = f_band;
+                        if(count > 0) 
+                          { if (band == 0) {band = bmax; } else {band--;} next_band(0,band);}
+                        else
+                          { band++; if (band > bmax) {band = 0; } next_band(1,band);} 
+                        
+                        frq = current_frq[band];              
+                        f_band   = band; // to make it more thread save
+                        f_dchange=1;
+                        f_fchange=1; // update the si5351 vfo frequency
+                    }
+                    else
+                    {
+                        if (f_mode)
+                          f_mode = 0;
+                        else
+                          f_mode = 1;
+    
+                        f_bchange = 1;
+                        f_dchange=1; // send for update display                    
+                        }
                 lastEncoding = currMillis;
                }
            }
