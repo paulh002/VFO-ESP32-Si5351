@@ -13,7 +13,7 @@ VFO build in into QRP tranceiver with hycas IF and bandpassfilters managed by es
 The VFO uses a optical encoder for frequency adjustment and mechanical rotary for bandswitch and option selection.
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/IMG_20200825_223043.jpg)
 
-Bottom side with transmitter amplifier and low-pass filter section.
+Bottom side with transmitter amplifier and low-pass filter section also managed by esp32.
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/IMG_20200902_211710.jpg)
 
 
