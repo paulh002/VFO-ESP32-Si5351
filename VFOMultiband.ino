@@ -171,15 +171,23 @@ uint8_t f_mode = 0;  //
 #define USB_y 86 
 #define LSB_x 0 
 #define LSB_y 86 
+
+#define BUTTON_x 0 
+#define BUTTON_y 112 
+#define BUTTON_MODE_TEXT_COLOR ILI9341_WHITE
+#define MAX_BUTTON  3
+uint8_t   pressed = 0, pressed_old = 10;
+uint8_t   c_button = -1, f_button = 0;
+
 #define MODE_BACKGROUND_COLOR ILI9341_DARKGREY
 #define MODE_SELTEXT_COLOR tft.color565(255,255,0)
 #define MODE_NSELTEXT_COLOR 0
 
-#define USB_FREQUENCY 9000000 //9000500 //8998000 
+#define USB_FREQUENCY 9001500 //9000500 //8998000 
 #define LSB_FREQUENCY 8997000 //8998000 //8995000 
 
 #define F_MAX_MODE  1
-#define BFO_STEP 10  // BFO adjust 10Hz
+#define BFO_STEP 100  // BFO adjust 10Hz
 #define BFO_MIN 8900000 
 #define BFO_MAX 9008450 
 #define BFO_COLOR ILI9341_MAGENTA
@@ -591,6 +599,38 @@ if (c_band != f_band)
    switch_band();
   }
 } 
+
+
+void display_button()
+{
+  int16_t x1, y1; 
+  uint16_t w, h;
+  
+if (c_button != f_button)
+  {
+    c_button = f_button;
+    tft.setFont(&FreeSans9pt7b);
+    tft.setTextColor(BUTTON_MODE_TEXT_COLOR);
+    tft.setCursor(BUTTON_x,BUTTON_y);
+    tft.getTextBounds("Mode: WWWWWWWWWW", (int16_t)BUTTON_x,(int16_t) BUTTON_y, &x1, &y1, &w, &h);
+    tft.fillRoundRect(x1-2,y1-2,w+4,h+6,5,ILI9341_BLACK);
+    tft.setTextColor(BUTTON_MODE_TEXT_COLOR);
+    switch(f_button)
+    {
+      case 0:
+        tft.print("Band switch"); 
+        break;
+      case 1:
+        tft.print("Mode switch"); 
+        break;
+      case 2:
+        tft.print("BFO Adjust"); 
+        break;      
+      case 3:
+        tft.print("3"); 
+        break;     }
+  }
+}
 /*--------------------------------------------------------------------------
         Display the current Mode LSB, USB, ..
 ---------------------------------------------------------------------------*/
@@ -853,6 +893,7 @@ void loop() {
   display_rx_tx();
   display_smeter();
   display_tmeter();
+  display_button();
 }
 
 void next_band(uint8_t dir, uint8_t &band)
@@ -880,8 +921,7 @@ void next_band(uint8_t dir, uint8_t &band)
         Alternative Loop (core0)
 ------------------------------------------------------------------------------------------------*/
 volatile int lastEncoding = 0, lastEncoding1 = 0;
-uint8_t   pressed = 1, pressed_old =1;
-uint8_t   button_pressed = 0;
+
 
 void task0(void* arg)
 {
@@ -905,6 +945,84 @@ void task0(void* arg)
             f_fchange=1; // update the si5351 vfo frequency
          }
 
+
+        pressed = digitalRead(ROTARY_PRESS); 
+        if (pressed == 0)  // Button is pulled up
+        {
+            int currMillis = millis();
+            if (currMillis - lastEncoding1 > 500)
+            {
+              switch(f_button)
+              {
+                case 0:
+                  f_button = 1;
+                  break;               
+                case 1:
+                  f_button = 2;
+                  break;                
+                case 2:
+                  f_button = 0;
+                  break;
+              }
+//              if ((f_button+1) > MAX_BUTTON)
+//                f_button = 0; 
+//              else          
+//                f_button++;
+              lastEncoding1 = currMillis;
+             }
+        }
+               
+
+         count = 0;
+         count = Enc_band.getCount();
+         Enc_band.clearCount();
+         if (count!=0)
+             {
+              int currMillis = millis();
+              if (currMillis - lastEncoding > 100)
+                {     
+                    switch(f_button)
+                    {
+                      case 0:
+                        band = f_band;
+                        if(count > 0) 
+                          { if (band == 0) {band = bmax; } else {band--;} next_band(0,band);}
+                        else
+                          { band++; if (band > bmax) {band = 0; } next_band(1,band);} 
+                        
+                        frq = current_frq[band];              
+                        f_band   = band; // to make it more thread save
+                        f_dchange=1;
+                        f_fchange=1; // update the si5351 vfo frequency
+                        break;
+                      case 1:
+                        if (f_mode)
+                          f_mode = 0;
+                        else
+                          f_mode = 1;
+                        f_bchange = 1;
+                        f_dchange=1; // send for update display   
+                        break;
+                      case 2:
+                         f_bchange=1; // Set bfo frequency and display New BFO frequency
+                         f_dchange=1; // UpdateDisplay 
+                         bfo_frq+= count * BFO_STEP;
+                         if (bfo_frq > BFO_MAX) bfo_frq = BFO_MAX;
+                         if (bfo_frq < BFO_MIN) bfo_frq = BFO_MIN;
+                      break;
+                        
+                    }
+                lastEncoding = currMillis;
+               }
+           }
+      delay(1);
+     }
+}
+
+
+
+
+/*
 
         pressed = digitalRead(ROTARY_PRESS); 
         if (pressed == 0 && pressed_old != 0)
@@ -931,43 +1049,5 @@ void task0(void* arg)
               } 
             }      
         }
-               
 
-         count = 0;
-         count = Enc_band.getCount();
-         Enc_band.clearCount();
-         if (count!=0)
-             {
-              int currMillis = millis();
-              if (currMillis - lastEncoding > 100)
-                {     
-                    if (button_pressed)
-                    {
-                        // Switch band
-                        band = f_band;
-                        if(count > 0) 
-                          { if (band == 0) {band = bmax; } else {band--;} next_band(0,band);}
-                        else
-                          { band++; if (band > bmax) {band = 0; } next_band(1,band);} 
-                        
-                        frq = current_frq[band];              
-                        f_band   = band; // to make it more thread save
-                        f_dchange=1;
-                        f_fchange=1; // update the si5351 vfo frequency
-                    }
-                    else
-                    {
-                        if (f_mode)
-                          f_mode = 0;
-                        else
-                          f_mode = 1;
-    
-                        f_bchange = 1;
-                        f_dchange=1; // send for update display                    
-                        }
-                lastEncoding = currMillis;
-               }
-           }
-      delay(1);
-     }
-}
+*/
