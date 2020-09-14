@@ -129,6 +129,8 @@ ESP32Encoder   Enc_vfo;
 #define CLK_VFO_RX           SI5351_CLK2
 #define CLK_BFO_TX           SI5351_CLK1
 #define CLK_VFO_TX           SI5351_CLK1
+#define CLK_NA               SI5351_CLK0
+
 
 
 Si5351 si5351;
@@ -183,7 +185,7 @@ uint8_t   c_button = -1, f_button = 0;
 #define MODE_SELTEXT_COLOR tft.color565(255,255,0)
 #define MODE_NSELTEXT_COLOR 0
 
-#define USB_FREQUENCY 9001500 //9000500 //8998000 
+#define USB_FREQUENCY 9001000 //9000500 //8998000 
 #define LSB_FREQUENCY 8997000 //8998000 //8995000 
 
 #define F_MAX_MODE  1
@@ -758,7 +760,7 @@ void setbfo()
 
 void setvfo()
 {
- if(f_fchange==1)
+ if(f_fchange)
     {
     f_fchange=0;
     uint64_t freq = (uint64_t)(frq + offset_frq) * SI5351_FREQ_MULT;
@@ -855,28 +857,24 @@ void setup() {
   {  Serial.println ( "SI5351 not found" ); }
 
   si5351.set_correction(correction, SI5351_PLL_INPUT_XO);
- 
   si5351.drive_strength(CLK_VFO_RX, SI5351_DRIVE_2MA);
-  si5351.output_enable(CLK_VFO_RX, 1);
-
   si5351.drive_strength(CLK_VFO_TX, SI5351_DRIVE_2MA);
-  si5351.output_enable(CLK_VFO_TX, 1);
   
   if (si5351_bfo.init(SI5351_CRYSTAL_LOAD_8PF, SI5351_XTAL_FREQ1, 0) == false)
   {  Serial.println ( "SI5351 bfo not found" ); }
 
   si5351_bfo.set_correction(correction1, SI5351_PLL_INPUT_XO);
   si5351_bfo.drive_strength(CLK_BFO_RX, SI5351_DRIVE_2MA);
-  si5351_bfo.output_enable(CLK_BFO_RX, 1);
-  
   si5351_bfo.drive_strength(CLK_BFO_TX, SI5351_DRIVE_2MA);
-  si5351_bfo.output_enable(CLK_BFO_TX, 1);
-    
-  shiftOut(BP_80M,LP_80M);
-  setbfo();
-  setvfo();
 
-  
+  shiftOut(BP_80M,LP_80M);
+  setbfo();  // Auto output enable!
+  setvfo();  
+
+  si5351.output_enable(CLK_VFO_RX, 1);
+  si5351.output_enable(CLK_VFO_TX, 0);
+  si5351_bfo.output_enable(CLK_BFO_RX, 1);
+  si5351_bfo.output_enable(CLK_BFO_TX, 0);
 }
 
 
@@ -964,10 +962,6 @@ void task0(void* arg)
                   f_button = 0;
                   break;
               }
-//              if ((f_button+1) > MAX_BUTTON)
-//                f_button = 0; 
-//              else          
-//                f_button++;
               lastEncoding1 = currMillis;
              }
         }
@@ -1018,36 +1012,3 @@ void task0(void* arg)
       delay(1);
      }
 }
-
-
-
-
-/*
-
-        pressed = digitalRead(ROTARY_PRESS); 
-        if (pressed == 0 && pressed_old != 0)
-        {
-            int currMillis = millis();
-            if (currMillis - lastEncoding1 > 100)
-            {
-            pressed_old = 0;
-            button_pressed++;
-            if (button_pressed > 1)
-              button_pressed = 0;           
-            lastEncoding1 = currMillis;
-            }
-        }
-        else
-        {
-            if (pressed_old == 0)
-            {
-              int currMillis = millis();
-              if (currMillis - lastEncoding1 > 100)
-              {
-              pressed_old = 1;
-              lastEncoding1 = currMillis;
-              } 
-            }      
-        }
-
-*/
