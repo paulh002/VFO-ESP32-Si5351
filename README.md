@@ -1,13 +1,15 @@
 # VFO-ESP32-Si5351 v2.1
 The PCB has a connector for analog I/O this is intended to support facilities like SWR meter, Voltage and current meter. In the src directory I have put a version of the software that support SWR measurement. Also some simple calibration menu's are added. But this is still in development. The code for SWR comes from Loftur E. Jónasson - TF3LJ / VE2LJX but was intended for Teensy. I made a ESP32 implementation of it and with support for ILI9341 adafruit library. 
 I will update (hope fully) this extension the comming months to have full calibration capability for both si5351 and the AD8307 log detectors. A pcb for the SWR meter is also developed this I will put in a seperate repository.
-![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/vfo4.jpg)
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/vfo7.jpg)
 
 # VFO-ESP32-Si5351 v2.0
 The new version v 2.0 uses 2x si5351 on the pcb with buffer transistors to minimize crosstalk. The old version had about 52 db  crosstalk suppression with the new version this is much improved. I cannot hear any injected spurs any more. But will add some measurements later.
 The SI5351 library is updated to support multiple si5351's.
 
 If you are using diode double balanced mixers than a square wave is no problem. But if you want to use a jfet balanced mixer than you need to filter the output of the vfo. For this I developed a filter PCB which is controled by the vfo.
+
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/vfo4.jpg)
 
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/VFO-PCB1.jpg)
 
