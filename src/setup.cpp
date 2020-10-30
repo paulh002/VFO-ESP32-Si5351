@@ -88,7 +88,7 @@ void setup_menu(void)
         break;        
       case 3:
         calibrate_ad8307();
-        setup_select = 0;
+        setup_select = 1;
         break;  
       }
 	delay(1);
@@ -128,6 +128,67 @@ void calibrate_ad8307(void)
   
   tft.setCursor(30, 20);
   tft.print("Calibrate ad8307");
+  tft.setCursor(30, 40);
+  tft.print("-> 1: One level Calibration");
+  tft.setCursor(30, 60);
+  tft.print("   2: 1st level Calibration");
+  tft.setCursor(30, 80);
+  tft.print("   3: 2nd level Calibration");
+  tft.setCursor(30, 120);
+  tft.print("   4: Back");
+
+  while(f_button == 3)
+  {
+  if (c_setup_menu_item != setup_menu_item)
+    {
+    c_setup_menu_item = setup_menu_item;
+    
+    tft.fillScreen(ILI9341_BLACK);
+    tft.setCursor(30, 20);
+    tft.print("Setup");
+  
+    tft.setCursor(30, 40);
+    if (c_setup_menu_item == 1)
+      tft.print("-> 1: One level Calibration");
+    else
+      tft.print("   1: One level Calibration");
+    
+    tft.setCursor(30, 60);
+    if (c_setup_menu_item == 2)
+      tft.print("-> 2: 1st level Calibration");
+    else
+      tft.print("   2: 1st level Calibration");
+
+    tft.setCursor(30, 80);
+    if (c_setup_menu_item == 3)
+      tft.print("-> 3: 2nd level Calibration");
+    else
+      tft.print("   3: 2nd level Calibration");
+
+    tft.setCursor(30, 120);
+    if (c_setup_menu_item == 4)
+      tft.print("-> 4: Back");
+    else
+      tft.print("   4: Back");
+    }
+   
+   switch (setup_select)
+      {
+      case 0:
+        break;  
+      case 1:
+        one_level_calibration();
+        setup_select = 0;
+        break;  
+      case 2:
+        setup_select = 0;
+        break;        
+      case 3:
+        setup_select = 0;
+        break;  
+      }
+  delay(1);
+  }
 }
 
 void LoadEEPROM ()

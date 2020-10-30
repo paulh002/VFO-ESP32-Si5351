@@ -277,7 +277,8 @@ int16_t RE_Count = 0;
 uint8_t f_redraw; 
 uint8_t c_mhz=0;  // Only draw Mhz once
 
-QueueHandle_t queue;
+SemaphoreHandle_t swrBinarySemaphore = NULL;
+QueueHandle_t     rotary_queue = NULL;
 
 /*--------------------------------------------------------------------------
         Initialize 74HC595
@@ -946,17 +947,23 @@ void setup() {
   Serial.println("VFO PA0PHH !"); 
   frq = freqswitch_low[f_band];
 
-  queue = xQueueCreate( 10, sizeof( int ) );
-  if(queue == NULL){
-    Serial.println("Error creating the queue");
-  }
-  
+
  // set pin modes before display updates
   pinMode(TXRX_SWITCH, INPUT);
   pinMode(S_METER, ANALOG);
   pinMode(T_METER, ANALOG);
   pinMode(REF_METER, ANALOG);
   adc_init();
+  swrBinarySemaphore = xSemaphoreCreateMutex();
+  if(swrBinarySemaphore == NULL){
+    Serial.println("Error creating the swrBinarySemaphore");
+  }
+  
+  rotary_queue = xQueueCreate( 10, sizeof( int ) );
+  if(rotary_queue == NULL){
+    Serial.println("Error creating the queue");
+  }
+
   
   display_init();
   setup_display();
@@ -1012,7 +1019,7 @@ void loop() {
   setbfo();
   if (f_rxtx != 0)
       {
-        adc_poll_and_feed_circular();
+        //adc_poll_and_feed_circular();
         pswr_sync_from_interrupt();
         calc_SWR_and_power();
         if (loop_counter == 0)
@@ -1099,12 +1106,17 @@ void task0(void* arg)
                   f_button = 3;
                   break;
                 case 3:
-                  if (setup_menu_item == 3)
+                  if (setup_menu_item == 4)
                     f_button = 0;
                   if (setup_menu_item == 1)
                     setup_select = 1;
                   if (setup_menu_item == 2)
                     setup_select = 2;
+                  if (setup_menu_item == 3)
+                    setup_select = 3;
+                  break;
+                case 4:
+                  f_button = 0;
                   break;
               }
               lastEncoding1 = currMillis;
@@ -1151,26 +1163,57 @@ void task0(void* arg)
                       break;
                       
                       case 3:
-                        switch (setup_menu_item)
+                        if(count > 0) 
                         {
-                          case 1:
-                            setup_menu_item = 2;
-                            break;
-                          case 2:
-                            setup_menu_item = 3;
-                            break;
-                          case 3:
-                            setup_menu_item = 4;
-                            break;
-                          case 4:
-                            setup_menu_item = 1;
-                            break;
+                          switch (setup_menu_item)
+                          {
+                            case 1:
+                              setup_menu_item = 2;
+                              break;
+                            case 2:
+                              setup_menu_item = 3;
+                              break;
+                            case 3:
+                              setup_menu_item = 4;
+                              break;
+                            case 4:
+                              setup_menu_item = 1;
+                              break;
+                          }
                         }
-                      break;  
+                        else
+                        {
+                          switch (setup_menu_item)
+                          {
+                            case 1:
+                              setup_menu_item = 4;
+                              break;
+                            case 2:
+                              setup_menu_item = 1;
+                              break;
+                            case 3:
+                              setup_menu_item = 2;
+                              break;
+                            case 4:
+                              setup_menu_item = 3;
+                              break;
+                          }
+                        }
+                        break;
+                      case 4:
+                        xQueueSend(rotary_queue, &count, portMAX_DELAY);
+                        break;
                     }
                 lastEncoding = currMillis;
                }
            }
-      delay(1);
+      
+
+     // Sample power on core 0
+     xSemaphoreTake( swrBinarySemaphore, portMAX_DELAY );
+     adc_poll_and_feed_circular();
+     xSemaphoreGive( swrBinarySemaphore );
+
+     delay(1);
      }
 }

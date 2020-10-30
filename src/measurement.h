@@ -28,6 +28,32 @@
 #define MIN_PWR_FOR_SWR_SHOW  0.01  // Minimum Power in mW for SWR indication (use recent value)
 
 //-----------------------------------------------------------------------------
+// DEFS for FWD and REF coupler, 2xAD8307 or Diode detectors
+//-----------------------------------------------------------------------------
+// DEFS for AD8307 Calibration (dBm *10)
+// levels for the forward and reverse measurements - in order to allow a Calibration
+//
+// Note that the AD8307 generates 2uA per dB and applies an internal resistor of 12.5kohms
+// 2uA * 12.5kohm gives the specified slope of 25mV/dB.  
+// Unloaded Teensy 3.2 AD inputs appear to have an impedance of approx 200 kohms,
+// hence the voltage slope is slightly affected:
+// 12.5k||200k = 11.75k.  2uA * 11.75k gives a slope value of 23.5mV/dB.
+// However if the meter has a voltage divider made out of RS=15kohm and RP=10kohm, 
+// then the slope would need to be recalculated like below:
+// 12.5k||25k = 8.333k.  2uA * 8.333k then gives a slope value of 16.67mV/dB 
+// or if RS = 47kohm and RP = 33kohm (RS+RP = 80 kohm), then:
+// 12.5k||80k = 10.81k.  2uA * 10.81k gives a slope value of 21.62mV/dB
+//
+#define LOGAMP1_SLOPE          23.5 // mV/dB.  Used with Single Level Calibration
+#define LOGAMP2_SLOPE          23.5 // mV/dB.  Used with Single Level Calibration
+                                    // Typical value for AD8307 is 25mV/dB if AD input is ~1Mohm or higher
+                                    // Typical value for ADL5519 is 22mV/dB
+//-----------------------------------------------------------------------------
+#define CAL_INP_QUALITY        12.0 // (dB) Minimum difference between the Fwd and Rev
+                                    // signals to be allowed to calibrate
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
 // ADC Reference Voltage and Voltage Drop Definitions
 #define ADCREF_BUILTIN            0 // 1 for builtin 1.2V reference, 0 for external 3.3V reference
 //-----------------------------------------------------------------------------
@@ -98,6 +124,12 @@ extern double power_db_long;  // Calculated MAX power in dBm, 30 sec or longer w
 extern double rev_power_db;
 extern char   lcd_buf[];
 extern var_t  R;
+extern double adc_ref;        // ADC reference 
+extern int16_t     fwd;            // AD input - 12 bit value, v-forward
+extern int16_t     rev;            // AD input - 12 bit value, v-reverse
+
+extern  SemaphoreHandle_t swrBinarySemaphore;
+extern  QueueHandle_t     rotary_queue;
 
 extern void adc_init(void);
 extern void adc_poll_and_feed_circular(void);

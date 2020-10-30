@@ -49,6 +49,9 @@ void  ShowHelp ();
 void  LoadCorrection ();
 void  loop_si5351 ( uint8_t ui_vfo_bfo );
 void FmtFreq ( int32_t freq, char* buff, bool addHz );
+void one_level_calibration(void);
+void first_level_calibration(void);
+void second_level_calibration(void);
 
 extern  Si5351 si5351;
 extern  Si5351 si5351_bfo;

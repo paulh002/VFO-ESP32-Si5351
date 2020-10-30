@@ -77,16 +77,14 @@ void pswr_sync_from_interrupt(void)
 {
   uint8_t in;
 
-//  noInterrupts();
+  xSemaphoreTake( swrBinarySemaphore, portMAX_DELAY );
   in = measure.incount;
-//  interrupts();
 
   while (measure.outcount != in)              // Read from circular buffer, while new input available
   {
-//    noInterrupts();
     fwd = measure.fwd[measure.outcount];      // Transfer data from circular buffers
     rev = measure.rev[measure.outcount];
-//    interrupts();
+
     measure.outcount++;                       // 8 bit value, rolls over at 256
     
     determine_power_pep_pk();                 // Determine Instantaneous power, pep, pk and avg
@@ -96,10 +94,9 @@ void pswr_sync_from_interrupt(void)
       ModScope.adddata(power_mw, power_mw_long);    
     }
 */
-//    noInterrupts();                           // Perhaps a bit redundant - squeeze every last drop while we're at it
     in = measure.incount;
-//    interrupts();
   }
+  xSemaphoreGive( swrBinarySemaphore );
 }
 
 
