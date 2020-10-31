@@ -60,9 +60,6 @@ using namespace ace_button;
 
 //#define RIT_SWITCH  32  
 #define TXRX_SWITCH   39
-#define S_METER       32 
-#define T_METER       33
-#define REF_METER     4
 
 
 #define SMETER_X     40
@@ -955,8 +952,8 @@ void setup() {
  // set pin modes before display updates
   pinMode(TXRX_SWITCH, INPUT);
   pinMode(S_METER, ANALOG);
-  pinMode(T_METER, ANALOG);
-  pinMode(REF_METER, ANALOG);
+  pinMode(FWD_METER, ANALOG);
+  pinMode(REV_METER, ANALOG);
   
   // Set pushbutton rotary encoder configuration
   pinMode(ROTARY_PRESS, INPUT);

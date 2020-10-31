@@ -61,11 +61,11 @@ void adc_poll_and_feed_circular(void)
   // use builtin A/D converters (12 bit resolution)
   // Each poll of the builtin ADC is measured to take 130us if averaging set at 8.
 
-    int16_t result_fwd = (int16_t)random(1025, 3000); // analogRead(Pfwd);
-    int16_t result_ref = (int16_t)random(1000, 2000); // analogRead(Pref);  // ref=ADC0, fwd=ADC1
+    //int16_t result_fwd = (int16_t)random(1025, 3000); // analogRead(Pfwd);
+    //int16_t result_ref = (int16_t)random(1000, 2000); // analogRead(Pref);  // ref=ADC0, fwd=ADC1
     
-    //int16_t result_fwd = analogRead(Pfwd);
-    //int16_t result_ref = analogRead(Pref);  // ref=ADC0, fwd=ADC1
+    int16_t result_fwd = analogRead(FWD_METER);
+    int16_t result_ref = analogRead(REV_METER);  // ref=ADC0, fwd=ADC1
     
     // Serial.println(result_fwd);
     measure.fwd[measure.incount] = result_fwd;

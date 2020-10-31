@@ -2,6 +2,11 @@
 #ifndef _MEASUREMENT_H_
 #define _MEASUREMENT_H_
 
+
+#define S_METER       32            // GPIO port S-Meter
+#define FWD_METER     33            // GPIO port Fwd-Meter
+#define REV_METER     4             // GPIO port Rev-Meter
+
 #define TWENTYTOONE               0 // 1 to select the values for 20 to 1 coupler, else 0
 #define SAMPLE_TIMER           1000 // Interrupt timer, in microseconds
 #define BUF_SHORT               100 // Buffer size for 100ms Peak
