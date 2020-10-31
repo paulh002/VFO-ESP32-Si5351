@@ -79,16 +79,25 @@ void setup_menu(void)
       case 0:
         break;  
       case 1:
+        setup_menu_item = 1;
+        setup_select = 0;
         calibrate_vfo_si5351();
         setup_select = 0;
+        c_setup_menu_item = 0;
         break;  
       case 2:
+        setup_menu_item = 1;
+        setup_select = 0;
         calibrate_bfo_si5351();
         setup_select = 0;
+        c_setup_menu_item = 0;
         break;        
       case 3:
+        setup_menu_item = 1;
+        setup_select = 0;
         calibrate_ad8307();
-        setup_select = 1;
+        setup_select = 0;
+        c_setup_menu_item = 0;
         break;  
       }
 	delay(1);
@@ -177,14 +186,22 @@ void calibrate_ad8307(void)
       case 0:
         break;  
       case 1:
-        one_level_calibration();
         setup_select = 0;
+        ad8307_calibration(CAL_SET0_MENU);
+        setup_select = 0;
+        c_setup_menu_item = 0;
         break;  
       case 2:
         setup_select = 0;
+        ad8307_calibration(CAL_SET1_MENU);
+        setup_select = 0;
+        c_setup_menu_item = 0;
         break;        
       case 3:
         setup_select = 0;
+        ad8307_calibration(CAL_SET2_MENU);
+        setup_select = 0;
+        c_setup_menu_item = 0;
         break;  
       }
   delay(1);
@@ -195,8 +212,14 @@ void LoadEEPROM ()
 {
   uint8_t coldstart;
 
+  EEPROM.begin(sizeof(var_t) + sizeof(uint8_t));
+  
   coldstart = EEPROM.read(0);               // Grab the coldstart byte indicator in EEPROM for
                                              // comparison with the COLDSTART_REFERENCE
+
+  sprintf(lcd_buf,"coldstart : %d", coldstart);
+  Serial.println ( lcd_buf );
+  
   // Initialize all memories if first upload or if COLDSTART_REF has been modified
   // either through PSWR_A.h or through Menu functions
   if (coldstart != COLDSTART_REF)

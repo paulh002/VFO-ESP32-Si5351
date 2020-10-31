@@ -28,29 +28,37 @@ extern uint8_t setup_menu_item, c_setup_menu_item, setup_select;
 #define CAL_FWD 1                                      // Good input signal detected, forward direction
 #define CAL_REV 2                                      // Good input signal detected, reverse direction (redundant)
 // Below variable can take one of the three above defined values, based on the
-#define CAL_SET0_MENU 0
 // detected input "calibration" signal
 
 
-void one_level_calibration(void)
+void ad8307_calibration(int16_t menu_level)
 {
-  int16_t value=0, value_old = 0, cal_set = 0, menu_level;
-  int16_t val_sub = 0;
-  int16_t val = 0;
-  char    lcd_buf[80];
-  int     count;
-  int16_t x1, y1; 
-  uint16_t w, h;
-  
-  static uint8_t  cal_sig_direction_quality = 0, cal_sig_direction_quality_old = 3;
+  int16_t   value=0, value_old = 0, cal_set = 0, val_sub = 0, val = 0;
+  char      lcd_buf[80];
+  int       count;
+  int16_t   x1, y1; 
+  uint16_t  w, h;
+  uint8_t   cal_sig_direction_quality = 0, cal_sig_direction_quality_old = 3;
    
 	tft.fillScreen(ILI9341_BLACK);
   tft.setFont(&DroidSansMono8pt7b);
   tft.setCursor(30, 20);
-  tft.print("One level calibration");
 
-  menu_level = CAL_SET0_MENU;
-  cal_set = 0;
+  switch(menu_level)
+  {
+    case CAL_SET0_MENU:
+      tft.print("Single calibration");
+      cal_set = 0;
+      break;
+    case CAL_SET1_MENU:
+      tft.print("Forward calibration");
+      cal_set = 0;
+      break;
+    case CAL_SET2_MENU:
+      tft.print("Reverse calibration");
+      cal_set = 1;
+      break;
+  }
   value = R.cal_AD[cal_set].db10m;
       
   f_button = 4;
@@ -101,7 +109,7 @@ void one_level_calibration(void)
         tft.print("Adjust (dBm) level: ");
         tft.print(lcd_buf);
       }
-      if (xQueueReceive(rotary_queue, &count, 0))
+      if (xQueueReceive(rotary_queue, &count, 0))  // Receive number of clicks from rotary
       {
         value = value + count;
         int16_t max_value = 530;                             // Highest permissible Calibration value in dBm * 10
@@ -150,7 +158,7 @@ void one_level_calibration(void)
         R.cal_AD[cal_set].Fwd = adc_ref * fwd/4096.0;
         R.cal_AD[cal_set].Rev = R.cal_AD[cal_set].Fwd;
       }
-    EEPROM_writeAnything(1,R);
+    SaveEEPROM ();
     tft.setCursor(30, 80);
     tft.print("Value Stored");  
     }
@@ -166,7 +174,7 @@ void one_level_calibration(void)
       {
         R.cal_AD[cal_set].Rev = adc_ref * rev/4096.0;
       }
-    EEPROM_writeAnything(1,R);
+    SaveEEPROM ();
     tft.setCursor(30, 80);
     tft.print("Value Stored"); 
     }
@@ -175,15 +183,6 @@ void one_level_calibration(void)
     tft.setCursor(30, 80);
     tft.print("Nothing Stored");   
     }
+f_button = 3;
 delay(1000);
-}
-
-void first_level_calibration(void)
-{
-	
-}
-
-void second_level_calibration(void)
-{
-	
 }

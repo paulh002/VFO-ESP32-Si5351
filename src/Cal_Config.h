@@ -42,6 +42,10 @@
  *	used in the calibration program, but are referenced in the Si5351 code.
  */
 
+#define CAL_SET0_MENU 0
+#define CAL_SET1_MENU 1
+#define CAL_SET2_MENU 2
+
 bool  GetNewFreq (void);
 void  SaveCorrection ( );
 void  GetTestFreq ();
@@ -49,9 +53,8 @@ void  ShowHelp ();
 void  LoadCorrection ();
 void  loop_si5351 ( uint8_t ui_vfo_bfo );
 void FmtFreq ( int32_t freq, char* buff, bool addHz );
-void one_level_calibration(void);
-void first_level_calibration(void);
-void second_level_calibration(void);
+void ad8307_calibration(int16_t menu_level);
+
 
 extern  Si5351 si5351;
 extern  Si5351 si5351_bfo;

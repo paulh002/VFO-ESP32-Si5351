@@ -30,6 +30,8 @@ CLK2 : Lo Signal
 #include <Adafruit_GFX.h>
 #include <Adafruit_SPITFT.h>
 #include <Adafruit_SPITFT_Macros.h>
+#include <AceButton.h>
+using namespace ace_button;
 
 #include <Adafruit_ILI9341.h>
 #include "Fonts/FreeSans18pt7b.h"
@@ -131,8 +133,10 @@ ESP32Encoder   Enc_band;
 #define PULSE_INPUT_PIN 34  // Rotaty Encoder A
 #define PULSE_CTRL_PIN  35  // Rotaty Encoder B
 
-ESP32Encoder   Enc_vfo;
-
+ESP32Encoder    Enc_vfo;
+AceButton       rotary_button(ROTARY_PRESS);
+void            rotary_button_eventhandler(AceButton*, uint8_t, uint8_t);
+ 
 /*-------------------------------------------------------
    Si5351
 --------------------------------------------------------*/
@@ -953,6 +957,13 @@ void setup() {
   pinMode(S_METER, ANALOG);
   pinMode(T_METER, ANALOG);
   pinMode(REF_METER, ANALOG);
+  
+  // Set pushbutton rotary encoder configuration
+  pinMode(ROTARY_PRESS, INPUT);
+  rotary_button.setEventHandler(rotary_button_eventhandler);
+  rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureLongPress);
+  rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureSuppressAfterLongPress);
+  
   adc_init();
   swrBinarySemaphore = xSemaphoreCreateMutex();
   if(swrBinarySemaphore == NULL){
@@ -978,10 +989,19 @@ void setup() {
   
   xTaskCreatePinnedToCore(task0, "Task0", 4096, NULL, 1, NULL, 0);
   
-  // Set pushbutton rotary encoder
-  pinMode(ROTARY_PRESS, INPUT);
+
 // Load correction and calibration information
   LoadEEPROM(); 
+
+  sprintf(lcd_buf,"db10m : %d %f %f", R.cal_AD[0].db10m, R.cal_AD[0].Fwd, R.cal_AD[0].Rev);
+  Serial.println ( lcd_buf );
+  sprintf(lcd_buf,"db10m : %d %f %f", R.cal_AD[1].db10m, R.cal_AD[1].Fwd, R.cal_AD[1].Rev);
+  Serial.println ( lcd_buf );
+  sprintf(lcd_buf,"Correction 1 : %d", R.correction_si5351_no1);
+  Serial.println ( lcd_buf );
+  sprintf(lcd_buf,"Correction 2 : %d ", R.correction_si5351_no1);
+  Serial.println ( lcd_buf );
+  
   if (si5351.init(SI5351_CRYSTAL_LOAD_8PF, SI5351_XTAL_FREQ1, 0) == false)
   {  Serial.println ( "SI5351 not found" ); }
 
@@ -1086,43 +1106,8 @@ void task0(void* arg)
             f_dchange=1; // send for update display
             f_fchange=1; // update the si5351 vfo frequency
          }
-
-
-        pressed = digitalRead(ROTARY_PRESS); 
-        if (pressed == 0)  // Button is pulled up
-        {
-            int currMillis = millis();
-            if (currMillis - lastEncoding1 > 500)
-            {
-              switch(f_button)
-              {
-                case 0:
-                  f_button = 1;
-                  break;               
-                case 1:
-                  f_button = 2;
-                  break;                
-                case 2:
-                  f_button = 3;
-                  break;
-                case 3:
-                  if (setup_menu_item == 4)
-                    f_button = 0;
-                  if (setup_menu_item == 1)
-                    setup_select = 1;
-                  if (setup_menu_item == 2)
-                    setup_select = 2;
-                  if (setup_menu_item == 3)
-                    setup_select = 3;
-                  break;
-                case 4:
-                  f_button = 0;
-                  break;
-              }
-              lastEncoding1 = currMillis;
-             }
-        }
-               
+        
+         rotary_button.check();        
 
          count = 0;
          count = Enc_band.getCount();
@@ -1208,7 +1193,6 @@ void task0(void* arg)
                }
            }
       
-
      // Sample power on core 0
      xSemaphoreTake( swrBinarySemaphore, portMAX_DELAY );
      adc_poll_and_feed_circular();
@@ -1216,4 +1200,40 @@ void task0(void* arg)
 
      delay(1);
      }
+}
+
+void rotary_button_eventhandler(AceButton*, uint8_t eventType, uint8_t buttonState)
+{
+  switch (eventType) {
+    case AceButton::kEventLongPressed :
+      f_button = 3; 
+      break;
+    case AceButton::kEventReleased:
+      switch(f_button)
+        {
+        case 0:
+          f_button = 1;
+          break;               
+        case 1:
+          f_button = 2;
+          break;                
+        case 2:
+          f_button = 0;
+          break;
+        case 3:
+          if (setup_menu_item == 4)
+            f_button = 0;
+          if (setup_menu_item == 1)
+            setup_select = 1;
+          if (setup_menu_item == 2)
+            setup_select = 2;
+          if (setup_menu_item == 3)
+            setup_select = 3;
+          break;
+        case 4:
+          f_button = 0;
+          break;
+        }
+      break;
+  }
 }
