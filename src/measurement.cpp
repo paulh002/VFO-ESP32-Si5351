@@ -67,7 +67,8 @@ void adc_poll_and_feed_circular(void)
     int16_t result_fwd = analogRead(FWD_METER);
     int16_t result_ref = analogRead(REV_METER);  // ref=ADC0, fwd=ADC1
     
-    // Serial.println(result_fwd);
+    Serial.println(result_fwd);
+    Serial.println(result_ref);
     measure.fwd[measure.incount] = result_fwd;
     measure.rev[measure.incount] = result_ref;
     measure.incount++;                        // 8 bit value, rolls over at 256
@@ -124,15 +125,15 @@ void pswr_determine_dBm(void)
   //
   // measured dB values are: (V - V_Cal1) * slope_gradient + dB_Cal1
  
-  //char str[82];
-  //sprintf(str,"fwd %d  rev %d", fwd,rev );
-  //Serial.println (str);
+  char str[82];
+  sprintf(str,"fwd %d  rev %d", fwd,rev );
+  Serial.println (str);
   
   ad8307_FdBm = (adc_ref * (fwd/4096.0) - R.cal_AD[0].Fwd) * delta_Fdb + R.cal_AD[0].db10m/10.0;
   ad8307_RdBm = (adc_ref * (rev/4096.0) - R.cal_AD[0].Rev) * delta_Rdb + R.cal_AD[0].db10m/10.0;
 
-  //sprintf(str,"ad8307_FdBm %f  ad8307_RdBm %f", ad8307_FdBm,ad8307_RdBm );
-  //Serial.println (str);
+  sprintf(str,"ad8307_FdBm %f  ad8307_RdBm %f", ad8307_FdBm,ad8307_RdBm );
+  Serial.println (str);
   
 
   // Test for direction of power - Always designate the higher power as "forward"
@@ -200,10 +201,12 @@ void determine_power_pep_pk(void)
   power_db = 10 * log10(power_mw);
   rev_power_db = 10 * log10(ref_power_mw);
 
-//  char str[82];
-//  sprintf(str,"fwd_power_mw %f ref_power_mw %f power_mw %f", fwd_power_mw, ref_power_mw, power_mw );
-//  Serial.println (str);
+  char str[82];
+  sprintf(str,"fwd_power_mw %f ref_power_mw %f power_mw %f", fwd_power_mw, ref_power_mw, power_mw );
+  Serial.println (str);
 
+  sprintf(str,"rev_power_db %f power_db %f ", rev_power_db, power_db );
+  Serial.println (str);
 
   #else
   //---------------------------------------------------------------------------------

@@ -401,6 +401,8 @@ void display_smeter(){
  }
  else
  {
+  smeterval = 0;
+  if (rev_power_db > 0.0)
   smeterval = floor(rev_power_db / 6.0) ;
  }
  if (smeterval_old == smeterval)
@@ -456,7 +458,9 @@ void display_tmeter(){
  }
  else
  {
-  tmeterval = floor(power_db / 6.0) ;
+  tmeterval = 0;
+  if (power_db > 0.0)
+    tmeterval = floor(power_db / 6.0) ;
  }
  
  if (tmeterval_old == tmeterval)
@@ -1191,10 +1195,12 @@ void task0(void* arg)
            }
       
      // Sample power on core 0
-     xSemaphoreTake( swrBinarySemaphore, portMAX_DELAY );
-     adc_poll_and_feed_circular();
-     xSemaphoreGive( swrBinarySemaphore );
-
+     if (f_rxtx)
+       {
+       xSemaphoreTake( swrBinarySemaphore, portMAX_DELAY );
+       adc_poll_and_feed_circular();
+       xSemaphoreGive( swrBinarySemaphore );
+       }
      delay(1);
      }
 }
