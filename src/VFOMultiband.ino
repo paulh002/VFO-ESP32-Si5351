@@ -140,8 +140,8 @@ void            rotary_button_eventhandler(AceButton*, uint8_t, uint8_t);
 
 #define I2C_SDA2  16
 #define I2C_SCL2  17
-//#define SI5351_XTAL_FREQ1 SI5351_XTAL_FREQ //32000000
-#define SI5351_XTAL_FREQ1 32000000
+#define SI5351_XTAL_FREQ1 SI5351_XTAL_FREQ //32000000
+//#define SI5351_XTAL_FREQ1 32000000
 
 #define CLK_BFO_RX           SI5351_CLK2
 #define CLK_VFO_RX           SI5351_CLK2
