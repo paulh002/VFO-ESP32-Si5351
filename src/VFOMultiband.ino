@@ -536,18 +536,18 @@ void display_power()
     
   if(f_rxtx==1)
   {
- /*   tft.setFont(&FreeSans9pt7b);
+/*  tft.setFont(&FreeSans9pt7b);
     tft.getTextBounds("PEP:1.00KW", POWER_X, POWER_Y, &x1, &y1, &w, &h);
-    tft.setCursor(POWER_X, POWER_Y);
+    tft.setCursor(BAND_X, BAND_Y + 60);
     tft.setTextColor(POWER_COLOR);  
     print_p_mw(power_mw_pep);
     
   //-------- Display Power ---------------------------------------
     sprintf(str, "PEP: %s", lcd_buf  );
     tft.getTextBounds("PEP: 1000pW",POWER_X, POWER_Y, &x1, &y1, &w, &h);  
-    tft.fillRect(POWER_X,POWER_Y - h + 1, ILI9341_TFTHEIGHT - POWER_X, h + 3,ILI9341_BLACK);
+    tft.fillRect(BAND_X,BAND_Y + 60 - h + 1, ILI9341_TFTHEIGHT - POWER_X, h + 3,ILI9341_BLACK);
     tft.print(str);
-   */ 
+*/   
 //-------- Display SWR ---------------------------------------
 /*    h1 = h + 4;
     tft.setCursor(POWER_X, POWER_Y+h1);
@@ -560,13 +560,21 @@ void display_power()
     tft.print(str); */
      
     swr = print_swr();
-    pep = print_p_mw(power_mw_pep);
-    ringMeter((int)swr, 0, 500, X_SWR_RING, Y_SWR_RING, R_SWR_RING, (char *) "SWR", GREEN3RED);
-    ringMeter((int)pep, 0, 100, X_PEP_RING, Y_PEP_RING, R_PEP_RING, (char *) "PEP", GREEN2RED);
+    pep = power_mw_pep / 1000.0 ;//print_p_mw(power_mw_pep);
+    
+    //Serial.print("power_mw_pep : ");
+    //Serial.println(power_mw_pep);
+    //Serial.print("power_db : ");
+    //Serial.print(power_db);
+    //Serial.println("dbm");
+    
+    ringMeter((int)swr, 0, 500, X_SWR_RING, Y_SWR_RING, R_SWR_RING, (char *) "SWR", GREEN3RED,2);
+    ringMeter((int)pep, 0, 100, X_PEP_RING, Y_PEP_RING, R_PEP_RING, (char *) "PEP", GREEN2RED,0);
     fpower = 1;
   }
   else
   {
+    
     if (fpower)
     {
     /*tft.setFont(&FreeSans9pt7b);

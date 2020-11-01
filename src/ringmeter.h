@@ -13,7 +13,7 @@
 
 #define ILI9341_GREY 0x2104 // Dark grey 16 bit colour
 
-extern int ringMeter(int value, int vmin, int vmax, int x, int y, int r, char *units, byte scheme);
+extern int ringMeter(int value, int vmin, int vmax, int x, int y, int r, char *units, byte scheme, int digits);
 
 
 #endif

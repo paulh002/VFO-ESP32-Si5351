@@ -57,7 +57,7 @@ int drawCentreString(char *string, int dX, int poY, int size, int erase)
       tft.getTextBounds(str, (int16_t)dX, (int16_t) poY, &x1, &y1, &w, &h);
       int poX = dX - w/2;
       if (poX < 0) poX = 0;
-      tft.fillRoundRect(poX,y1-2,w+4,h+4,5,ILI9341_BLACK);  
+      tft.fillRoundRect(poX,y1-2,w+6,h+4,5,ILI9341_BLACK);  
     }
     
     
@@ -72,7 +72,7 @@ int drawCentreString(char *string, int dX, int poY, int size, int erase)
 // #########################################################################
 //  Draw the meter on the screen, returns x coord of righthand side
 // #########################################################################
-int ringMeter(int value, int vmin, int vmax, int x, int y, int r, char *units, byte scheme)
+int ringMeter(int value, int vmin, int vmax, int x, int y, int r, char *units, byte scheme, int digits)
 {
   // Minimum value of r is about 52 before value text intrudes on ring
   // drawing the text first is an option
@@ -138,10 +138,18 @@ int ringMeter(int value, int vmin, int vmax, int x, int y, int r, char *units, b
   }
 
   // Convert value to a string
-  char buf[10];
-  byte len = 4; if (value > 999) len = 5;
+  char buf[10], buf1[10];
+  byte len = 3; if (value > 999) len = 4;
   dtostrf(value, len, 0, buf);
-
+  if (digits == 2)
+  {
+    memset(buf1,0,10);
+    strcpy(buf1,buf);
+    buf1[1] = '.';
+    strcpy(&buf1[2], &buf[1]);
+    strcpy(buf, buf1);
+  }
+  
   // Set the text colour to default
   tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
   // Uncomment next line to set the text colour to the last segment value!
