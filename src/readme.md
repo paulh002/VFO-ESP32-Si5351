@@ -1,1 +1,1 @@
-Pre version of VFO with SWR meter support and calibration menu
+Pre version of VFO with SWR meter support, CAT interface and calibration menu
