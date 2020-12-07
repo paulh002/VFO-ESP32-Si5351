@@ -1,5 +1,5 @@
 # VFO-ESP32-Si5351 v2.1
-The PCB has a connector for analog I/O this is intended to support facilities like SWR meter, Voltage and current meter. In the src directory I have put a version of the software that support SWR measurement. Also some simple calibration menu's are added. But this is still in development. The code for SWR comes from Loftur E. Jónasson - TF3LJ / VE2LJX but was intended for Teensy. I made a ESP32 implementation of it and with support for ILI9341 adafruit library. 
+The PCB has a connector for analog I/O this is intended to support facilities like SWR meter, Voltage and current meter. In the src directory I have put a version of the software that support SWR measurement and CAT interface. Also some simple calibration menu's are added. But this is still in development. The code for SWR comes from Loftur E. Jónasson - TF3LJ / VE2LJX but was intended for Teensy. I made a ESP32 implementation of it and with support for ILI9341 adafruit library. 
 I will update (hope fully) this extension the comming months to have full calibration capability for both si5351 and the AD8307 log detectors. A pcb for the SWR meter is also developed this I will put in a seperate repository.
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/vfo7.jpg)
 
