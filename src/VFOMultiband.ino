@@ -47,12 +47,21 @@ using namespace ace_button;
 #include "measurement.h"
 #include "ringmeter.h"
 #include "setup.h"
+#include "FT891_CAT.h"
+
 
 #define Xw 320
 #define Yw 240
 
 #define Nx Xw
 #define Ny Yw
+
+
+/*-------------------------------------------------------
+   CAT Interface
+--------------------------------------------------------*/
+FT891_CAT CAT; 
+
 
 /*-------------------------------------------------------
    S-Meter Connection and TXRX switch
@@ -163,6 +172,7 @@ const  uint8_t bandconf[] = {0,1,1,1,0,1};
 const unsigned long freqswitch_low[] = {1800000,3500000,7000000,14000000,21000000,28000000};
 const unsigned long freqswitch_high[] = {1880000,3800000,7200000,14350000,21450000,29000000};
 long  current_frq[] = {1800000,3500000,7000000,14000000,21000000,28000000};
+uint8_t vfo_AB = 0;  // Switch between VFO_A and VFO_B
 
 #define bmax 5
 
@@ -187,9 +197,18 @@ volatile uint32_t freq = freqswitch_low[f_band];
 /*-------------------------------------------------------
    Mode (USV, LSB, CW) settings
 --------------------------------------------------------*/
+/*
+ *  Define subscripts of the modeData array for modes (assumes the array is in this order):
+ */
+
+#define MODE_LSB  0
+#define MODE_USB  1
+#define MODE_CW   2
+#define MODE_AM   3
+#define MODE_DIG  4
 
 uint8_t c_mode = 1;  // if need to renew display, set this flag to 1
-uint8_t f_mode = 0;  //
+uint8_t f_mode = MODE_LSB;  //
 #define USB_x 70 
 #define USB_y 86 
 #define LSB_x 0 
@@ -207,7 +226,7 @@ uint8_t   c_button = -1, f_button = 0;
 #define MODE_NSELTEXT_COLOR 0
 
 #define USB_FREQUENCY 9001000 //9000500 //8998000 
-#define LSB_FREQUENCY 8997000 //8998000 //8995000 
+#define LSB_FREQUENCY 8998000 //8998000 //8995000 
 
 #define F_MAX_MODE  1
 #define BFO_STEP 100  // BFO adjust 10Hz
@@ -280,6 +299,60 @@ uint8_t c_mhz=0;  // Only draw Mhz once
 
 SemaphoreHandle_t swrBinarySemaphore = NULL;
 QueueHandle_t     rotary_queue = NULL;
+
+/*--------------------------------------------------------------------------
+        Check CAT interface
+---------------------------------------------------------------------------*/
+
+uint32_t  lastCatRead        = 0;
+
+bool CheckCAT ()
+{
+bool      returnCode = false;  // Assume nothing happened
+
+/*
+ *  We only look for new messages every CAT_READ_TIME milliseconds:
+ */
+
+//  if (( millis() - lastCatRead ) < CAT_READ_TIME )
+//    return returnCode;            // Nothing changed
+
+  lastCatRead = millis ();          // Update the last read time
+
+/*
+ *  Ask the CAT module if anything changed. If not, we have nothing to do!
+ */
+
+  if ( !CAT.CheckCAT () )           // If nothing changed
+    return returnCode;            // No more to do!
+ 
+ // check if mode is changed
+  if (CAT.GetMDA() != f_mode)
+  {
+    f_mode = CAT.GetMDA();
+    f_bchange = 1;
+    f_dchange=1; // send for update display 
+  }
+
+  //char  str[80];
+  //sprintf(str,"freq = %ld cat freq %ld" , frq, CAT.GetFA() );
+ // Serial.println(str);
+  if (CAT.GetFA() != frq)
+    {
+    long freq;
+      
+    freq = CAT.GetFA() ;
+    if(freq>freqswitch_high[f_band])
+      return  returnCode;
+    if(freq<freqswitch_low[f_band]) 
+      return  returnCode;
+    frq = freq;
+    current_frq[f_band] = frq;
+  
+    f_dchange=1; // send for update display
+    f_fchange=1; // update the si5351 vfo frequency
+    }
+}
 
 /*--------------------------------------------------------------------------
         Initialize 74HC595
@@ -397,6 +470,7 @@ void display_smeter(){
  if (f_rxtx == 0)
  {
   smeterval=analogRead(S_METER);
+  CAT.SetSM (smeterval / 16);  
   smeterval=(10 * smeterval)/4096;
  }
  else
@@ -627,11 +701,19 @@ void display_rx_tx()
 {
   int16_t x1, y1; 
   uint16_t w, h;
-  
+
  if (digitalRead(TXRX_SWITCH))
-   f_rxtx = 0;
+   {
+    if (CAT.GetTX() == TX_CAT)
+      f_rxtx = 1;
+    else
+      f_rxtx = 0;    
+   }
  else
-   f_rxtx = 1;
+   {
+    CAT.SetTX((uint8_t)TX_MAN);
+    f_rxtx = 1;
+   }
  
  if ((c_rxtx != f_rxtx) || f_rxchange)
   {
@@ -682,7 +764,7 @@ if ((c_band != f_band) || f_bachange)
     switch(c_band)
     {
     case 0:
-      f_mode = 0;
+      f_mode = MODE_LSB;
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(BAND_TEXT_COLOR);
       tft.setCursor(BAND_X,BAND_Y);
@@ -692,7 +774,7 @@ if ((c_band != f_band) || f_bachange)
       break;
   
     case 1:
-      f_mode = 0;
+      f_mode = MODE_LSB;
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(BAND_TEXT_COLOR);
       tft.setCursor(BAND_X,BAND_Y);
@@ -702,7 +784,7 @@ if ((c_band != f_band) || f_bachange)
       break;
   
     case 2:
-      f_mode = 0;
+      f_mode = MODE_LSB;
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(BAND_TEXT_COLOR);
       tft.setCursor(BAND_X,BAND_Y);
@@ -712,7 +794,7 @@ if ((c_band != f_band) || f_bachange)
       break;
   
   case 3:
-      f_mode = 1;
+      f_mode = MODE_USB;
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(BAND_TEXT_COLOR);
       tft.setCursor(BAND_X,BAND_Y);
@@ -722,7 +804,7 @@ if ((c_band != f_band) || f_bachange)
       break;
       
   case 4:
-      f_mode = 1;
+      f_mode = MODE_USB;
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(BAND_TEXT_COLOR);
       tft.setCursor(BAND_X,BAND_Y);
@@ -732,7 +814,7 @@ if ((c_band != f_band) || f_bachange)
       break;
 
   case 5:
-      f_mode = 1;
+      f_mode = MODE_USB;
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(BAND_TEXT_COLOR);
       tft.setCursor(BAND_X,BAND_Y);
@@ -741,6 +823,7 @@ if ((c_band != f_band) || f_bachange)
       tft.print(" 10 M");
       break;
       }
+   CAT.SetMDA(f_mode);
    switch_band();
   }
 } 
@@ -793,7 +876,7 @@ if ((c_mode != f_mode) || (f_mchange))
     
     switch (f_mode)
     {
-    case 0:
+    case MODE_LSB:
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(MODE_NSELTEXT_COLOR);
       tft.setCursor(USB_x,USB_y);
@@ -810,7 +893,7 @@ if ((c_mode != f_mode) || (f_mchange))
       f_bchange = 1;
       break;
   
-    case 1:
+    case MODE_USB:
       tft.setFont(&FreeSansBold12pt7b);
       tft.setTextColor(MODE_SELTEXT_COLOR);
       tft.setCursor(USB_x,USB_y);
@@ -890,7 +973,7 @@ void setup_display()
 
 void setup_smeter()
  {
-  char str[64];
+  char str[164];
   int16_t x1, y1; 
   uint16_t w, h;
   
@@ -947,6 +1030,10 @@ void setvfo()
     uint64_t freq = (uint64_t)(frq + offset_frq) * SI5351_FREQ_MULT;
     si5351.set_freq(freq, CLK_VFO_RX);
     si5351.set_freq(freq, CLK_VFO_TX);
+    if (vfo_AB == 0)
+      CAT.SetFA( frq );
+    else
+      CAT.SetFB( frq );
     }
  }
       
@@ -958,6 +1045,7 @@ void setup() {
   
   Serial.begin(115200);
   Serial.println("VFO PA0PHH !"); 
+    
   frq = freqswitch_low[f_band];
 
 
@@ -1026,6 +1114,8 @@ void setup() {
   si5351_bfo.drive_strength(CLK_BFO_TX, SI5351_DRIVE_2MA);
 
   shiftOut(BP_80M,LP_80M);
+  CAT.begin (true);               // Initialize CAT control stuff
+  
   setbfo();  // Auto output enable!
   setvfo();  
 
@@ -1033,6 +1123,20 @@ void setup() {
   si5351.output_enable(CLK_VFO_TX, 0);
   si5351_bfo.output_enable(CLK_BFO_RX, 1);
   si5351_bfo.output_enable(CLK_BFO_TX, 0);
+
+
+
+
+
+/*  
+ *  The VFO-A and VFO-B frequencies and associated modes in the CAT module are set
+ *  from the "band" and "mode" arrays.
+ */
+
+  
+  //
+  //CAT.SetMDA ( modeData[activeMode].catMode );
+  //CAT.SetMDB ( modeData[activeMode].catMode );
 }
 
 uint8_t  loop_counter = 0;
@@ -1059,6 +1163,8 @@ void loop() {
       {
         display_power(); // clear the power meter from the screen done once
       } 
+  
+  CheckCAT ();
   display_rx_tx();
   display_smeter(); 
   display_tmeter();
@@ -1142,9 +1248,9 @@ void task0(void* arg)
                         break;
                       case 1:
                         if (f_mode)
-                          f_mode = 0;
+                          f_mode = MODE_LSB;
                         else
-                          f_mode = 1;
+                          f_mode = MODE_USB;
                         f_bchange = 1;
                         f_dchange=1; // send for update display   
                         break;
