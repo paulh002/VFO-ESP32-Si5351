@@ -8,7 +8,7 @@
 
 
 extern var_t  R;
-extern uint8_t c_button, f_button, f_mchange, f_rxchange, f_bachange, c_mhz;
+extern uint8_t c_button, f_button, c_mode, c_rxtx, c_band, c_mhz;
 extern uint8_t f_dchange, f_bchange;
 extern uint8_t setup_menu_item, setup_select;
 
@@ -20,4 +20,5 @@ void calibrate_bfo_si5351(void);
 void calibrate_ad8307(void);
 void LoadEEPROM (void);
 void SaveEEPROM ();
+void otawifi();
 #endif

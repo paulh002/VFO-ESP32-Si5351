@@ -285,9 +285,6 @@ uint32_t   mfo_frq    = 26000000UL;        // MF frequency [HZ]
 uint8_t f_fchange = 1;  // if frequency changed, set this flag to 1
 uint8_t f_bchange = 1;  // if bfo frequency changed set this flag to 1
 uint8_t f_dchange = 0;  // if need to renew display, set this flag to 1
-uint8_t f_mchange = 1;
-uint8_t f_rxchange = 1;
-uint8_t f_bachange = 1;
 
 /*-----------------------------------------------------------------------------
  *       Global
@@ -314,8 +311,8 @@ bool      returnCode = false;  // Assume nothing happened
  *  We only look for new messages every CAT_READ_TIME milliseconds:
  */
 
-//  if (( millis() - lastCatRead ) < CAT_READ_TIME )
-//    return returnCode;            // Nothing changed
+  if (( millis() - lastCatRead ) < CAT_READ_TIME )
+    return returnCode;            // Nothing changed
 
   lastCatRead = millis ();          // Update the last read time
 
@@ -715,11 +712,10 @@ void display_rx_tx()
     f_rxtx = 1;
    }
  
- if ((c_rxtx != f_rxtx) || f_rxchange)
+ if (c_rxtx != f_rxtx)
   {
     setup_smeter();
     c_rxtx = f_rxtx;
-    f_rxchange = 0;
     
     f_dchange = 1;
     tft.setFont(&FreeSansBold12pt7b);
@@ -756,10 +752,9 @@ void display_band()
   int16_t x1, y1; 
   uint16_t w, h;
   
-if ((c_band != f_band) || f_bachange)
+if (c_band != f_band)
   {
     c_band = f_band;
-    f_bachange = 0;
     
     switch(c_band)
     {
@@ -823,7 +818,6 @@ if ((c_band != f_band) || f_bachange)
       tft.print(" 10 M");
       break;
       }
-   CAT.SetMDA(f_mode);
    switch_band();
   }
 } 
@@ -869,11 +863,10 @@ void display_mode()
   int16_t x1, y1; 
   uint16_t w, h;
   
-if ((c_mode != f_mode) || (f_mchange))
+if (c_mode != f_mode)
   {
     c_mode = f_mode;
-    f_mchange = 0;
-    
+    CAT.SetMDA(f_mode); 
     switch (f_mode)
     {
     case MODE_LSB:
@@ -1215,8 +1208,6 @@ void task0(void* arg)
             if(frq>freqswitch_high[band]) { band++; if (band > bmax) {band = 0; } frq= freqswitch_low[band]; next_band(1,band); } 
             if(frq<freqswitch_low[band]) { if (band == 0) {band = bmax; } else {band--;}  frq= freqswitch_high[band]; next_band(0,band);}
             current_frq[band] = frq;
-
-            
             f_band   = band; // to make it more thread save
             f_dchange=1; // send for update display
             f_fchange=1; // update the si5351 vfo frequency
@@ -1251,8 +1242,8 @@ void task0(void* arg)
                           f_mode = MODE_LSB;
                         else
                           f_mode = MODE_USB;
-                        f_bchange = 1;
-                        f_dchange=1; // send for update display   
+                        f_bchange = 1; // Set bfo frequency and display New BFO frequency
+                        f_dchange = 1; // send for update display   
                         break;
                       case 2:
                          f_bchange=1; // Set bfo frequency and display New BFO frequency
@@ -1277,6 +1268,9 @@ void task0(void* arg)
                               setup_menu_item = 4;
                               break;
                             case 4:
+                              setup_menu_item = 5;
+                              break;
+                            case 5:
                               setup_menu_item = 1;
                               break;
                           }
@@ -1286,7 +1280,7 @@ void task0(void* arg)
                           switch (setup_menu_item)
                           {
                             case 1:
-                              setup_menu_item = 4;
+                              setup_menu_item = 5;
                               break;
                             case 2:
                               setup_menu_item = 1;
@@ -1296,6 +1290,9 @@ void task0(void* arg)
                               break;
                             case 4:
                               setup_menu_item = 3;
+                              break;
+                            case 5:  
+                              setup_menu_item = 4;
                               break;
                           }
                         }
@@ -1338,7 +1335,7 @@ void rotary_button_eventhandler(AceButton*, uint8_t eventType, uint8_t buttonSta
           f_button = 0;
           break;
         case 3:
-          if (setup_menu_item == 4)
+          if (setup_menu_item == 5)
             f_button = 0;
           if (setup_menu_item == 1)
             setup_select = 1;
@@ -1346,6 +1343,8 @@ void rotary_button_eventhandler(AceButton*, uint8_t eventType, uint8_t buttonSta
             setup_select = 2;
           if (setup_menu_item == 3)
             setup_select = 3;
+          if (setup_menu_item == 4)
+            setup_select = 4;
           break;
         case 4:
           f_button = 0;

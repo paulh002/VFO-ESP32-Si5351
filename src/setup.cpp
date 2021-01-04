@@ -36,8 +36,11 @@ void setup_menu(void)
   tft.print("   2: SI5351 BFO Calibration");
   tft.setCursor(30, 80);
   tft.print("   3: AD8307 Calibration");
-  tft.setCursor(30, 120);
-  tft.print("   4: Exit");
+  tft.setCursor(30, 100);
+  tft.print("   4: OTA Wifi");
+  
+  tft.setCursor(30, 140);
+  tft.print("   5: Exit");
   
 	while(f_button == 3)
 	{
@@ -67,11 +70,17 @@ void setup_menu(void)
     else
       tft.print("   3: AD8307 Calibration");
 
-    tft.setCursor(30, 120);
+    tft.setCursor(30, 100);
     if (c_setup_menu_item == 4)
-      tft.print("-> 4: Exit");
+      tft.print("-> 4: OTA Wifi");
     else
-      tft.print("   4: Exit");
+      tft.print("   4: OTA Wifi");
+      
+    tft.setCursor(30, 140);
+    if (c_setup_menu_item == 5)
+      tft.print("-> 5: Exit");
+    else
+      tft.print("   5: Exit");
     }
    
    switch (setup_select)
@@ -98,13 +107,20 @@ void setup_menu(void)
         calibrate_ad8307();
         setup_select = 0;
         c_setup_menu_item = 0;
+        break;      
+      case 4:
+        setup_menu_item = 1;
+        setup_select = 0;
+        otawifi();
+        setup_select = 0;
+        c_setup_menu_item = 0;
         break;  
       }
 	delay(1);
 	}
 	
 	c_mhz = 0;
-	f_bachange = f_rxchange = f_mchange = f_bchange = f_dchange = -1;
+	c_mode = c_band = c_rxtx = f_bchange = f_dchange = -1;
   tft.fillScreen(ILI9341_BLACK);
   setup_display();
 }
@@ -202,6 +218,9 @@ void calibrate_ad8307(void)
         ad8307_calibration(CAL_SET2_MENU);
         setup_select = 0;
         c_setup_menu_item = 0;
+        break;
+      case 4:
+        f_button = 0;
         break;  
       }
   delay(1);
