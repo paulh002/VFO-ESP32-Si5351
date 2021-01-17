@@ -68,7 +68,7 @@ FT891_CAT CAT;
 --------------------------------------------------------*/
 
 //#define RIT_SWITCH  32  
-#define TXRX_SWITCH   39
+#define TXRX_SWITCH   4
 
 
 #define SMETER_X     40
@@ -123,9 +123,9 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(CS, DC);
    Rotary hardware connection (used for bandswitching, and mode switching)
 --------------------------------------------------------*/
 
-#define ROTARY_A      19      //      27  //  pin
-#define ROTARY_B      36      //      26  //  pin
-#define ROTARY_PRESS  26      //      14  //  pin
+#define ROTARY_A      14      
+#define ROTARY_B      19
+#define ROTARY_PRESS  26
 
 volatile int rotState = 0;
 volatile int rotAval = 1;
@@ -149,7 +149,7 @@ void            rotary_button_eventhandler(AceButton*, uint8_t, uint8_t);
 
 #define I2C_SDA2  16
 #define I2C_SCL2  17
-#define SI5351_XTAL_FREQ1 SI5351_XTAL_FREQ //32000000
+#define SI5351_XTAL_FREQ1 SI5351_XTAL_FREQ //25 mhz
 //#define SI5351_XTAL_FREQ1 32000000
 
 #define CLK_BFO_RX           SI5351_CLK2
@@ -1070,7 +1070,7 @@ void setup() {
   setup_display();
   filter_init();
 
-  ESP32Encoder::useInternalWeakPullResistors=false;
+  ESP32Encoder::useInternalWeakPullResistors=NONE;
   Enc_vfo.attachHalfQuad(PULSE_INPUT_PIN, PULSE_CTRL_PIN);
   Enc_band.attachHalfQuad(ROTARY_A, ROTARY_B);
 
