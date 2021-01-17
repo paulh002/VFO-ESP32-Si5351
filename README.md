@@ -1,3 +1,8 @@
+# VFO-ESP32-Si5351 v2.3
+I added a new version of the pcb to support Wifi and uses a buck converter for powersupply.
+I am still testing if the buck converter does not generate to much noise.
+Source code is adjusted to use new GPIO ports so ADC1 is only used
+
 # VFO-ESP32-Si5351 v2.2
 Now my transceiver is in a box, it is more easy to update software using wifi. This release support this. The only problem is that some analog ports will not support both ADC and wifi, in the next release I will update the PCB and rearange the analog inputs to user ADC1 only.
 
