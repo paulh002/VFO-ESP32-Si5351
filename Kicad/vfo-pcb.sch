@@ -210,7 +210,7 @@ Text GLabel 4250 4050 0    50   Input ~ 0
 R1_2
 Text GLabel 4250 4250 0    50   Input ~ 0
 R2_2
-Text GLabel 3200 3900 2    50   Input ~ 0
+Text GLabel 3200 3000 2    50   Input ~ 0
 R1_2a
 Text GLabel 4850 4250 2    50   Input ~ 0
 R3_2
@@ -279,8 +279,8 @@ L Device:CP C6
 U 1 1 5D40F4A0
 P 5350 1900
 F 0 "C6" H 5235 1854 50  0000 R CNN
-F 1 "100u" H 5235 1945 50  0000 R CNN
-F 2 "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm" H 5388 1750 50  0001 C CNN
+F 1 "1000u" H 5235 1945 50  0000 R CNN
+F 2 "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm" H 5388 1750 50  0001 C CNN
 F 3 "~" H 5350 1900 50  0001 C CNN
 	1    5350 1900
 	1    0    0    -1  
@@ -341,14 +341,12 @@ L Device:CP C10
 U 1 1 5D5D4DE1
 P 6700 1900
 F 0 "C10" H 6585 1854 50  0000 R CNN
-F 1 "100u" H 6585 1945 50  0000 R CNN
-F 2 "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm" H 6738 1750 50  0001 C CNN
+F 1 "2200u" H 6585 1945 50  0000 R CNN
+F 2 "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm" H 6738 1750 50  0001 C CNN
 F 3 "~" H 6700 1900 50  0001 C CNN
 	1    6700 1900
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	6700 1750 6950 1750
 Wire Wire Line
 	6700 2050 6950 2050
 Connection ~ 6950 2050
@@ -436,7 +434,7 @@ L Device:R R3
 U 1 1 5D86398D
 P 1950 4400
 F 0 "R3" H 2020 4446 50  0000 L CNN
-F 1 "2.2k" H 2020 4355 50  0000 L CNN
+F 1 "680" H 2020 4355 50  0000 L CNN
 F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 1880 4400 50  0001 C CNN
 F 3 "~" H 1950 4400 50  0001 C CNN
 	1    1950 4400
@@ -610,17 +608,6 @@ R2_2a
 Text GLabel 6050 5150 1    50   Input ~ 0
 R3_2a
 $Comp
-L power:GND #PWR09
-U 1 1 5D989F63
-P 7300 5100
-F 0 "#PWR09" H 7300 4850 50  0001 C CNN
-F 1 "GND" H 7305 4927 50  0000 C CNN
-F 2 "" H 7300 5100 50  0001 C CNN
-F 3 "" H 7300 5100 50  0001 C CNN
-	1    7300 5100
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR07
 U 1 1 5D98A28F
 P 6900 5100
@@ -648,9 +635,7 @@ Text GLabel 6900 4800 1    50   Input ~ 0
 R2_2a
 Text GLabel 6500 4800 1    50   Input ~ 0
 R1_2a
-Text GLabel 2050 2900 0    50   Input ~ 0
-A3P
-Text GLabel 3200 3000 2    50   Input ~ 0
+Text GLabel 3200 3900 2    50   Input ~ 0
 A4P
 $Comp
 L Connector:Conn_01x07_Female J3
@@ -680,7 +665,7 @@ F 3 "" H 1100 5100 50  0001 C CNN
 	1    1100 5100
 	0    1    1    0   
 $EndComp
-Text GLabel 3200 3800 2    50   Input ~ 0
+Text GLabel 2050 2900 0    50   Input ~ 0
 RXTX
 Text GLabel 3200 3700 2    50   Input ~ 0
 R1
@@ -690,10 +675,6 @@ Text Notes 3900 4400 0    50   ~ 0
 19
 Text Notes 4850 4400 0    50   ~ 0
 26
-Text Notes 1750 6650 0    50   ~ 0
-39
-Text Notes 1750 6750 0    50   ~ 0
-36
 Text GLabel 1100 5200 0    50   Input ~ 0
 A1P
 Text GLabel 3250 6300 0    50   Input ~ 0
@@ -717,7 +698,7 @@ Wire Wire Line
 Text GLabel 2050 3400 0    50   Input ~ 0
 R2_2a
 Text Notes 3900 4000 0    50   ~ 0
-36
+14
 $Comp
 L Oscillator:Si5351A-B-GT U4
 U 1 1 5EBB0A76
@@ -1701,4 +1682,47 @@ Wire Wire Line
 	10350 1150 10400 1150
 Connection ~ 10400 1150
 Connection ~ 10000 5050
+Text GLabel 1100 5700 0    50   Input ~ 0
+V33a
+$Comp
+L Device:C C18
+U 1 1 5F8B6A6A
+P 1100 5850
+F 0 "C18" H 985 5804 50  0000 R CNN
+F 1 "100n" H 985 5895 50  0000 R CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 1138 5700 50  0001 C CNN
+F 3 "~" H 1100 5850 50  0001 C CNN
+	1    1100 5850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR09
+U 1 1 5D989F63
+P 7300 5100
+F 0 "#PWR09" H 7300 4850 50  0001 C CNN
+F 1 "GND" H 7305 4927 50  0000 C CNN
+F 2 "" H 7300 5100 50  0001 C CNN
+F 3 "" H 7300 5100 50  0001 C CNN
+	1    7300 5100
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR036
+U 1 1 5F8B99F4
+P 1100 6000
+F 0 "#PWR036" H 1100 5750 50  0001 C CNN
+F 1 "GND" H 1105 5827 50  0000 C CNN
+F 2 "" H 1100 6000 50  0001 C CNN
+F 3 "" H 1100 6000 50  0001 C CNN
+	1    1100 6000
+	1    0    0    -1  
+$EndComp
+Text Notes 1750 6650 0    50   ~ 0
+4
+Text GLabel 3200 3800 2    50   Input ~ 0
+A3P
+Text Notes 1450 5450 0    50   ~ 0
+36\n39
+Wire Wire Line
+	6700 1750 6950 1750
 $EndSCHEMATC
