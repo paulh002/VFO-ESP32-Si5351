@@ -2,7 +2,7 @@
 Some PCB updates, added output capacitors and changed the resistor pi network on the output to simple voltage divider.
 The pi network caused a higher current in the buffer transistor which causes the board to radiate some BFO frequency.
 This was picked up by my IF and caused the AVC to react. It seems to be better to lower the current in the buffer transistor.
-The output voltage can be regulated by adjusting the resitor devider.
+The output voltage can be regulated by adjusting the resitor divider.
 
 # VFO-ESP32-Si5351 v2.3
 I added a new version of the pcb to support Wifi and uses a buck converter for powersupply.
