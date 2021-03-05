@@ -1,3 +1,14 @@
+# VFO-ESP32-Si5351 v3
+This is a new branch of the ESP32 VFO, I want to have a standard JTAG interface for debugging on this PCB for this 4 GPIO ports need to be made free.
+I use a PCF8574ATS to connect the bandswitch rotary encoder. Also extra connector for external I2C interface. I think in the future I will use more the I2C to drive 
+external interfaces.
+Software changes are in development currently son not yet uploaded.
+
+The changes for this versio is:
+1) JTAG interface
+2) PCF8574ATS GPIO for rotary encoder and external interface
+3) Connector for external I2C interface
+
 # VFO-ESP32-Si5351 v2.31
 Some PCB updates, added output capacitors and changed the resistor pi network on the output to simple voltage divider.
 The pi network caused a higher current in the buffer transistor which causes the board to radiate some BFO frequency.
