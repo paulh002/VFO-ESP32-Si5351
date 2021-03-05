@@ -181,42 +181,42 @@ Text GLabel 3950 5900 1    50   Input ~ 0
 Vcc
 Text GLabel 3950 6200 3    50   Input ~ 0
 LED
-Text GLabel 5100 2950 0    50   Input ~ 0
+Text GLabel 4400 2450 0    50   Input ~ 0
 GND
-Text GLabel 5100 2850 0    50   Input ~ 0
+Text GLabel 4400 2350 0    50   Input ~ 0
 Vcc
-Text GLabel 5100 2650 0    50   Input ~ 0
+Text GLabel 4400 2150 0    50   Input ~ 0
 SCLK_2
-Text GLabel 5100 2550 0    50   Input ~ 0
+Text GLabel 4400 2050 0    50   Input ~ 0
 RCLK_2
-Text GLabel 3200 2700 2    50   Input ~ 0
+Text GLabel 5300 3700 2    50   Input ~ 0
 SER_2
-Text GLabel 3200 3300 2    50   Input ~ 0
+Text GLabel 5300 3500 2    50   Input ~ 0
 RCLK_2
 $Comp
 L Device:Rotary_Encoder_Switch SW1
 U 1 1 5D7CFA25
-P 4550 4150
-F 0 "SW1" H 4550 4517 50  0000 C CNN
-F 1 "Rotary_Encoder_Switch" H 4550 4426 50  0000 C CNN
-F 2 "Rotary_Encoder:RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm" H 4400 4310 50  0001 C CNN
-F 3 "~" H 4550 4410 50  0001 C CNN
-	1    4550 4150
+P 6300 2150
+F 0 "SW1" H 6300 2517 50  0000 C CNN
+F 1 "Rotary_Encoder_Switch" H 6300 2426 50  0000 C CNN
+F 2 "Rotary_Encoder:RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm" H 6150 2310 50  0001 C CNN
+F 3 "~" H 6300 2410 50  0001 C CNN
+	1    6300 2150
 	1    0    0    -1  
 $EndComp
-Text GLabel 4250 4150 0    50   Input ~ 0
+Text GLabel 6000 2150 0    50   Input ~ 0
 GND
-Text GLabel 4250 4050 0    50   Input ~ 0
+Text GLabel 6000 2050 0    50   Input ~ 0
 R1_2
-Text GLabel 4250 4250 0    50   Input ~ 0
+Text GLabel 6000 2250 0    50   Input ~ 0
 R2_2
-Text GLabel 3200 3000 2    50   Input ~ 0
+Text GLabel 5300 3800 2    50   Input ~ 0
 R1_2a
-Text GLabel 4850 4250 2    50   Input ~ 0
+Text GLabel 6600 2250 2    50   Input ~ 0
 R3_2
-Text GLabel 3200 3200 2    50   Input ~ 0
+Text GLabel 5300 4000 2    50   Input ~ 0
 R3_2a
-Text GLabel 4850 4050 2    50   Input ~ 0
+Text GLabel 6600 2050 2    50   Input ~ 0
 GND
 Text GLabel 3200 3500 2    50   Input ~ 0
 A1P
@@ -225,15 +225,15 @@ A2P
 $Comp
 L Connector:Conn_01x07_Female J9
 U 1 1 5D7CDE44
-P 5300 2650
-F 0 "J9" H 5328 2676 50  0000 L CNN
-F 1 "Conn_01x07_Female" H 5328 2585 50  0000 L CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x07_P2.54mm_Vertical" H 5300 2650 50  0001 C CNN
-F 3 "~" H 5300 2650 50  0001 C CNN
-	1    5300 2650
+P 4600 2150
+F 0 "J9" H 4628 2176 50  0000 L CNN
+F 1 "Conn_01x07_Female" H 4628 2085 50  0000 L CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x07_P2.54mm_Vertical" H 4600 2150 50  0001 C CNN
+F 3 "~" H 4600 2150 50  0001 C CNN
+	1    4600 2150
 	1    0    0    -1  
 $EndComp
-Text GLabel 3200 2900 2    50   Input ~ 0
+Text GLabel 5300 3600 2    50   Input ~ 0
 SCLK_2
 Text GLabel 3200 2800 2    50   Input ~ 0
 GND
@@ -400,7 +400,7 @@ F 3 " ~" H 11400 2150 50  0001 C CNN
 	1    11400 2150
 	1    0    0    -1  
 $EndComp
-Text GLabel 5100 2350 0    50   Input ~ 0
+Text GLabel 4400 1850 0    50   Input ~ 0
 V12V
 Text GLabel 2050 3200 0    50   Input ~ 0
 CS
@@ -429,49 +429,49 @@ RXTX
 $Comp
 L Device:R R5
 U 1 1 5D88A14D
-P 5350 4400
-F 0 "R5" H 5420 4446 50  0000 L CNN
-F 1 "10k" H 5420 4355 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5280 4400 50  0001 C CNN
-F 3 "~" H 5350 4400 50  0001 C CNN
-	1    5350 4400
+P 6150 2950
+F 0 "R5" H 6220 2996 50  0000 L CNN
+F 1 "10k" H 6220 2905 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 6080 2950 50  0001 C CNN
+F 3 "~" H 6150 2950 50  0001 C CNN
+	1    6150 2950
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R R7
 U 1 1 5D88A157
-P 5650 4400
-F 0 "R7" H 5720 4446 50  0000 L CNN
-F 1 "10k" H 5720 4355 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5580 4400 50  0001 C CNN
-F 3 "~" H 5650 4400 50  0001 C CNN
-	1    5650 4400
+P 6450 2950
+F 0 "R7" H 6520 2996 50  0000 L CNN
+F 1 "10k" H 6520 2905 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 6380 2950 50  0001 C CNN
+F 3 "~" H 6450 2950 50  0001 C CNN
+	1    6450 2950
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5350 4250 5650 4250
-Text GLabel 5500 4250 1    50   Input ~ 0
+	6150 2800 6450 2800
+Text GLabel 6300 2800 1    50   Input ~ 0
 V33
-Text GLabel 5350 4550 3    50   Input ~ 0
+Text GLabel 6150 3100 3    50   Input ~ 0
 R1_2
-Text GLabel 5650 4550 3    50   Input ~ 0
+Text GLabel 6450 3100 3    50   Input ~ 0
 R2_2
 $Comp
 L Device:R R9
 U 1 1 5D88BE39
-P 5950 4400
-F 0 "R9" H 6020 4446 50  0000 L CNN
-F 1 "10k" H 6020 4355 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5880 4400 50  0001 C CNN
-F 3 "~" H 5950 4400 50  0001 C CNN
-	1    5950 4400
+P 6750 2950
+F 0 "R9" H 6820 2996 50  0000 L CNN
+F 1 "10k" H 6820 2905 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 6680 2950 50  0001 C CNN
+F 3 "~" H 6750 2950 50  0001 C CNN
+	1    6750 2950
 	1    0    0    -1  
 $EndComp
-Text GLabel 5950 4550 3    50   Input ~ 0
+Text GLabel 6750 3100 3    50   Input ~ 0
 R3_2
 Wire Wire Line
-	5650 4250 5950 4250
-Connection ~ 5650 4250
+	6450 2800 6750 2800
+Connection ~ 6450 2800
 $Comp
 L Connector:Screw_Terminal_01x02 J5
 U 1 1 5D894359
@@ -533,39 +533,39 @@ F 3 "~" H 7300 4950 50  0001 C CNN
 	1    7300 4950
 	-1   0    0    1   
 $EndComp
-Text GLabel 5650 5450 3    50   Input ~ 0
+Text GLabel 6450 4000 3    50   Input ~ 0
 R2_2
-Text GLabel 5350 5450 3    50   Input ~ 0
+Text GLabel 6150 4000 3    50   Input ~ 0
 R1_2
 $Comp
 L Device:R R10
 U 1 1 5D988F6A
-P 6050 5300
-F 0 "R10" H 6120 5346 50  0000 L CNN
-F 1 "10k" H 6120 5255 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5980 5300 50  0001 C CNN
-F 3 "~" H 6050 5300 50  0001 C CNN
-	1    6050 5300
+P 6750 3850
+F 0 "R10" H 6820 3896 50  0000 L CNN
+F 1 "10k" H 6820 3805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 6680 3850 50  0001 C CNN
+F 3 "~" H 6750 3850 50  0001 C CNN
+	1    6750 3850
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R R8
 U 1 1 5D98969C
-P 5650 5300
-F 0 "R8" H 5720 5346 50  0000 L CNN
-F 1 "10k" H 5720 5255 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5580 5300 50  0001 C CNN
-F 3 "~" H 5650 5300 50  0001 C CNN
-	1    5650 5300
+P 6450 3850
+F 0 "R8" H 6520 3896 50  0000 L CNN
+F 1 "10k" H 6520 3805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 6380 3850 50  0001 C CNN
+F 3 "~" H 6450 3850 50  0001 C CNN
+	1    6450 3850
 	1    0    0    -1  
 $EndComp
-Text GLabel 6050 5450 3    50   Input ~ 0
+Text GLabel 6750 4000 3    50   Input ~ 0
 R3_2
-Text GLabel 5350 5150 1    50   Input ~ 0
+Text GLabel 6150 3700 1    50   Input ~ 0
 R1_2a
-Text GLabel 5650 5150 1    50   Input ~ 0
+Text GLabel 6450 3700 1    50   Input ~ 0
 R2_2a
-Text GLabel 6050 5150 1    50   Input ~ 0
+Text GLabel 6750 3700 1    50   Input ~ 0
 R3_2a
 $Comp
 L power:GND #PWR07
@@ -625,15 +625,15 @@ F 3 "" H 1100 5100 50  0001 C CNN
 	1    1100 5100
 	0    1    1    0   
 $EndComp
-Text GLabel 2050 2900 0    50   Input ~ 0
+Text GLabel 5300 3400 2    50   Input ~ 0
 RXTX
 Text GLabel 3200 3700 2    50   Input ~ 0
 R1
 Text GLabel 3200 3600 2    50   Input ~ 0
 R2
-Text Notes 3900 4400 0    50   ~ 0
+Text Notes 5650 2400 0    50   ~ 0
 19
-Text Notes 4850 4400 0    50   ~ 0
+Text Notes 6600 2400 0    50   ~ 0
 26
 Text GLabel 1100 5200 0    50   Input ~ 0
 A1P
@@ -643,7 +643,7 @@ Text GLabel 3250 6500 0    50   Input ~ 0
 SDI
 Text GLabel 2050 2800 0    50   Input ~ 0
 T_CS
-Text GLabel 2050 2600 0    50   Input ~ 0
+Text GLabel 2050 3400 0    50   Input ~ 0
 RESET
 Text GLabel 3250 5700 0    50   Input ~ 0
 V33a
@@ -653,9 +653,9 @@ Text GLabel 3250 6600 0    50   Input ~ 0
 SDO
 Wire Wire Line
 	1250 4250 1950 4250
-Text GLabel 2050 3400 0    50   Input ~ 0
+Text GLabel 5300 3900 2    50   Input ~ 0
 R2_2a
-Text Notes 3900 4000 0    50   ~ 0
+Text Notes 5650 2000 0    50   ~ 0
 14
 $Comp
 L Oscillator:Si5351A-B-GT U4
@@ -859,7 +859,7 @@ Text GLabel 2050 3100 0    50   Input ~ 0
 SCL_2
 Wire Wire Line
 	10450 5050 10550 5050
-Text GLabel 5100 2450 0    50   Input ~ 0
+Text GLabel 4400 1950 0    50   Input ~ 0
 SER_2
 Text GLabel 550  1400 1    50   Input ~ 0
 Vcc
@@ -1498,7 +1498,7 @@ Wire Wire Line
 Wire Wire Line
 	10350 1150 10400 1150
 Text GLabel 1100 5700 0    50   Input ~ 0
-V33a
+V33
 $Comp
 L Device:C C18
 U 1 1 5F8B6A6A
@@ -1751,12 +1751,246 @@ $EndComp
 $Comp
 L Device:R R6
 U 1 1 5D989930
-P 5350 5300
-F 0 "R6" H 5420 5346 50  0000 L CNN
-F 1 "10k" H 5420 5255 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5280 5300 50  0001 C CNN
-F 3 "~" H 5350 5300 50  0001 C CNN
-	1    5350 5300
+P 6150 3850
+F 0 "R6" H 6220 3896 50  0000 L CNN
+F 1 "10k" H 6220 3805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 6080 3850 50  0001 C CNN
+F 3 "~" H 6150 3850 50  0001 C CNN
+	1    6150 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C26
+U 1 1 603E5BDD
+P 3700 4150
+F 0 "C26" H 3585 4104 50  0000 R CNN
+F 1 "10u" H 3585 4195 50  0000 R CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 3738 4000 50  0001 C CNN
+F 3 "~" H 3700 4150 50  0001 C CNN
+	1    3700 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR018
+U 1 1 603EB689
+P 3700 4300
+F 0 "#PWR018" H 3700 4050 50  0001 C CNN
+F 1 "GND" H 3705 4127 50  0000 C CNN
+F 2 "" H 3700 4300 50  0001 C CNN
+F 3 "" H 3700 4300 50  0001 C CNN
+	1    3700 4300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 4000 3700 4000
+$Comp
+L Interface_Expansion:PCF8574ATS U5
+U 1 1 60431261
+P 4800 3800
+F 0 "U5" H 4800 4681 50  0000 C CNN
+F 1 "PCF8574ATS" H 4800 4590 50  0000 C CNN
+F 2 "Package_SO:SSOP-20_4.4x6.5mm_P0.65mm" H 4800 3800 50  0001 C CNN
+F 3 "http://www.nxp.com/documents/data_sheet/PCF8574_PCF8574A.pdf" H 4800 3800 50  0001 C CNN
+	1    4800 3800
+	1    0    0    -1  
+$EndComp
+Text GLabel 4800 3100 1    50   Input ~ 0
+V33a
+Text GLabel 4300 3400 0    50   Input ~ 0
+SCL
+Text GLabel 4300 3500 0    50   Input ~ 0
+SDA
+Text GLabel 2050 2900 0    50   Input ~ 0
+SCL
+Text GLabel 3200 3200 2    50   Input ~ 0
+SDA
+Text GLabel 4300 4200 0    50   Input ~ 0
+INT
+Text GLabel 3200 3300 2    50   Input ~ 0
+INT
+$Comp
+L power:GND #PWR038
+U 1 1 604428C6
+P 4800 4500
+F 0 "#PWR038" H 4800 4250 50  0001 C CNN
+F 1 "GND" H 4805 4327 50  0000 C CNN
+F 2 "" H 4800 4500 50  0001 C CNN
+F 3 "" H 4800 4500 50  0001 C CNN
+	1    4800 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R22
+U 1 1 60445C83
+P 4050 4850
+F 0 "R22" H 4120 4896 50  0000 L CNN
+F 1 "2.2k" H 4120 4805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 3980 4850 50  0001 C CNN
+F 3 "~" H 4050 4850 50  0001 C CNN
+	1    4050 4850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R23
+U 1 1 60446709
+P 4350 4850
+F 0 "R23" H 4420 4896 50  0000 L CNN
+F 1 "2.2k" H 4420 4805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 4280 4850 50  0001 C CNN
+F 3 "~" H 4350 4850 50  0001 C CNN
+	1    4350 4850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4050 4700 4350 4700
+Text GLabel 4050 5000 3    50   Input ~ 0
+SCL
+Text GLabel 4350 5000 3    50   Input ~ 0
+SDA
+Text GLabel 4050 4700 1    50   Input ~ 0
+V33a
+$Comp
+L Device:R R21
+U 1 1 6044A34F
+P 3750 4850
+F 0 "R21" H 3820 4896 50  0000 L CNN
+F 1 "2.2k" H 3820 4805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 3680 4850 50  0001 C CNN
+F 3 "~" H 3750 4850 50  0001 C CNN
+	1    3750 4850
+	1    0    0    -1  
+$EndComp
+Text GLabel 3750 5000 3    50   Input ~ 0
+INT
+Wire Wire Line
+	3750 4700 4050 4700
+Connection ~ 4050 4700
+Text GLabel 1100 2500 0    50   Input ~ 0
+GPIO15
+Text GLabel 1100 2300 0    50   Input ~ 0
+GPIO12
+Text GLabel 1100 2700 0    50   Input ~ 0
+GPIO13
+$Comp
+L power:GND #PWR022
+U 1 1 60459852
+P 1100 2800
+F 0 "#PWR022" H 1100 2550 50  0001 C CNN
+F 1 "GND" H 1105 2627 50  0000 C CNN
+F 2 "" H 1100 2800 50  0001 C CNN
+F 3 "" H 1100 2800 50  0001 C CNN
+	1    1100 2800
+	0    1    1    0   
+$EndComp
+Text GLabel 1100 2900 0    50   Input ~ 0
+GPIO14
+Text GLabel 2050 2600 0    50   Input ~ 0
+GPIO15
+Text GLabel 3200 2900 2    50   Input ~ 0
+GPIO12
+Text GLabel 3200 3000 2    50   Input ~ 0
+GPIO14
+Text GLabel 3200 2700 2    50   Input ~ 0
+GPIO13
+Wire Wire Line
+	4300 3700 4300 3800
+Connection ~ 4300 3800
+Wire Wire Line
+	4300 3800 4300 3900
+$Comp
+L power:GND #PWR023
+U 1 1 604653A0
+P 4300 3900
+F 0 "#PWR023" H 4300 3650 50  0001 C CNN
+F 1 "GND" H 4305 3727 50  0000 C CNN
+F 2 "" H 4300 3900 50  0001 C CNN
+F 3 "" H 4300 3900 50  0001 C CNN
+	1    4300 3900
+	1    0    0    -1  
+$EndComp
+Connection ~ 4300 3900
+$Comp
+L Connector:Conn_01x10_Male J16
+U 1 1 60465E9C
+P 1300 2600
+F 0 "J16" H 1272 2482 50  0000 R CNN
+F 1 "JTAG" H 1272 2573 50  0000 R CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_2x05_P2.54mm_Vertical" H 1300 2600 50  0001 C CNN
+F 3 "~" H 1300 2600 50  0001 C CNN
+	1    1300 2600
+	-1   0    0    1   
+$EndComp
+Text GLabel 1100 3000 0    50   Input ~ 0
+V33a
+$Comp
+L power:GND #PWR021
+U 1 1 6046ABF8
+P 1100 2600
+F 0 "#PWR021" H 1100 2350 50  0001 C CNN
+F 1 "GND" H 1105 2427 50  0000 C CNN
+F 2 "" H 1100 2600 50  0001 C CNN
+F 3 "" H 1100 2600 50  0001 C CNN
+	1    1100 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR020
+U 1 1 6046AE40
+P 1100 2400
+F 0 "#PWR020" H 1100 2150 50  0001 C CNN
+F 1 "GND" H 1105 2227 50  0000 C CNN
+F 2 "" H 1100 2400 50  0001 C CNN
+F 3 "" H 1100 2400 50  0001 C CNN
+	1    1100 2400
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR019
+U 1 1 6046B0E5
+P 1100 2200
+F 0 "#PWR019" H 1100 1950 50  0001 C CNN
+F 1 "GND" H 1105 2027 50  0000 C CNN
+F 2 "" H 1100 2200 50  0001 C CNN
+F 3 "" H 1100 2200 50  0001 C CNN
+	1    1100 2200
+	0    1    1    0   
+$EndComp
+Text Notes 600  2950 0    50   ~ 0
+TMS
+Text Notes 600  2750 0    50   ~ 0
+TCK
+Text Notes 600  2550 0    50   ~ 0
+TDO
+Text Notes 600  2350 0    50   ~ 0
+TDI
+$Comp
+L Connector:Conn_01x05_Female J?
+U 1 1 60427BAC
+P 5150 5250
+F 0 "J?" H 5178 5276 50  0000 L CNN
+F 1 "I2C" H 5178 5185 50  0000 L CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x05_P2.54mm_Vertical" H 5150 5250 50  0001 C CNN
+F 3 "~" H 5150 5250 50  0001 C CNN
+	1    5150 5250
+	1    0    0    -1  
+$EndComp
+Text GLabel 4950 5250 0    50   Input ~ 0
+INT
+Text GLabel 4950 5150 0    50   Input ~ 0
+SCL
+Text GLabel 4950 5050 0    50   Input ~ 0
+SDA
+Text GLabel 4950 5350 0    50   Input ~ 0
+Vcc
+$Comp
+L power:GND #PWR?
+U 1 1 60429B4D
+P 4950 5450
+F 0 "#PWR?" H 4950 5200 50  0001 C CNN
+F 1 "GND" H 4955 5277 50  0000 C CNN
+F 2 "" H 4950 5450 50  0001 C CNN
+F 3 "" H 4950 5450 50  0001 C CNN
+	1    4950 5450
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
