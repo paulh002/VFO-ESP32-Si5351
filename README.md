@@ -2,7 +2,7 @@
 This is a new branch of the ESP32 VFO, I want to have a standard JTAG interface for debugging on this PCB for this 4 GPIO ports need to be made free.
 I use a PCF8574ATS to connect the bandswitch rotary encoder. Also extra connector for external I2C interface. I think in the future I will use more the I2C to drive 
 external interfaces.
-Software changes are in development currently son not yet uploaded.
+Software changes are in development currently so not yet uploaded.
 
 The changes for this versio is:
 1) JTAG interface
