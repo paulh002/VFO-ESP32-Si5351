@@ -1,3 +1,7 @@
+# VFO-ESP32-Si5351 v2.32
+Updated the ota software to support Arduino IDE interface, recently I have dropped the Arduino IDE for Visual Studio 2019 which gives a bit more software development support
+The main changes for this version is a Network CAT support the idea is from TRXNET (TRX-Manager) unfortunally TRX-Manager is discontinued. But the idea of a CAT interface on tcp/ip is nice. I use this interface to let the VFO to communicate with other ESP32 controlers to automatic send commands to my rf-amp. Also I want to use it to communicate with my automatic antenna tuner. Will be added to github later.
+
 # VFO-ESP32-Si5351 v2.31
 Some PCB updates, added output capacitors and changed the resistor pi network on the output to simple voltage divider.
 The pi network caused a higher current in the buffer transistor which causes the board to radiate some BFO frequency.
