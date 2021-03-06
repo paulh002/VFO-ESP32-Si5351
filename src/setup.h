@@ -20,5 +20,4 @@ void calibrate_bfo_si5351(void);
 void calibrate_ad8307(void);
 void LoadEEPROM (void);
 void SaveEEPROM ();
-void otawifi();
 #endif

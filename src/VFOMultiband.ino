@@ -25,11 +25,13 @@ CLK1 : Car Signal (Q)
 CLK2 : Lo Signal
 ------------------------------------------------*/
 
-
+#include <arduino.h>
 #include <gfxfont.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SPITFT.h>
 #include <Adafruit_SPITFT_Macros.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
 #include <AceButton.h>
 using namespace ace_button;
 
@@ -48,7 +50,7 @@ using namespace ace_button;
 #include "ringmeter.h"
 #include "setup.h"
 #include "FT891_CAT.h"
-
+#include "network.h"
 
 #define Xw 320
 #define Yw 240
@@ -102,20 +104,20 @@ uint16_t ref_meterval_old=0;
    74HC595 Connection
 --------------------------------------------------------*/
 
-#define SER   13  // (pin 14)
-#define SRCLK 12  // (pin 11)
-#define RCLK  25  // (pin 12)
+#define SER   13  // (74HC595 GPIO pin 13)
+#define SRCLK 12  // (74HC595 GPIO pin 12)
+#define RCLK  25  // (74HC595 GPIO pin 25)
 
 /*-------------------------------------------------------
    Adafruit_ILI9341 hardware connection
 --------------------------------------------------------*/
 
-#define SCLK  18 // SPI clock pin
-#define SDO -1 // MISO(master input slave output) not using
-#define SDI 23 // MOSI(master output slave input) pin
-#define CS  5 // Chip Select pin
-#define DC  2 // Data Command pin
-#define RST_PIN 15 // Reset pin
+#define SCLK  18    // SPI clock pin
+#define SDO -1      // MISO(master input slave output) not using
+#define SDI 23      // MOSI(master output slave input) pin
+#define CS  5       // Chip Select pin
+#define DC  2       // Data Command pin
+#define RST_PIN 15  // Reset pin
 
 Adafruit_ILI9341 tft = Adafruit_ILI9341(CS, DC);
 
@@ -154,9 +156,9 @@ void            rotary_button_eventhandler(AceButton*, uint8_t, uint8_t);
 
 #define CLK_BFO_RX           SI5351_CLK2
 #define CLK_VFO_RX           SI5351_CLK2
-#define CLK_BFO_TX           SI5351_CLK1
-#define CLK_VFO_TX           SI5351_CLK1
-#define CLK_NA               SI5351_CLK0
+#define CLK_BFO_TX           SI5351_CLK0
+#define CLK_VFO_TX           SI5351_CLK0
+#define CLK_NA               SI5351_CLK1
 
 
 
@@ -336,7 +338,7 @@ bool      returnCode = false;  // Assume nothing happened
  // Serial.println(str);
   if (CAT.GetFA() != frq)
     {
-    long freq;
+    long freq; // frequency received from CAT
       
     freq = CAT.GetFA() ;
     if(freq>freqswitch_high[f_band])
@@ -704,7 +706,10 @@ void display_rx_tx()
     if (CAT.GetTX() == TX_CAT)
       f_rxtx = 1;
     else
-      f_rxtx = 0;    
+      {
+        f_rxtx = 0;    
+        CAT.SetTX((uint8_t)TX_OFF);
+      }
    }
  else
    {
@@ -957,6 +962,7 @@ void UpdateDisplay()
 
 void setup_display()
  {
+ tft.fillScreen(ILI9341_BLACK);
  UpdateDisplay();
  setup_smeter();
  tft.setCursor(10,230);
@@ -1064,11 +1070,12 @@ void setup() {
   if(rotary_queue == NULL){
     Serial.println("Error creating the queue");
   }
-
   
   display_init();
+  wifiinit();
   setup_display();
   filter_init();
+  
 
   ESP32Encoder::useInternalWeakPullResistors=NONE;
   Enc_vfo.attachHalfQuad(PULSE_INPUT_PIN, PULSE_CTRL_PIN);
@@ -1078,7 +1085,8 @@ void setup() {
   Enc_band.clearCount();
   
   xTaskCreatePinnedToCore(task0, "Task0", 4096, NULL, 1, NULL, 0);
-  
+  xTaskCreatePinnedToCore(task1, "Task1", 4096, NULL, 1, NULL, 1);
+
 
 // Load correction and calibration information
   LoadEEPROM(); 
@@ -1164,6 +1172,7 @@ void loop() {
   display_button();
   if (f_button == 3)
     setup_menu();
+  network_loop();
 }
 
 void next_band(uint8_t dir, uint8_t &band)
@@ -1268,9 +1277,6 @@ void task0(void* arg)
                               setup_menu_item = 4;
                               break;
                             case 4:
-                              setup_menu_item = 5;
-                              break;
-                            case 5:
                               setup_menu_item = 1;
                               break;
                           }
@@ -1280,7 +1286,7 @@ void task0(void* arg)
                           switch (setup_menu_item)
                           {
                             case 1:
-                              setup_menu_item = 5;
+                              setup_menu_item = 4;
                               break;
                             case 2:
                               setup_menu_item = 1;
@@ -1290,9 +1296,6 @@ void task0(void* arg)
                               break;
                             case 4:
                               setup_menu_item = 3;
-                              break;
-                            case 5:  
-                              setup_menu_item = 4;
                               break;
                           }
                         }
@@ -1311,8 +1314,9 @@ void task0(void* arg)
        xSemaphoreTake( swrBinarySemaphore, portMAX_DELAY );
        adc_poll_and_feed_circular();
        xSemaphoreGive( swrBinarySemaphore );
-       }
-     delay(1);
+       }     
+     vTaskDelay(1);
+     //delay(1);
      }
 }
 

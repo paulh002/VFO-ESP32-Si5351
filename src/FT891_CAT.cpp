@@ -19,7 +19,9 @@
 
 #include <Arduino.h>							// Basic Arduino definitions
 #include "FT891_CAT.h"							// Our header
-
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include "network.h"
 
 /*
  *	The "radioStatus" structure contains all of the current values for all the parameters
@@ -50,6 +52,7 @@ struct	status {
 	uint8_t			SM		 = 0;				// S-meter reading
 	uint8_t			ST		 = 0;				// Split mode off
 	uint8_t			TX		 = 0;				// Transmitter off
+  uint8_t     BS     = 0;       // Band select
 } radioStatus;
 
 
@@ -91,6 +94,7 @@ struct	status {
 		{ "BS",  MSG_BS, MSG_BOTH },		// Band select
 		{ "AI",  MSG_AI, MSG_BOTH },		// ( 0 or 1) Turn auto-information on or off
 		{ "ID",  MSG_ID, MSG_STS  },		// Request radio's ID (0650 for the FT-891)
+		{ "CL",  MSG_CL, MSG_STS },    // Request call sign
 		{ "",    MSG_NONE, 0 }				// Command not found in the list
 	};
 
@@ -124,6 +128,8 @@ void FT891_CAT::begin ( int txPin, bool debug )
 	keyTransmit = true;							// Pin specified, so we operate the transmitter
 	
 	pttPin     = txPin;							// Remember GPIO pin to key the transmitter
+
+  callsign = "PA0PHH";
 
 
 /*
@@ -182,10 +188,12 @@ bool newCmd = false;							// True if command message processed
 
 	if ( GetMessage ())							// See if new message
 	{
+		
 		newMessage = FindMsg ();				// If so, look it up in the table
-
-		if ( newMessage.ID == MSG_NONE )		// Not found?
+    if ( newMessage.ID == MSG_NONE )		// Not found?
+			{
 			return false;						// We're done
+			}
 
 		ParseMsg ();							// Separate any data in the message
 
@@ -194,9 +202,10 @@ bool newCmd = false;							// True if command message processed
 			if ( ProcessCmd ())					// Yes, process it
 				newCmd = true;					// Indicate command received & processed
 		}
-
 		else									// It's a status request
-			ProcessStatus ();					// Process it
+		{
+		ProcessStatus ();					// Process it
+		}
 
 		memset ( rxBuff, 0, BUF_LEN );			// Clear the receive buffer
 
@@ -216,11 +225,22 @@ bool FT891_CAT::GetMessage ()
 {
 	int	i;										// Loop counter
 
+if (CatServer.Anyconnection())
+  {
+	memset(rxBuff, 0, sizeof(rxBuff));
+	CatServer.readAll((const uint8_t*)rxBuff, sizeof(rxBuff));
+	char *ptr = strchr(rxBuff,TERM_CH);
+	if (ptr)
+		*ptr = '\0';
+  }
+  else
+  {
 	if ( !Serial.available ())					// Anything in the input buffer?
 		return false;							// If not, no message yet
 
 	Serial.readBytesUntil ( TERM_CH, rxBuff, sizeof ( rxBuff ));
-
+  }
+  
 	for ( i = 0; i < strlen ( rxBuff ); i++ )	// Translate incoming message
 		rxBuff[i] = toupper ( rxBuff[i] );		// to all upper case
 
@@ -245,13 +265,16 @@ msg FT891_CAT::FindMsg ()
 
 	for ( index = 0; index < MSG_COUNT; index++ )		//Search the table
 	{
-		if ( strncmp ( rxBuff,
-					msgTable[index].Name, 2 ) == 0 )					// Find a match?
-			if ( strlen ( rxBuff ) >= strlen ( msgTable[index].Name ))	// Complete message?
-				return msgTable[index];									// Yes, return the entry
-
+		if ( strncmp ( rxBuff, msgTable[index].Name, 2 ) == 0 )					// Find a match?
+			{
+			  if ( strlen ( rxBuff ) >= strlen ( msgTable[index].Name ))	// Complete message?
+				{
+				  //Serial.println ("MSG: Index " + String(index) + " " + String(msgTable[index].Name));
+				  return msgTable[index];									// Yes, return the entry
+				}
 			else										// If not,
 				return msgTable[MSG_COUNT - 1] ;		// Return MSG_NONE entry
+			}
 	}
 
 	return msgTable[MSG_COUNT - 1] ;					// Return MSG_NONE entry - nothing found
@@ -361,7 +384,7 @@ bool FT891_CAT::ProcessCmd ()
 	memset ( tempBuff, 0, sizeof ( tempBuff ));			// Clear the temporary buffer
 
 	switch ( newMessage.ID )							// Make decisions based on message ID
-	{
+	{    
 		case MSG_AB:									// Copy VFO-A to VFO-B (and mode)
 			radioStatus.FB  = radioStatus.FA;			// VFO-A frequency now in VFO-B
 			radioStatus.MDB = radioStatus.MDA;			// And mode
@@ -491,9 +514,14 @@ void FT891_CAT::ProcessStatus ()
 	char	 tempBuff[BUF_LEN];							// Temporary buffer
 
 	memset ( tempBuff, 0, BUF_LEN );					// Clear the temporary buffer
-
+  
+  
 	switch ( newMessage.ID )							// Make decisions based on message ID
 	{
+    case MSG_CL:                      // print callsign
+      callsign.toCharArray(tempBuff, BUF_LEN);   
+      break;
+      
 		case MSG_IF:									// Information request
 			sprintf ( tempBuff,							// Format response
 					"IF000%09lu+000000%1u00000;",
@@ -589,18 +617,71 @@ void FT891_CAT::ProcessStatus ()
 
 	if ( buffSize != 0 )								//  Anything to be sent?
 	{
+		Serial.println ("process status");
 		strcpy ( txBuff[txBuffIndex], tempBuff );
+
+    if (CatServer.Anyconnection())
+    {
+    Serial.println ("Send data ");
+    if ( addNewline )
+      {
+        CatServer.writeAll ( (const uint8_t *)txBuff[txBuffIndex], strlen(txBuff[txBuffIndex]) );   // Send the message (debugging mode)
+        CatServer.writeAll ( (const uint8_t *)"\r\n", strlen("\r\n") );   // Send the message (debugging mode)      
+      }
+    else
+        CatServer.writeAll ( (const uint8_t *)txBuff[txBuffIndex], strlen(txBuff[txBuffIndex]) );   // Send the message with no newline
+    }
+    else
+    {
 
 		if ( addNewline )
 			Serial.println ( txBuff[txBuffIndex] );		// Send the message (debugging mode)
 		else
 			Serial.print ( txBuff[txBuffIndex] );		// Send the message with no newline
-
+			}
 		txBuffIndex++;
 		txBuffIndex %= BUF_COUNT - 1;
 	}
 }
 
+void FT891_CAT::Processautoinformation (uint8_t message)
+{
+  uint16_t buffSize;                    // Number of characters to be sent
+  char   tempBuff[BUF_LEN];             // Temporary buffer
+
+  memset ( tempBuff, 0, BUF_LEN );      // Clear the temporary buffer
+  switch ( message )              // Make decisions based on message ID
+  {
+    case MSG_TX:
+    if ( radioStatus.TX )
+      strcpy(tempBuff,"TX1;");
+    else
+      strcpy(tempBuff,"TX0;");
+    break;
+
+    case MSG_FA:
+    sprintf ( tempBuff,              // Format message
+          "FA%09lu;", radioStatus.FA );
+    break;
+
+    case MSG_FB:
+    sprintf ( tempBuff,              // Format message
+          "FB%09lu;", radioStatus.FB );
+    break;
+  }
+
+if (CatServer.Anyconnection() && strlen(tempBuff))
+    {
+    Serial.println ("Send data ");
+    if ( addNewline )
+      {
+        CatServer.writeAll ( (const uint8_t *)tempBuff, strlen(tempBuff) );   // Send the message (debugging mode)
+        CatServer.writeAll ( (const uint8_t *)"\r\n", strlen("\r\n") );   // Send the message (debugging mode)      
+      }
+    else
+        CatServer.writeAll ( (const uint8_t *)tempBuff, strlen(tempBuff) );   // Send the message with no newline
+    }
+}
 
 /*
  *	"xtoi()" works similar to "atoi()" except the string is assumed to be hex numbers. It will
@@ -649,11 +730,13 @@ uint16_t	answer = 0;									// The answer
 void FT891_CAT::SetFA ( uint32_t freq )			// Set VFO-A frequency
 {
 	radioStatus.FA = freq;						// Done!
+  Processautoinformation (MSG_FA);
 }
 
 void FT891_CAT::SetFB ( uint32_t freq )			// Set VFO-B frequency
 {
 	radioStatus.FB = freq;						// Done!
+  Processautoinformation (MSG_FB);
 }
 
 uint32_t FT891_CAT::GetFA ()					// Get VFO-A frequency
@@ -676,11 +759,24 @@ uint32_t FT891_CAT::GetFB ()					// Get VFO-B frequency
 void FT891_CAT::SetMDA ( uint8_t mode )			// Set VFO-A mode
 {
 	radioStatus.MDA = mode;						// Done!
+  Processautoinformation (MSG_MD);
 }
 
 void FT891_CAT::SetMDB ( uint8_t mode )			// Set VFO-B mode
 {
 	radioStatus.MDB = mode;						// Done!
+  Processautoinformation (MSG_MD);
+}
+
+void FT891_CAT::SetBS ( uint8_t mode )      // Set band select
+{
+  radioStatus.BS = mode;           // Done!
+  Processautoinformation (MSG_BS);
+}
+
+uint8_t FT891_CAT::GetBS ()          // Get Band select frequency
+{
+  return radioStatus.BS;            // Done!
 }
 
 uint8_t FT891_CAT::GetMDA ()					// Get VFO-A mode
@@ -700,7 +796,10 @@ uint8_t FT891_CAT::GetMDB ()					// Get VFO-B mode
 
 void FT891_CAT::SetTX ( uint8_t tx )				// Set transmit/receive status
 {
+	uint8_t old_tx = radioStatus.TX;
 	radioStatus.TX = tx;							// Set status
+  if (old_tx != tx)
+    Processautoinformation (MSG_TX);
 
 	if ( keyTransmit )								// Only operate the transmitter if 'true'
 	{

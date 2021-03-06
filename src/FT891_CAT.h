@@ -88,6 +88,7 @@ struct	msg							// Keeps everything together
 #define	MSG_ST			18			// (Data 0 - 2) Split mode off, on or on +5KHz up
 #define	MSG_SV			19			// Swap VFOs
 #define	MSG_TX			20			// Set or request transmit/receive status
+#define MSG_CL      21      // Request or set callsign
 
 
 /*
@@ -149,6 +150,7 @@ void	 SetMDB ( uint8_t mode );				// Set VFO-B mode
 void	 SetTX  ( uint8_t tx );					// Set transmit/receive status
 void	 SetST  ( uint8_t st );					// Set split mode
 void	 SetSM  ( uint8_t sm );					// Set S-Meter
+void   SetBS  ( uint8_t mode );
 
 uint32_t GetFA  ();								// Get VFO-A frequency
 uint32_t GetFB  ();								// Get VFO-B frequency
@@ -157,7 +159,7 @@ uint8_t	 GetMDB ();								// Get VFO-B mode
 uint8_t	 GetTX  ();								// Get transmit/receive status
 bool	 GetST  ();								// Get Split mode
 uint8_t	 GetSM  ();								// Get s-meter
-
+uint8_t GetBS ();
 /*
  *	These can't be called from the outside world:
  */
@@ -170,6 +172,7 @@ msg 	 FindMsg ();					// Find the message in "msgTable"
 bool	 ParseMsg ();					// Separate any data from the message
 bool	 ProcessCmd ();					// Process a command type message
 void	 ProcessStatus ();				// Process a status request
+void   Processautoinformation (uint8_t message);        // Process a status request
 unsigned xtoi ( char* hexString );		// Convert a hexadecimal string to integer
 
 
@@ -179,10 +182,11 @@ unsigned xtoi ( char* hexString );		// Convert a hexadecimal string to integer
 
 private:
 
-char	rxBuff[BUF_LEN];				// DxCommander receive buffer
-char	txBuff[BUF_COUNT][BUF_LEN];		// DxCommander transmit buffers
-char	dataBuff[BUF_LEN];				// Data part of a message - slightly bigger than needed
-bool	hasData = false;				// Indicator that a message included some data
+char	  rxBuff[BUF_LEN];				// DxCommander receive buffer
+char	  txBuff[BUF_COUNT][BUF_LEN];		// DxCommander transmit buffers
+char	  dataBuff[BUF_LEN];				// Data part of a message - slightly bigger than needed
+bool	  hasData = false;				// Indicator that a message included some data
+String  callsign;
 
 uint8_t	txBuffIndex = 0;				// Next txBuff to be used
 
