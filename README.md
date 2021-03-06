@@ -4,7 +4,7 @@ I use a PCF8574ATS to connect the bandswitch rotary encoder. Also extra connecto
 external interfaces.
 Software changes are in development currently so not yet uploaded.
 
-The changes for this versio is:
+The changes for this version is:
 1) JTAG interface
 2) PCF8574ATS GPIO for rotary encoder and external interface
 3) Connector for external I2C interface
