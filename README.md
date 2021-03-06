@@ -8,6 +8,7 @@ The changes for this version is:
 1) JTAG interface
 2) PCF8574ATS GPIO for rotary encoder and external interface
 3) Connector for external I2C interface
+4) Network CAT interface
 
 # VFO-ESP32-Si5351 v2.31
 Some PCB updates, added output capacitors and changed the resistor pi network on the output to simple voltage divider.
