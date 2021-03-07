@@ -204,8 +204,11 @@ Telnet::~Telnet()
 
 void Telnet::begin()
 {
-  if (pServer)
-    pServer->begin();
+    if (pServer)
+    {
+        pServer->begin();
+        pServer->setNoDelay(true);
+    }
 }
 
 void Telnet::handle()
@@ -391,7 +394,7 @@ void task1(void* arg)
 	{
 		char str[NET_BUFSIZE+1];
 		memset(str, 0, (NET_BUFSIZE + 1) * sizeof(char));
-		if (xQueueReceive(write_queue, &str, 0))  
+		if (xQueueReceive(write_queue, str, 0))  
 		{
             TelServer.writeAll((const uint8_t*) str, strlen(str));
 		}
