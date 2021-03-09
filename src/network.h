@@ -3,13 +3,31 @@
 
 #define TELNET_PORT 23
 #define MAX_CLIENTS 10
+#define CATCLIENT 1
 #define NET_BUFSIZE	45
+#define TRXNET_CLIENT 1
+#define TRXNET_SERVER 0
 
-extern void wifiinit(void);
-extern void network_loop(void);
-extern void init_ota(void);
-extern void init_telnet(void);
-extern void task1(void* arg);
+#define TCP_NODELAY    0x01    /* don't delay send to coalesce packets */
+#define TCP_KEEPALIVE  0x02    /* send KEEPALIVE probes when idle for pcb->keep_idle milliseconds */
+#define TCP_KEEPIDLE   0x03    /* set pcb->keep_idle  - Same as TCP_KEEPALIVE, but use seconds for get/setsockopt */
+#define TCP_KEEPINTVL  0x04    /* set pcb->keep_intvl - Use seconds for get/setsockopt */
+#define TCP_KEEPCNT    0x05    /* set pcb->keep_cnt   - Use number of probes sent for get/setsockopt */
+
+class TrxNetwork
+{
+public:
+	void begin(uint8_t type_network);
+	void network_loop();
+
+private:
+	TaskHandle_t	Task1;
+	
+	void init_ota(void);
+	static void task1_client(void* arg);
+	static void task1_server(void* arg);
+};
+
 
 class Telnet
 {
@@ -49,5 +67,31 @@ public:
 
 extern Telnet			DebugServer;
 extern TelnetQueue		CatServer;
-extern QueueHandle_t    network_write_queue ;
+
+class TelnetClient
+{
+public:
+  
+  void		handle();
+  void		begin(WiFiClient *client);
+  size_t	read(const uint8_t *buffer, size_t size);
+  size_t	write(const uint8_t *buffer, size_t size);
+  uint8_t	connected();
+  uint8_t	available();
+  void		CheckForDroppedConnections();
+private:
+  WiFiClient	*pclient =  NULL;
+};
+
+class TelnetClientQueue
+{
+public:
+	size_t write(const uint8_t* buffer, size_t size);
+	size_t read(const uint8_t* buffer, size_t size);
+	uint8_t		connected();
+	void	begin();
+};
+
+extern TelnetClientQueue CatTelClient;
+
 #endif

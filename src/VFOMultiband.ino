@@ -57,7 +57,10 @@ using namespace ace_button;
 
 #define Nx Xw
 #define Ny Yw
-
+/*-------------------------------------------------------
+   CAT Interface
+--------------------------------------------------------*/
+TrxNetwork vfo_network;
 
 /*-------------------------------------------------------
    CAT Interface
@@ -1072,7 +1075,7 @@ void setup() {
   }
   
   display_init();
-  wifiinit();
+  vfo_network.begin(TRXNET_SERVER);
   setup_display();
   filter_init();
   
@@ -1085,9 +1088,7 @@ void setup() {
   Enc_band.clearCount();
   
   xTaskCreatePinnedToCore(task0, "Task0", 4096, NULL, 1, NULL, 0);
-  xTaskCreatePinnedToCore(task1, "Task1", 4096, NULL, 1, NULL, 1);
-
-
+  
 // Load correction and calibration information
   LoadEEPROM(); 
 
@@ -1172,7 +1173,7 @@ void loop() {
   display_button();
   if (f_button == 3)
     setup_menu();
-  network_loop();
+  vfo_network.network_loop();
 }
 
 void next_band(uint8_t dir, uint8_t &band)
