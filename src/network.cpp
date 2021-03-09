@@ -154,6 +154,8 @@ void TrxNetwork::begin(uint8_t type_network)
 		{
 			tft.setTextColor(ILI9341_RED);
 			tft.println("Failed to host: " + String(vfo_host));
+			delay(2000);
+			return;
 		}		
 		CatTelClient.begin();
 		xTaskCreatePinnedToCore(this->task1_client, "Task1", 4096, NULL, 1, &Task1, 0);
@@ -243,6 +245,10 @@ void TrxNetwork::network_loop() {
 	size_t retval = DebugServer.readAll((const uint8_t*)str, NET_BUFSIZE);
 }
 
+// Client thread is started when network is in client mode
+// Thread to handle incoming tcp data and put them in the read queue
+// The write queue is filled by CAT interface and red by this thread and send to tcp server
+//
 void TrxNetwork::task1_client(void* arg)
 {
 
@@ -250,7 +256,7 @@ void TrxNetwork::task1_client(void* arg)
 	while (1)
 	{
 		char str[NET_BUFSIZE + 1];
-		memset(str, 0, (NET_BUFSIZE + 1) * sizeof(char));
+		memset(str, 0, sizeof(str));
 		if (xQueueReceive(write_queue, str, 0))
 		{
 			if (TelClient.connected())
@@ -258,7 +264,7 @@ void TrxNetwork::task1_client(void* arg)
 				TelClient.write((const uint8_t*)str, (size_t)strlen(str));
 			}
 		}
-		memset(str, 0, (NET_BUFSIZE + 1) * sizeof(char));
+		memset(str, 0, sizeof(str));
 		if (TelClient.connected())
 		{
 			TelClient.read((const uint8_t*)str, NET_BUFSIZE);
@@ -272,7 +278,10 @@ void TrxNetwork::task1_client(void* arg)
 	}
 }
 
-
+// Server thread is started when network is in Server mode
+// Thread to handle incoming tcp data from clients and put them in the read queue
+// The write queue is filled by CAT interface requests and red by this thread and send to tcp client
+//
 void TrxNetwork::task1_server(void* arg)
 {
 	static Telnet       TelServer(&TRXNETServer, MAX_CLIENTS, "Connected to PA0PHH ESP-VPO TRXNET interface\r\n");
@@ -281,18 +290,15 @@ void TrxNetwork::task1_server(void* arg)
 	while (1)
 	{
 		char str[NET_BUFSIZE + 1];
-		memset(str, 0, (NET_BUFSIZE + 1) * sizeof(char));
+		memset(str, 0,  sizeof(str));
 		if (xQueueReceive(write_queue, str, 0))
 		{
 			TelServer.writeAll((const uint8_t*)str, strlen(str));
 		}
-		memset(str, 0, (NET_BUFSIZE + 1) * sizeof(char));
+		memset(str, 0, sizeof(str));
 		if (TelServer.Anyconnection())
 		{
-			if (TelServer.readAll((const uint8_t*)str, NET_BUFSIZE) == -1)
-			{
-				Serial.println("Read Error");
-			}
+			TelServer.readAll((const uint8_t*)str, NET_BUFSIZE);
 			if (strlen(str))
 			{
 				xQueueSend(read_queue, &str, 0);
