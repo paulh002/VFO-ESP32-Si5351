@@ -2,13 +2,16 @@
 This is a new branch of the ESP32 VFO, I want to have a standard JTAG interface for debugging on this PCB for this 4 GPIO ports need to be made free.
 I use a PCF8574ATS to connect the bandswitch rotary encoder. Also extra connector for external I2C interface. I think in the future I will use more the I2C to drive 
 external interfaces.
-Software changes are in development currently so not yet uploaded.
 
 The changes for this version is:
 1) JTAG interface
 2) PCF8574ATS GPIO for rotary encoder and external interface
 3) Connector for external I2C interface
 4) Network CAT interface
+5) Userinterface based on lgvl
+
+I am working on a overhaule of the userinterface using lvgl. It is still in development but it add touch support and hopefully a better interface, especialy for setup purposes like wifi and the si5351 calibration functions can be accessed without usb connection. 
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/tree/ESP32-VFO-v3/IMG_20210316_092140.jpg)
 
 # VFO-ESP32-Si5351 v2.31
 Some PCB updates, added output capacitors and changed the resistor pi network on the output to simple voltage divider.
