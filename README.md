@@ -1,7 +1,37 @@
-# VFO-ESP32-Si5351 v2.33
+# VFO-ESP32-Si5351 v2.4 beta
+Version 2.33 source code is moved to the main branch, as I am now working on a new version of the GUI based on LVGL userinterface.
+This because the old userinterface became to complex to maintain if I want to add wifi management and other setup pages.
+The software is not yet complete, however enough to test.
+
+Changes:
+- TFT library has been changed to TFT_eSPI, download the library in Arduine IDE and config the User_Setup.h to your configuration or use the one in this repository for the PCB in this project
+- LGVL library is used for GUI. Install in Arduino IDE LVGL library (not Arduino LVGL) copy the lv_conf.h to you library directory to config lvgl library or create your own config file to your liking.
+- I use now Visual Studio Community 2019 with Visual Micro to compile the project. But Arduino IDE is also supported.
+- source has been moved to vfo_esp32_si5351 directory
+- vfo1 and vfo2 support
+- gui supported wifi configuration
+- gui supported si5351 configuration
+- libraries are moved to library directory 
+- source code includes a visual studio project file
+- 
+
+Todo
+- GUI supported AD8307 configuration
+- TX GUI to add SWR measurement
+
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/lvgl_gui.jpg)
+Gui supported Wifi settings
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/wifi_gui.jpg)
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/wifi_gui2.jpg)
+Gui supported si5351 calibration
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/si5351_gui.jpg)
+
+# VFO-ESP32-Si5351 v2.33 (main branch)
 Updated network functions. Added telnet support for debugging, CAT interface on port 1003 support.
 CAT interface will send frequency updates when the VFO is tuned. This is used by RF-AMP and later Antenna tunner to follow the frequencies
 See PWRSWR repository for the rf-amp esp32 controler with swr meter functionality. I use same VFO PCB also for rf-amp controler. 
+
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/tsxnet.png)
 
 # VFO-ESP32-Si5351 v2.32
 Updated the ota software to support Arduino IDE interface, recently I have dropped the Arduino IDE for Visual Studio 2019 which gives a bit more software development support
