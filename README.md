@@ -31,7 +31,7 @@ Updated network functions. Added telnet support for debugging, CAT interface on 
 CAT interface will send frequency updates when the VFO is tuned. This is used by RF-AMP and later Antenna tunner to follow the frequencies
 See PWRSWR repository for the rf-amp esp32 controler with swr meter functionality. I use same VFO PCB also for rf-amp controler. 
 
-![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/tsxnet.png)
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/tsxnet.jpg)
 
 # VFO-ESP32-Si5351 v2.32
 Updated the ota software to support Arduino IDE interface, recently I have dropped the Arduino IDE for Visual Studio 2019 which gives a bit more software development support
