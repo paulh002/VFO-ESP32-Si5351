@@ -13,6 +13,7 @@ using namespace ace_button;
 #include "vfo.h"
 #include "io.h"
 #include "FT891_CAT.h"
+#include "si5351.h"
 
 uint8_t			c_rxtx = -1; // detect rx_tx change
 uint8_t			f_rxtx = 0;  // initial rx
@@ -48,11 +49,17 @@ const uint8_t bmax = 5;
 
 uint32_t   bfo_frq[2] = { LSB_FREQUENCY, LSB_FREQUENCY };     // BFO Frequency[Hz]
 
-void init_vfo(int active_vfo)
+void start_vfo()
 {
 	uint32_t bfo_frq;
 	uint32_t frq;
 	
+	memcpy(current_frq1, R.current_frq1, sizeof(current_frq1));
+	memcpy(current_frq2, R.current_frq2, sizeof(current_frq2));
+	f_band[0] = R.band[0];
+	f_band[1] = R.band[1];
+	active_vfo = R.active_vfo;
+
 	uint8_t band = f_band[active_vfo];
 	if (active_vfo == 0)
 		frq = current_frq1[band];
@@ -77,26 +84,36 @@ void init_vfo(int active_vfo)
 	setvfo(frq, bfo_frq);
 	// Use semaphores for setting label different thread than GUI
 	BfoLabel(bfo_frq / 1000,1);
-	CAT.SetFA(current_frq1[band]);
-	CAT.SetFB(current_frq2[band]);
+	CAT.SetFA(current_frq1[f_band[0]]);
+	CAT.SetFB(current_frq1[f_band[1]]);
+	CAT.SetMDA(f_mode[0]+1);
+	CAT.SetMDB(f_mode[1]+1);
+
 }
 
-void init_vfo_save(int active_vfo)
+void init_vfo(int active_vfo)
 {
+	// default settings
+	memset(&R, 0, sizeof(var_t));
 	memcpy(R.current_frq1, current_frq1, sizeof(current_frq1));
 	memcpy(R.current_frq2, current_frq2, sizeof(current_frq2));
 	R.band[0] = f_band[0];
 	R.band[1] = f_band[1];
 	R.active_vfo = active_vfo;
-}
-
-void init_vfo_load()
-{
-	memcpy(current_frq1, R.current_frq1, sizeof(current_frq1));
-	memcpy(current_frq2, R.current_frq2, sizeof(current_frq2));
-	f_band[0] = R.band[0];
-	f_band[1] = R.band[1];
-	active_vfo = R.active_vfo;
+	R.cal_AD[0].db10m = CAL1_NOR_VALUE;
+	R.cal_AD[0].db10m = CALFWD1_DEFAULT;
+	R.cal_AD[0].db10m = CALREV1_DEFAULT;
+	R.cal_AD[1].db10m = CAL1_NOR_VALUE;
+	R.cal_AD[1].db10m = CALFWD1_DEFAULT;
+	R.cal_AD[1].db10m = CALREV1_DEFAULT;
+	R.PEP_period = PEP_PERIOD;
+	R.AVG_period = 0;
+	R.low_power_floor = FLOOR_TEN_mW;
+	R.correction_si5351_no1 = 0;
+	R.correction_si5351_no2 = 0;
+	R.xtal_si5351_no1 = SI5351_XTAL_FREQ;
+	R.xtal_si5351_no2 = SI5351_XTAL_FREQ;
+	R.wifi_onoff = 1;
 }
 
 void next_band(uint8_t dir, uint8_t& band, long &frq)
@@ -134,6 +151,8 @@ void mode_select(int new_band, int active_vfo)
 			f_mode[active_vfo] = MODE_USB;
 			BfoLabel(bfo_frq / 1000,0);
 			setbfo(bfo_frq);
+			CAT.SetMDB(MODE_USB+1);
+			CAT.SetMDA(MODE_USB+1);
 		}
 		else
 		{
@@ -142,6 +161,8 @@ void mode_select(int new_band, int active_vfo)
 			f_mode[active_vfo] = MODE_LSB;
 			BfoLabel(bfo_frq / 1000,0);
 			setbfo(bfo_frq);
+			CAT.SetMDB(MODE_LSB+1);
+			CAT.SetMDA(MODE_LSB+1);
 		}
 		f_band[active_vfo] = new_band;
 		switch_band(active_vfo);
@@ -279,6 +300,8 @@ void set_vfo_frequency(long frq,int active_vfo)
 	setvfo(frq, bfo_frq[active_vfo]);
 }
 
+// This function is called from the GUI thread,
+// So Semaphores
 long switch_vfo(int active_vfo)
 {
 	long frq;
@@ -295,6 +318,7 @@ long switch_vfo(int active_vfo)
 		f_band[active_vfo] = -1; //make sure mode_select will change mode
 		mode_select(band, active_vfo);
 		switch_band(active_vfo);
+		Togglemode(f_mode[active_vfo],0);
 	}
 	return frq;
 }
@@ -363,10 +387,16 @@ bool CheckCAT()
 		return returnCode;            // No more to do!
 
 	 // check if mode is changed
-	uint8_t mode = CAT.GetMDA();
+	uint8_t mode;
+	if (active_vfo)
+		mode = CAT.GetMDA() -1;
+	else
+		mode = CAT.GetMDB() -1;
 	if (mode != f_mode[active_vfo])
 	{
+		Serial.println("Change mode : " + String(mode));
 		switch_mode(mode,active_vfo);
+		Togglemode(mode);
 	}
 
 	//char  str[80];
@@ -406,6 +436,8 @@ void switch_mode(uint8_t mode, int active_vfo)
 		f_mode[active_vfo] = MODE_LSB;
 		BfoLabel(bfo_frq / 1000, 0);
 		setbfo(bfo_frq);
+		CAT.SetMDB(MODE_LSB + 1);
+		CAT.SetMDA(MODE_LSB + 1);
 	}
 	if (mode == MODE_USB)
 	{
@@ -414,5 +446,7 @@ void switch_mode(uint8_t mode, int active_vfo)
 		f_mode[active_vfo] = MODE_USB;
 		BfoLabel(bfo_frq / 1000, 0);
 		setbfo(bfo_frq);
+		CAT.SetMDB(MODE_USB + 1);
+		CAT.SetMDA(MODE_USB + 1);
 	}
 }

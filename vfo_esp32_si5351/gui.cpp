@@ -579,7 +579,6 @@ static void lv_spinbox_decrement_event_cb(lv_obj_t* btn, lv_event_t e)
 static void event_button_save(lv_obj_t* btn, lv_event_t e)
 {
 	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
-		init_vfo_save(active_vfo);
 		SaveEEPROM();
 	}
 }
@@ -601,6 +600,23 @@ void BfoLabel(uint32_t num, uint8_t sem) {
 		xSemaphoreGive(GuiBinarySemaphore);
 }
 
+void Togglemode(int mode, uint8_t sem)
+{
+	if (sem)
+		xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY); 
+	if (mode == MODE_LSB)
+	{
+		lv_btn_set_state(lsb_button, LV_BTN_STATE_CHECKED_RELEASED);
+		lv_btn_set_state(usb_button, LV_BTN_STATE_RELEASED);
+	}
+	if (mode == MODE_USB)
+	{
+		lv_btn_set_state(usb_button, LV_BTN_STATE_CHECKED_RELEASED);
+		lv_btn_set_state(lsb_button, LV_BTN_STATE_RELEASED);
+	}
+	if (sem)
+		xSemaphoreGive(GuiBinarySemaphore);
+}
 
 static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event)
 {
@@ -621,6 +637,7 @@ static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event)
 			break;
 		case 3:
 			memset(&R, 0, sizeof(R));
+			init_vfo(0);
 			SaveEEPROM();
 			break;
 		}

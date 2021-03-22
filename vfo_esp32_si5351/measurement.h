@@ -145,11 +145,12 @@ extern  SemaphoreHandle_t swrBinarySemaphore;
 extern  QueueHandle_t     rotary_queue;
 
 extern void adc_init(void);
-extern void adc_poll_and_feed_circular(void);
+extern void adc_poll_and_feed_circular(void* pvParameters);
 extern void pswr_sync_from_interrupt(void);
 extern void pswr_determine_dBm(void);
 extern void determine_power_pep_pk(void);
 extern uint16_t print_p_mw(double pwr);
 extern uint16_t print_swr(void);
 extern void calc_SWR_and_power(void);
+extern void start_measurement();
 #endif

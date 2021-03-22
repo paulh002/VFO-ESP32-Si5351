@@ -31,6 +31,7 @@ void setfrequencylabel(long freq, uint8_t sem = 0);
 void ToggleTX(uint8_t show);
 void ToggleSetup(bool show);
 void BfoLabel(uint32_t num, uint8_t sem);
+void Togglemode(int mode, uint8_t sem = 1);
 
 static void mode_button_eh(lv_obj_t* obj, lv_event_t event);
 static void popupPW();

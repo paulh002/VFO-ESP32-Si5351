@@ -13,7 +13,9 @@ Changes:
 - gui supported si5351 configuration
 - libraries are moved to library directory 
 - source code includes a visual studio project file
-- 
+
+Notes
+- The si5351 library is customized for esp32 support and can be found in the library directory
 
 Todo
 - GUI supported AD8307 configuration

@@ -13,8 +13,8 @@ using namespace ace_button;
 #include "io.h"
 #include "FT891_CAT.h"
 
-var_t	R;
 SemaphoreHandle_t GuiBinarySemaphore = NULL;
+SemaphoreHandle_t swrBinarySemaphore = NULL;
 
 // the setup function runs once when you press reset or power the board
 void setup() {
@@ -24,15 +24,18 @@ void setup() {
 	pinMode(S_METER, ANALOG);
 	pinMode(FWD_METER, ANALOG);
 	pinMode(REV_METER, ANALOG);
+	adc_init();
 	memset(&R, 0, sizeof(R));
-	init_vfo_save(0);
+	init_vfo(0); // load default values for R
 	LoadEEPROM();
-	R.wifi_onoff = 1;
 	GuiBinarySemaphore = xSemaphoreCreateMutex();
 	if (GuiBinarySemaphore == NULL) {
 		Serial.println("Error creating the GuiBinarySemaphore");
 	}
-	
+	swrBinarySemaphore = xSemaphoreCreateMutex();
+	if (swrBinarySemaphore == NULL) {
+		Serial.println("Error creating the swrBinarySemaphore");
+	}
 	net_queue = xQueueCreate(1, sizeof(uint8_t));
 	if (net_queue == NULL) {
 		Serial.println("Error creating the queue");
@@ -40,8 +43,9 @@ void setup() {
 
 	init_io();
 	guisetup();
+	start_vfo();
 	CAT.begin(true);
-	init_vfo(active_vfo);
+	start_measurement();
 	delay(10);
 	if (R.wifi_onoff)
 	{
@@ -73,8 +77,6 @@ void LoadEEPROM()
 	// either through PSWR_A.h or through Menu functions
 	if (coldstart != COLDSTART_REF)
 	{
-		memset(&R, 0, sizeof(var_t));
-		init_vfo_save(0);
 		EEPROM.write(0, COLDSTART_REF);          // COLDSTART_REF in first byte indicates all initialized
 		EEPROM_writeAnything(1, R);              // Write default settings into EEPROM
 		EEPROM.commit();
@@ -82,7 +84,6 @@ void LoadEEPROM()
 	else                                      // EEPROM contains stored data, retrieve the data
 	{
 		EEPROM_readAnything(1, R);               // Read the stored data
-		init_vfo_load();
 	}
 }
 

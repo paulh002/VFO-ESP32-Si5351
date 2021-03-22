@@ -459,7 +459,7 @@ bool FT891_CAT::ProcessCmd ()
 
 		case MSG_MD:									// Set mode (USB, LSB, CW, etc.)
 			tempMode = xtoi ( dataBuff );				// Convert to a number
-
+			//Serial.println("Mode : " + String(tempMode));
 			SetMDA ( tempMode );						// Set in radioStatus
 			SetMDB ( tempMode );						// Both modes for now
 
@@ -696,7 +696,7 @@ void FT891_CAT::Processautoinformation (uint8_t message)
 
 if (CatServer.Anyconnection() && strlen(tempBuff))
     {
-    Serial.println ("Send data ");
+    //Serial.println ("Send data ");
     if ( addNewline )
       {
         CatServer.write ( (const uint8_t *)tempBuff, strlen(tempBuff) );   // Send the message (debugging mode)

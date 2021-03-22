@@ -32,23 +32,7 @@ double      rev_power_db = 0.0;
 bool        Reverse;        // BOOL: True if reverse power is greater than forward power
 char        lcd_buf[82];    // Used to process data to be passed to LCD and USB Serial
 
-/*
-var_t  R  = {{
-                {                       // Meter calibration if 2x AD8307
-                  CAL1_NOR_VALUE,       // First calibrate point in 10 x dBm
-                  CALFWD1_DEFAULT,      // First Calibrate point, Forward direction, Volts    
-                  CALREV1_DEFAULT       // First Calibrate point, Reverse direction, Volts   
-                }
-             },
-             PEP_PERIOD,
-             0,
-             FLOOR_NOISEFLOOR,
-             0,
-             0,
-             SI5351_XTAL_FREQ,
-             SI5351_XTAL_FREQ
-            };
-*/
+var_t  R;
 
 void adc_init(void)
 { 
@@ -67,7 +51,15 @@ double ReadVoltage(byte pin){
 
 */
 
-void adc_poll_and_feed_circular(void)
+TaskHandle_t    Task_poll;
+
+void start_measurement()
+{
+    xTaskCreatePinnedToCore(adc_poll_and_feed_circular, "adc_poll", 4096, NULL, 1, &Task_poll, 0);
+}
+
+
+void adc_poll_and_feed_circular(void* pvParameters)
 {
   //----------------------------------------------------------------------------
   // use builtin A/D converters (12 bit resolution)
@@ -75,13 +67,16 @@ void adc_poll_and_feed_circular(void)
 
     //int16_t result_fwd = (int16_t)random(1025, 3000); // analogRead(Pfwd);
     //int16_t result_ref = (int16_t)random(1000, 2000); // analogRead(Pref);  // ref=ADC0, fwd=ADC1
+    while(1)
+    {
+        int16_t result_fwd = analogRead(FWD_METER);
+        int16_t result_ref = analogRead(REV_METER);  // ref=ADC0, fwd=ADC1
     
-    int16_t result_fwd = analogRead(FWD_METER);
-    int16_t result_ref = analogRead(REV_METER);  // ref=ADC0, fwd=ADC1
-    
-    measure.fwd[measure.incount] = result_fwd;
-    measure.rev[measure.incount] = result_ref;
-    measure.incount++;                        // 8 bit value, rolls over at 256
+        measure.fwd[measure.incount] = result_fwd;
+        measure.rev[measure.incount] = result_ref;
+        measure.incount++;                        // 8 bit value, rolls over at 256
+        vTaskDelay(5);
+    }
 }
 
 void pswr_sync_from_interrupt(void)
