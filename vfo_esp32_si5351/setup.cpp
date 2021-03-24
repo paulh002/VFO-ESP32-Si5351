@@ -26,7 +26,7 @@ void setup() {
 	pinMode(REV_METER, ANALOG);
 	adc_init();
 	memset(&R, 0, sizeof(R));
-	init_vfo(0); // load default values for R
+	init_vfo(); // load default values for R
 	LoadEEPROM();
 	GuiBinarySemaphore = xSemaphoreCreateMutex();
 	if (GuiBinarySemaphore == NULL) {

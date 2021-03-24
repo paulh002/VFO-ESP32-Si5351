@@ -84,6 +84,11 @@ CSmeter::~CSmeter()
 	free(m_cbuf);
 }
 
+void CSmeter::hide(bool hidden)
+{
+	lv_obj_set_hidden(s_canvas, hidden);
+}
+
 void CSmeter::Draw(uint16_t value)
 {
 	uint16_t max_value;

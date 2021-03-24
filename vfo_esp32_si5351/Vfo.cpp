@@ -91,21 +91,24 @@ void start_vfo()
 
 }
 
-void init_vfo(int active_vfo)
+void init_vfo()
 {
+	long  current_frq1[] = { 1800000,3500000,7000000,14000000,21000000,28000000 };
+	long  current_frq2[] = { 1800000,3500000,7000000,14000000,21000000,28000000 };
+
 	// default settings
-	memset(&R, 0, sizeof(var_t));
+	memset(&R, 0, sizeof(var_t));	
 	memcpy(R.current_frq1, current_frq1, sizeof(current_frq1));
 	memcpy(R.current_frq2, current_frq2, sizeof(current_frq2));
-	R.band[0] = f_band[0];
-	R.band[1] = f_band[1];
-	R.active_vfo = active_vfo;
+	R.band[0] = 1;
+	R.band[1] = 1;
+	R.active_vfo = 0;
 	R.cal_AD[0].db10m = CAL1_NOR_VALUE;
-	R.cal_AD[0].db10m = CALFWD1_DEFAULT;
-	R.cal_AD[0].db10m = CALREV1_DEFAULT;
-	R.cal_AD[1].db10m = CAL1_NOR_VALUE;
-	R.cal_AD[1].db10m = CALFWD1_DEFAULT;
-	R.cal_AD[1].db10m = CALREV1_DEFAULT;
+	R.cal_AD[0].Fwd = CALFWD1_DEFAULT;
+	R.cal_AD[0].Rev = CALREV1_DEFAULT;
+	R.cal_AD[1].db10m = CAL2_NOR_VALUE;
+	R.cal_AD[1].Fwd = CALFWD2_DEFAULT;
+	R.cal_AD[1].Rev = CALREV2_DEFAULT;
 	R.PEP_period = PEP_PERIOD;
 	R.AVG_period = 0;
 	R.low_power_floor = FLOOR_TEN_mW;

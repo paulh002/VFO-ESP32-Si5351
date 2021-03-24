@@ -34,6 +34,11 @@
 #define MIN_PWR_FOR_SWR_SHOW  0.01  // Minimum Power in mW for SWR indication (use recent value)
 
 //-----------------------------------------------------------------------------
+// Timer for Power/SWR calculations and LCD prints, milliseconds
+#define POLL_TIMER               10 // Meter updates will be at half this rate
+                                    // Text updates will be at quarter of this rate
+                                    // 
+//-----------------------------------------------------------------------------
 // DEFS for FWD and REF coupler, 2xAD8307 or Diode detectors
 //-----------------------------------------------------------------------------
 // DEFS for AD8307 Calibration (dBm *10)

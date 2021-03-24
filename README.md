@@ -1,3 +1,6 @@
+# VFO-ESP32-Si5351 v2.41 beta
+update-- added Power and SWR gauges
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/swr_pwr.jpg)
 # VFO-ESP32-Si5351 v2.4 beta
 Version 2.33 source code is moved to the main branch, as I am now working on a new version of the GUI based on LVGL userinterface.
 This because the old userinterface became to complex to maintain if I want to add wifi management and other setup pages.
@@ -13,13 +16,17 @@ Changes:
 - gui supported si5351 configuration
 - libraries are moved to library directory 
 - source code includes a visual studio project file
+- TX GUI with power and SWR measurement
 
 Notes
 - The si5351 library is customized for esp32 support and can be found in the library directory
+- Libraries used
+   -  Acebutton https://github.com/bxparks/AceButton
+   -  ESP32Encoder https://github.com/madhephaestus/ESP32Encoder
 
 Todo
-- GUI supported AD8307 configuration
-- TX GUI to add SWR measurement
+- GUI supported AD8307 calibration
+
 
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/lvgl_gui.jpg)
 Gui supported Wifi settings

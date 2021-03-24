@@ -71,11 +71,17 @@ lv_obj_t* vfo2_button;
 lv_obj_t* Band_roller;
 lv_obj_t* Tx_led1;
 lv_obj_t* bfo_spinbox;
+lv_obj_t* btn_plus;
+lv_obj_t* btn_min;
 lv_obj_t* s_canvas;
 lv_obj_t* bg_middle2;
 lv_obj_t* bg_middle3;
 lv_obj_t* si_spinbox;
 lv_obj_t* si_spinbox2;
+lv_obj_t* Swr_gauge;
+lv_obj_t* pwr_gauge;
+lv_obj_t* swr_vlabel;
+lv_obj_t* pwr_vlabel;
 
 CSmeter* smeter;
 
@@ -283,14 +289,6 @@ void guiTask(void* arg) {
 	char str[80];
 	
 	band_roller_str(str);
-	/*Band_roller = lv_dropdown_create(bg_middle, NULL);
-	lv_dropdown_set_options(Band_roller,str);
-	lv_obj_align(Band_roller,NULL, LV_ALIGN_CENTER, 130, -20);
-	lv_obj_set_width(Band_roller, 80);
-	lv_obj_set_event_cb(Band_roller, band_event_handler);
-	lv_group_add_obj(vfo_group, Band_roller);
-	*/
-	
 	Band_roller = lv_roller_create(bg_middle, NULL);
 	lv_roller_set_options(Band_roller,str, LV_ROLLER_MODE_INFINITE);
 	lv_obj_align(Band_roller,NULL, LV_ALIGN_CENTER, 120, 10);
@@ -318,22 +316,84 @@ void guiTask(void* arg) {
 	lv_textarea_set_cursor_hidden(bfo_spinbox, true);
 
 	lv_coord_t h = lv_obj_get_height(bfo_spinbox);
-	lv_obj_t* btn = lv_btn_create(bg_middle, NULL);
-	lv_obj_set_size(btn, h, h);
-	lv_obj_align(btn, bfo_spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-	lv_theme_apply(btn, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
-	lv_obj_set_event_cb(btn, lv_spinbox_increment_event_cb);
-	lv_group_add_obj(vfo_group, btn);
+	btn_plus = lv_btn_create(bg_middle, NULL);
+	lv_obj_set_size(btn_plus, h, h);
+	lv_obj_align(btn_plus, bfo_spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+	lv_theme_apply(btn_plus, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_plus, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
+	lv_obj_set_event_cb(btn_plus, lv_spinbox_increment_event_cb);
+	lv_group_add_obj(vfo_group, btn_plus);
 	
 	// Keep de order of the focus correct
 	lv_group_add_obj(vfo_group, bfo_spinbox);
 
-	btn = lv_btn_create(bg_middle, btn);
-	lv_obj_align(btn, bfo_spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
-	lv_obj_set_event_cb(btn, lv_spinbox_decrement_event_cb);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
-	lv_group_add_obj(vfo_group, btn);
+	btn_min = lv_btn_create(bg_middle, btn_plus);
+	lv_obj_align(btn_min, bfo_spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+	lv_obj_set_event_cb(btn_min, lv_spinbox_decrement_event_cb);
+	lv_obj_set_style_local_value_str(btn_min, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+	lv_group_add_obj(vfo_group, btn_min);
+
+	static lv_color_t needle_colors[1];
+	needle_colors[0] = LV_COLOR_ORANGE;
+	
+	static lv_style_t gauge_style;
+	lv_style_init(&gauge_style);
+	lv_style_set_bg_color(&gauge_style, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+	lv_style_set_line_color(&gauge_style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+	lv_style_set_scale_end_color(&gauge_style, LV_STATE_DEFAULT, LV_COLOR_RED);
+	lv_style_set_text_color(&gauge_style, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+	lv_style_set_line_width(&gauge_style, LV_STATE_DEFAULT, 2);
+	lv_style_set_line_width(&gauge_style, LV_STATE_DEFAULT, 2);
+	lv_style_set_border_side(&gauge_style, LV_STATE_DEFAULT, LV_BORDER_SIDE_NONE);
+	lv_style_set_scale_end_line_width(&gauge_style, LV_STATE_DEFAULT, 2);
+	lv_style_set_scale_end_border_width(&gauge_style, LV_STATE_DEFAULT, 2);
+
+	Swr_gauge = lv_gauge_create(bg_middle, NULL);
+	lv_obj_add_style(Swr_gauge, LV_GAUGE_PART_MAJOR, &gauge_style);
+	lv_obj_add_style(Swr_gauge, LV_GAUGE_PART_MAIN, &gauge_style);
+	lv_obj_add_style(Swr_gauge, LV_GAUGE_PART_NEEDLE, &gauge_style);
+	lv_obj_align(Swr_gauge, NULL, LV_ALIGN_CENTER, 100, 45);
+	lv_gauge_set_needle_count(Swr_gauge, 1, needle_colors);
+	lv_obj_set_size(Swr_gauge, 150, 150);
+	lv_gauge_set_range(Swr_gauge, 0, 10);
+	int line_cnt, label_cnt = 5, sub_div = 3;
+	line_cnt = (sub_div + 1) * (label_cnt - 1) + 1;
+	lv_gauge_set_scale(Swr_gauge, 270, line_cnt, label_cnt);
+	lv_gauge_set_critical_value(Swr_gauge, 4);
+	lv_gauge_set_angle_offset(Swr_gauge,0);
+	/*Allow recoloring of the images according to the needles' color*/
+	lv_obj_set_style_local_image_recolor_opa(Swr_gauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_COVER);
+	
+	lv_obj_t* swr_label = lv_label_create(Swr_gauge, NULL);
+	lv_obj_align(swr_label, Swr_gauge, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
+	lv_label_set_text(swr_label, "Swr");
+	lv_obj_set_hidden(Swr_gauge, true);
+	swr_vlabel = lv_label_create(Swr_gauge, NULL);
+	lv_obj_align(swr_vlabel, Swr_gauge, LV_ALIGN_IN_BOTTOM_MID, 0, -30);
+	lv_label_set_text(swr_vlabel, "0.0");
+	lv_obj_set_hidden(Swr_gauge, true);
+
+	pwr_gauge = lv_gauge_create(bg_middle, NULL);
+	lv_obj_add_style(pwr_gauge, LV_GAUGE_PART_MAJOR, &gauge_style);
+	lv_obj_add_style(pwr_gauge, LV_GAUGE_PART_MAIN, &gauge_style);
+	lv_obj_add_style(pwr_gauge, LV_GAUGE_PART_NEEDLE, &gauge_style);
+	lv_obj_align(pwr_gauge, NULL, LV_ALIGN_CENTER, -65, 45);
+	lv_gauge_set_needle_count(pwr_gauge, 1, needle_colors);
+	lv_obj_set_size(pwr_gauge, 150, 150);
+	lv_gauge_set_range(pwr_gauge, 0, 10);
+	label_cnt = 5; sub_div = 3;
+	line_cnt = (sub_div + 1) * (label_cnt - 1) + 1;
+	lv_gauge_set_scale(pwr_gauge, 270, line_cnt, label_cnt);
+	lv_gauge_set_angle_offset(pwr_gauge, 0);
+	/*Allow recoloring of the images according to the needles' color*/
+	lv_obj_set_style_local_image_recolor_opa(pwr_gauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_COVER);
+	lv_obj_t* pwr_label = lv_label_create(pwr_gauge, NULL);
+	lv_obj_align(pwr_label, pwr_gauge, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
+	lv_label_set_text(pwr_label, "Watt");
+	pwr_vlabel = lv_label_create(pwr_gauge, NULL);
+	lv_obj_align(pwr_vlabel, pwr_gauge, LV_ALIGN_IN_BOTTOM_MID, 0, -30);
+	lv_label_set_text(pwr_vlabel, "0.0");
+	lv_obj_set_hidden(pwr_gauge, true);
 
 	gui_setup(scr);
 	gui_si5351(scr);
@@ -373,16 +433,54 @@ void guiTask(void* arg) {
 */
 		rotary_button.check();
 		smeter->Draw(get_smeter());
-		/*
-		if (tt > 10)
+		
+		static volatile int lastPowerEncoding;
+		static	bool	hide_rx = true;
+		if (f_rxtx)
 		{
-			int r = random(0,4096);
-			smeter->Draw(r);
-			tt = 0;
+			if (hide_rx == false)
+			{
+				hide_rx = true;
+				lv_obj_set_hidden(btn_min, true);
+				lv_obj_set_hidden(btn_plus, true);
+				lv_obj_set_hidden(bfo_spinbox, true);
+				lv_obj_set_hidden(Band_roller, true);				
+				smeter->hide(true);
+				lv_obj_set_hidden(Swr_gauge, false);
+				lv_obj_set_hidden(pwr_gauge, false);
+			}
+			int currMillis = millis();
+			if (currMillis - lastPowerEncoding > POLL_TIMER)
+			{
+				uint16_t swr, pep;
+
+				pswr_sync_from_interrupt(); 
+				calc_SWR_and_power();
+				swr = print_swr();
+				pep = power_mw_pep / 10000.0;//print_p_mw(power_mw_pep);
+				lv_gauge_set_value(Swr_gauge, 0, swr/20);
+				lv_gauge_set_value(pwr_gauge, 0, pep);
+				lv_label_set_text(swr_vlabel, String((double)swr/20.0).c_str());
+				lv_label_set_text(pwr_vlabel, String((double)power_mw_pep / 10000.0).c_str());
+				Serial.println("SWR: " + String(swr) + "Power: " + String(pep));
+				lastPowerEncoding = currMillis;
+			}
+
 		}
 		else
-			tt++;
-		*/
+		{
+			if (hide_rx == true)
+			{
+				hide_rx = false;
+				lv_obj_set_hidden(btn_min, false);
+				lv_obj_set_hidden(btn_plus, false);
+				lv_obj_set_hidden(bfo_spinbox, false);
+				lv_obj_set_hidden(Band_roller, false);
+				smeter->hide(false);
+				lv_obj_set_hidden(Swr_gauge, true);
+				lv_obj_set_hidden(pwr_gauge, true);
+			}
+		}
 		vTaskDelay(5);
 	}
 }
@@ -637,8 +735,9 @@ static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event)
 			break;
 		case 3:
 			memset(&R, 0, sizeof(R));
-			init_vfo(0);
+			init_vfo();
 			SaveEEPROM();
+			ESP.restart();
 			break;
 		}
 		

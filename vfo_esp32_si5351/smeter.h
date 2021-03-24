@@ -15,6 +15,7 @@ public:
 	CSmeter(lv_obj_t* parent, lv_align_t align, lv_coord_t width, lv_coord_t height, lv_coord_t ofs_x, lv_coord_t ofs_y);
 	~CSmeter();
 	void Draw(uint16_t value);
+	void hide(bool hidden);
 
 private:
 	uint16_t	m_max_value;
