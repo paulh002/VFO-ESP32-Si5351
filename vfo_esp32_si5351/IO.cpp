@@ -46,19 +46,21 @@ Si5351 si5351_bfo(SI5351_BUS_BASE_ADDR, I2C_SDA2, I2C_SCL2);
 void init_io()
 {
 	if (si5351.init(SI5351_CRYSTAL_LOAD_8PF, SI5351_XTAL_FREQ1, 0) == false)
-	{
 		Serial.println("SI5351 not found");
-	}
+	else
+		Serial.println("SI5351 found");
 
+	Serial.println("SI5351 correcttion: " + String(R.correction_si5351_no1));
 	si5351.set_correction(R.correction_si5351_no1, SI5351_PLL_INPUT_XO);
 	si5351.drive_strength(CLK_VFO_RX, SI5351_DRIVE_2MA);
 	si5351.drive_strength(CLK_VFO_TX, SI5351_DRIVE_2MA);
 
 	if (si5351_bfo.init(SI5351_CRYSTAL_LOAD_8PF, SI5351_XTAL_FREQ1, 0) == false)
-	{
 		Serial.println("SI5351 bfo not found");
-	}
+	else
+		Serial.println("SI5351 bfo found");
 
+	Serial.println("SI5351 bfo correcttion: " + String(R.correction_si5351_no2));
 	si5351_bfo.set_correction(R.correction_si5351_no2, SI5351_PLL_INPUT_XO);
 	si5351_bfo.drive_strength(CLK_BFO_RX, SI5351_DRIVE_2MA);
 	si5351_bfo.drive_strength(CLK_BFO_TX, SI5351_DRIVE_2MA);
@@ -84,10 +86,26 @@ void setvfo(uint32_t frq, uint32_t offset_frq)
 	uint64_t freq = (uint64_t)(frq + offset_frq) * SI5351_FREQ_MULT;
 	si5351.set_freq(freq, CLK_VFO_RX);
 	si5351.set_freq(freq, CLK_VFO_TX);
-//	if (vfo_AB == 0)
-//		CAT.SetFA(frq);
-//	else
-//		CAT.SetFB(frq);
+}
+
+void setvfo_rxtx(uint8_t rxtx)
+{
+	if (rxtx)
+	{
+		si5351_bfo.output_enable(CLK_BFO_RX, 0);
+		si5351_bfo.output_enable(CLK_BFO_TX, 1);
+		si5351.output_enable(CLK_VFO_RX, 0);
+		si5351.output_enable(CLK_VFO_TX, 1);
+		Serial.println("TX output enable");
+	}else
+	{
+		si5351_bfo.output_enable(CLK_BFO_RX, 1);
+		si5351_bfo.output_enable(CLK_BFO_TX, 0);
+		si5351.output_enable(CLK_VFO_RX, 1);
+		si5351.output_enable(CLK_VFO_TX, 0);
+		Serial.println("RX output enable");
+	}
+
 }
 
 
@@ -167,7 +185,6 @@ void start_cal()
 
 	setbfo(frq);
 	setvfo(frq,0);
-
 }
 
 void cal_vfo()

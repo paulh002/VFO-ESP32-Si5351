@@ -37,6 +37,6 @@ void loop() {
         CheckCAT();
         check_rx_tx();
         vfo_network.network_loop();
-        delay(5);
+        delay(1);
     }
 }

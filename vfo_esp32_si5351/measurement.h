@@ -18,13 +18,17 @@
 #define AVG_BUFSWR               10 // Very short buffer for SWR bargraph smoothing.  Time is POLL_TIMER*AVG_BUFSWR
 #define MODSCOPE_DIVISOR          1 // Modultion Scope scan rate divisor
 #define AD8307_INSTALLED		  1
-#define CAL1_NOR_VALUE          400 // 40 dBm, default dBm level1 for both AD8307
-#define CAL2_NOR_VALUE          100 // 10 dBm, default dBm level2 for both AD8307
-#define CALFWD1_DEFAULT       2.233 // Default raw Voltage level1 at  40 dBm
-#define CALREV1_DEFAULT       2.233 // Default raw Voltage level1 at  40 dBm
-#define CALFWD2_DEFAULT       1.528 // Default raw Voltage level2 at  10 dBm
-#define CALREV2_DEFAULT       1.528 // Default raw Voltage level2 at  10 dBm
+#define CAL1_NOR_VALUE          440 // 40 dBm, default dBm level1 for both AD8307
+#define CAL2_NOR_VALUE          217 // 10 dBm, default dBm level2 for both AD8307
+#define CALFWD1_DEFAULT       2.04//2.233 // Default raw Voltage level1 at  40 dBm
+#define CALREV1_DEFAULT       2.04//2.233 // Default raw Voltage level1 at  40 dBm
+#define CALFWD2_DEFAULT       1.7 //1.528 // Default raw Voltage level2 at  10 dBm
+#define CALREV2_DEFAULT       1.7 //1.528 // Default raw Voltage level2 at  10 dBm
 #define PEP_PERIOD (2500000/SAMPLE_TIMER)/BUF_SHORT // 2.5 seconds = Default
+#define CAL_BAD  0                                      // Input signal of insufficient quality for calibration
+#define CAL_FWD 1                                      // Good input signal detected, forward direction
+#define CAL_REV 2                                      // Good input signal detected, reverse direction (redundant)
+#define CAL_SCALE_WATT          50  // default scale for watt output meter
 
 #if TWENTYTOONE                     // Defs when using a 20 to 1 coupler and AD7991
 #define MIN_PWR_FOR_SWR_CALC   0.5  // Minimum Power in mW for SWR calculation and display
@@ -131,6 +135,7 @@ typedef struct {
                uint8_t      band[2];
                uint8_t      active_vfo;
                uint8_t      wifi_onoff;
+               uint16_t     scale_watt;
                } var_t;
 
 extern double power_mw;
@@ -143,8 +148,8 @@ extern double rev_power_db;
 extern char   lcd_buf[];
 extern var_t  R;
 extern double adc_ref;        // ADC reference 
-extern int16_t     fwd;            // AD input - 12 bit value, v-forward
-extern int16_t     rev;            // AD input - 12 bit value, v-reverse
+extern uint16_t     fwd;            // AD input - 12 bit value, v-forward
+extern uint16_t     rev;            // AD input - 12 bit value, v-reverse
 
 extern  SemaphoreHandle_t swrBinarySemaphore;
 extern  QueueHandle_t     rotary_queue;
@@ -158,4 +163,6 @@ extern uint16_t print_p_mw(double pwr);
 extern uint16_t print_swr(void);
 extern void calc_SWR_and_power(void);
 extern void start_measurement();
+extern void stop_measurement();
+extern uint8_t check_input_cal();
 #endif

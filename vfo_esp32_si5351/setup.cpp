@@ -12,6 +12,7 @@ using namespace ace_button;
 #include "vfo.h"
 #include "io.h"
 #include "FT891_CAT.h"
+#include "credentials.h"
 
 SemaphoreHandle_t GuiBinarySemaphore = NULL;
 SemaphoreHandle_t swrBinarySemaphore = NULL;
@@ -40,13 +41,16 @@ void setup() {
 	if (net_queue == NULL) {
 		Serial.println("Error creating the queue");
 	}
-
+	Serial.println("db10m[0]" + String(R.cal_AD[0].db10m) + "Fwd[0]" + String(R.cal_AD[0].Fwd) + "Rev[0]" + String(R.cal_AD[0].Rev));
+	Serial.println("db10m[1]" + String(R.cal_AD[1].db10m) + "Fwd[1]" + String(R.cal_AD[1].Fwd) + "Rev[1]" + String(R.cal_AD[1].Rev));
 	init_io();
+	start_vfo(); 
 	guisetup();
-	start_vfo();
 	CAT.begin(true);
 	start_measurement();
 	delay(10);
+	strcpy(R.ssid[0], _ssid[1]);
+	strcpy(R.password[0], _password[1]);
 	if (R.wifi_onoff)
 	{
 		for (int i = 0; i < 5; i++)

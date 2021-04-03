@@ -59,6 +59,7 @@ void start_vfo()
 	f_band[0] = R.band[0];
 	f_band[1] = R.band[1];
 	active_vfo = R.active_vfo;
+	R.scale_watt = 50;
 
 	uint8_t band = f_band[active_vfo];
 	if (active_vfo == 0)
@@ -79,16 +80,33 @@ void start_vfo()
 	
 	Serial.println("Bfo : " + String(bfo_frq));
 	Serial.println("vfo : " + String(frq));
-
+	setvfo_rxtx(f_rxtx);
 	setbfo(bfo_frq);
 	setvfo(frq, bfo_frq);
-	// Use semaphores for setting label different thread than GUI
-	BfoLabel(bfo_frq / 1000,1);
 	CAT.SetFA(current_frq1[f_band[0]]);
 	CAT.SetFB(current_frq1[f_band[1]]);
 	CAT.SetMDA(f_mode[0]+1);
 	CAT.SetMDB(f_mode[1]+1);
+/*
+	R.cal_AD[0].db10m = CAL1_NOR_VALUE;
+	R.cal_AD[0].Fwd = CALFWD1_DEFAULT;
+	R.cal_AD[0].Rev = CALREV1_DEFAULT;
+	R.cal_AD[1].db10m = CAL2_NOR_VALUE;
+	R.cal_AD[1].Fwd = CALFWD2_DEFAULT;
+	R.cal_AD[1].Rev = CALREV2_DEFAULT;
+*/
+}
 
+void save_vfo()
+{
+	uint32_t bfo_frq;
+	uint32_t frq;
+
+	memcpy(R.current_frq1, current_frq1, sizeof(current_frq1));
+	memcpy(R.current_frq2, current_frq2, sizeof(current_frq2));
+	R.band[0] = f_band[0] ;
+	R.band[1] = f_band[1];
+	R.active_vfo = active_vfo;
 }
 
 void init_vfo()
@@ -117,6 +135,7 @@ void init_vfo()
 	R.xtal_si5351_no1 = SI5351_XTAL_FREQ;
 	R.xtal_si5351_no2 = SI5351_XTAL_FREQ;
 	R.wifi_onoff = 1;
+	R.scale_watt = CAL_SCALE_WATT;
 }
 
 void next_band(uint8_t dir, uint8_t& band, long &frq)
@@ -235,12 +254,14 @@ void check_rx_tx()
 
 	if (digitalRead(TXRX_SWITCH))
 	{
-		//if (CAT.GetTX() == TX_CAT)
-		//	f_rxtx = 1;
-		//else
+		if (CAT.GetTX() == TX_CAT)
+		{
+			f_rxtx = 1;
+		}
+		else
 		{
 			f_rxtx = 0;
-			//			CAT.SetTX((uint8_t)TX_OFF);
+			CAT.SetTX((uint8_t)TX_OFF);
 		}
 	}
 	else
@@ -250,6 +271,7 @@ void check_rx_tx()
 	}
 	if (c_rxtx != f_rxtx)
 	{
+		setvfo_rxtx(f_rxtx); 
 		ToggleTX(f_rxtx);
 		c_rxtx = f_rxtx;
 		switch_band(active_vfo);
@@ -280,6 +302,7 @@ long  set_encoder_count_to_vfo_frequency(int count, int active_vfo)
 	}
 	// mode select will update f_band[active_vfo]
 	mode_select(band, active_vfo);
+	Togglemode(f_mode[active_vfo], 0); 
 	if (active_vfo)
 		CAT.SetFB(frq);
 	else
@@ -323,6 +346,7 @@ long switch_vfo(int active_vfo)
 		switch_band(active_vfo);
 		Togglemode(f_mode[active_vfo],0);
 	}
+	setvfo(frq, bfo_frq[active_vfo]);
 	return frq;
 }
 
@@ -350,8 +374,10 @@ uint16_t get_smeter() {
 
 	if (f_rxtx == 0)
 	{
+		char buf[32];
+
 		smeterval = analogRead(S_METER);
-		smeterval = smeterval - 4096;
+		smeterval = 4096 - smeterval;
 		CAT.SetSM(smeterval / 16);
 	}
 	else
@@ -452,4 +478,9 @@ void switch_mode(uint8_t mode, int active_vfo)
 		CAT.SetMDB(MODE_USB + 1);
 		CAT.SetMDA(MODE_USB + 1);
 	}
+}
+
+uint32_t get_bfo(int active_vfo)
+{
+	return bfo_frq[f_mode[active_vfo]];
 }

@@ -36,7 +36,7 @@ ESP32Encoder    Enc_vfo;
    Rotary hardware connection (used for bandswitching, and mode switching)
 --------------------------------------------------------*/
 static	ESP32Encoder	GuiEncoder;
-static	int				enc_button_state = LV_INDEV_STATE_REL;
+static	volatile int	enc_button_state = LV_INDEV_STATE_REL;
 AceButton				rotary_button(ROTARY_PRESS);
 void					rotary_button_eventhandler(AceButton*, uint8_t, uint8_t);
 
@@ -82,10 +82,37 @@ lv_obj_t* Swr_gauge;
 lv_obj_t* pwr_gauge;
 lv_obj_t* swr_vlabel;
 lv_obj_t* pwr_vlabel;
+lv_obj_t* bg_calgui;
+lv_obj_t* ad_spinbox1;
+lv_obj_t* ad_spinbox2;
+lv_obj_t* ad_spinbox3;
+lv_obj_t* ad_spinbox4;
+lv_obj_t* fwd_label1;
+lv_obj_t* bg_top_cal;
+lv_obj_t* btn_fwd;
+lv_obj_t* btn_rev;
+lv_obj_t* label_cal;
+lv_obj_t* watt_cal;
+lv_obj_t* btn_matrix;
+
+lv_group_t* vfo_group;
+lv_group_t* si_5351_group;
+lv_group_t* setup_group;
+lv_group_t* cal_group;
+lv_indev_t* encoder_indev_t;
 
 CSmeter* smeter;
 
 static lv_color_t* cbuf;
+static lv_style_t cal_led_style;
+
+// VFO States
+// The VFO can be in different states:
+// f_rxtx determines if the VFO is in receive or transmit mode
+// f_cal_ad8307 determines if the VFO is calibrating the ad8307 for this the system need to measure the input of the ADC to a fixed dbm value
+// active_vfo determines if VFO 0 or VFO 1 is active
+
+static bool f_cal_ad8307 = false;
 
 #if USE_LV_LOG != 0
 /* Serial debugging */
@@ -97,18 +124,30 @@ void my_print(lv_log_level_t level, const char* file, uint32_t line, const char*
 }
 #endif
 
+
+
 bool read_encoder(lv_indev_drv_t* indev, lv_indev_data_t* data)
 {
 	data->enc_diff = GuiEncoder.getCount();
-	data->state = enc_button_state;
+	GuiEncoder.clearCount();
+	data->state = enc_button_state;	
 	if (data->enc_diff > 0)
 		data->enc_diff = 1;
 	if (data->enc_diff < 0)
 		data->enc_diff = -1;
-	GuiEncoder.clearCount();
 	return false;
 }
 
+static void lv_gauge_format_swr(lv_obj_t* gauge, char* buf, int bufsize, int32_t value)
+{
+	// 1:1
+	snprintf(buf, bufsize, "%d.%d", (value / 10) % 10, (value) % 10);
+}
+
+static void lv_gauge_format_pwr(lv_obj_t* gauge, char* buf, int bufsize, int32_t value)
+{
+	snprintf(buf, bufsize, "%d.%d", value / 10, (value) % 10);
+}
 
 void guisetup() {
 	xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
@@ -117,7 +156,7 @@ void guisetup() {
 	rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureLongPress);
 	rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureSuppressAfterLongPress);
 	ESP32Encoder::useInternalWeakPullResistors = NONE;
-	GuiEncoder.attachHalfQuad(ROTARY_A, ROTARY_B);
+	GuiEncoder.attachHalfQuad(ROTARY_B, ROTARY_A);
 	Enc_vfo.attachHalfQuad(PULSE_INPUT_PIN, PULSE_CTRL_PIN);
 
 	xTaskCreate(guiTask,
@@ -161,11 +200,11 @@ void guiTask(void* arg) {
 	indev_drv.read_cb = my_touchpad_read;      /*Set your driver function*/
 	lv_indev_drv_register(&indev_drv);         /*Finally register the driver*/
 
-	lv_indev_drv_t indev_drv_enc;
+	lv_indev_drv_t indev_drv_enc; 
 	lv_indev_drv_init(&indev_drv_enc);
 	indev_drv_enc.type = LV_INDEV_TYPE_ENCODER;
 	indev_drv_enc.read_cb = read_encoder;
-	lv_indev_t *encoder_indev_t = lv_indev_drv_register(&indev_drv_enc);
+	encoder_indev_t = lv_indev_drv_register(&indev_drv_enc);
 
 	//Set the theme..
 	lv_theme_t* th = lv_theme_material_init(LV_THEME_DEFAULT_COLOR_PRIMARY, LV_THEME_DEFAULT_COLOR_SECONDARY, LV_THEME_MATERIAL_FLAG_DARK, LV_THEME_DEFAULT_FONT_SMALL, LV_THEME_DEFAULT_FONT_NORMAL, LV_THEME_DEFAULT_FONT_SUBTITLE, LV_THEME_DEFAULT_FONT_TITLE);
@@ -203,28 +242,27 @@ void guiTask(void* arg) {
 	smeter = new CSmeter(bg_middle, LV_ALIGN_CENTER, 240, 50, 0, 60);
 
 	// Create groups for encoder support for the different screens
-	lv_group_t* vfo_group = lv_group_create();
+	vfo_group = lv_group_create();
 	lv_indev_set_group(encoder_indev_t, vfo_group);
 
-	usb_button = lv_btn_create(bg_top, NULL);
-	lv_obj_set_event_cb(usb_button, mode_button_eh);
-	lv_obj_align(usb_button, NULL, LV_ALIGN_CENTER, 170, 10);
-	lv_btn_set_checkable(usb_button, true);
-	lv_obj_set_size(usb_button, 40, 20);
-	lv_obj_t *label = lv_label_create(usb_button, NULL);
-	lv_label_set_text(label, "Usb");
-	lv_group_add_obj(vfo_group, usb_button);
+	lv_obj_t* save_button = lv_btn_create(bg_top, NULL);
+	lv_obj_set_event_cb(save_button, event_button_save);
+	lv_obj_align(save_button, NULL, LV_ALIGN_CENTER, -45, 10);
+	lv_obj_set_size(save_button, 50, 20);
+	lv_obj_t* label = lv_label_create(save_button, NULL);
+	lv_label_set_text(label, "Save");
+	lv_group_add_obj(vfo_group, save_button); 
 
-	lsb_button = lv_btn_create(bg_top, NULL);
-	lv_obj_set_event_cb(lsb_button, mode_button_eh);
-	lv_obj_align(lsb_button, NULL, LV_ALIGN_CENTER, 120, 10);
-	lv_btn_set_checkable(lsb_button, true);
-	lv_btn_toggle(lsb_button);
-	lv_obj_set_size(lsb_button, 40, 20);
-	label = lv_label_create(lsb_button, NULL);
-	lv_label_set_text(label, "Lsb");
-	lv_group_add_obj(vfo_group, lsb_button);
-
+	vfo2_button = lv_btn_create(bg_top, NULL);
+	lv_obj_set_event_cb(vfo2_button, mode_button_vfo);
+	lv_obj_align(vfo2_button, NULL, LV_ALIGN_CENTER, 10, 10);
+	lv_btn_set_checkable(vfo2_button, true);
+	//lv_btn_toggle(vfo2_button);
+	lv_obj_set_size(vfo2_button, 50, 20);
+	label = lv_label_create(vfo2_button, NULL);
+	lv_label_set_text(label, "Vfo 2");
+	lv_group_add_obj(vfo_group, vfo2_button); 
+	
 	vfo1_button = lv_btn_create(bg_top, NULL);
 	lv_obj_set_event_cb(vfo1_button, mode_button_vfo);
 	lv_obj_align(vfo1_button, NULL, LV_ALIGN_CENTER, 65, 10);
@@ -234,24 +272,25 @@ void guiTask(void* arg) {
 	label = lv_label_create(vfo1_button, NULL);
 	lv_label_set_text(label, "Vfo 1");
 	lv_group_add_obj(vfo_group, vfo1_button);
-	
-	vfo2_button = lv_btn_create(bg_top, NULL);
-	lv_obj_set_event_cb(vfo2_button, mode_button_vfo);
-	lv_obj_align(vfo2_button, NULL, LV_ALIGN_CENTER, 10, 10);
-	lv_btn_set_checkable(vfo2_button, true);
-	//lv_btn_toggle(vfo2_button);
-	lv_obj_set_size(vfo2_button, 50, 20);
-	label = lv_label_create(vfo2_button, NULL);
-	lv_label_set_text(label, "Vfo 2");
-	lv_group_add_obj(vfo_group, vfo2_button);
 
-	lv_obj_t* save_button = lv_btn_create(bg_top, NULL);
-	lv_obj_set_event_cb(save_button, event_button_save);
-	lv_obj_align(save_button, NULL, LV_ALIGN_CENTER, -45, 10);
-	lv_obj_set_size(save_button, 50, 20);
-	label = lv_label_create(save_button, NULL);
-	lv_label_set_text(label, "Save");
-	lv_group_add_obj(vfo_group, save_button);
+	lsb_button = lv_btn_create(bg_top, NULL);
+	lv_obj_set_event_cb(lsb_button, mode_button_eh);
+	lv_obj_align(lsb_button, NULL, LV_ALIGN_CENTER, 120, 10);
+	lv_btn_set_checkable(lsb_button, true);
+	lv_btn_toggle(lsb_button);
+	lv_obj_set_size(lsb_button, 40, 20);
+	label = lv_label_create(lsb_button, NULL);
+	lv_label_set_text(label, "Lsb");
+	lv_group_add_obj(vfo_group, lsb_button); 
+	
+	usb_button = lv_btn_create(bg_top, NULL);
+	lv_obj_set_event_cb(usb_button, mode_button_eh);
+	lv_obj_align(usb_button, NULL, LV_ALIGN_CENTER, 170, 10);
+	lv_btn_set_checkable(usb_button, true);
+	lv_obj_set_size(usb_button, 40, 20);
+	label = lv_label_create(usb_button, NULL);
+	lv_label_set_text(label, "Usb");
+	lv_group_add_obj(vfo_group, usb_button);
 
 	static lv_style_t text_style;
 	lv_style_init(&text_style);
@@ -295,9 +334,7 @@ void guiTask(void* arg) {
 	lv_obj_set_width(Band_roller, 80);
 	lv_obj_set_event_cb(Band_roller, band_event_handler);
 	lv_roller_set_visible_row_count(Band_roller, 2);
-	lv_group_add_obj(vfo_group, Band_roller);
-
-
+	
 	Tx_led1 = lv_led_create(bg_middle, NULL);
 	lv_obj_align(Tx_led1, NULL, LV_ALIGN_CENTER, -125, -50);
 	lv_led_off(Tx_led1);
@@ -322,17 +359,20 @@ void guiTask(void* arg) {
 	lv_theme_apply(btn_plus, LV_THEME_SPINBOX_BTN);
 	lv_obj_set_style_local_value_str(btn_plus, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
 	lv_obj_set_event_cb(btn_plus, lv_spinbox_increment_event_cb);
-	lv_group_add_obj(vfo_group, btn_plus);
 	
-	// Keep de order of the focus correct
-	lv_group_add_obj(vfo_group, bfo_spinbox);
-
 	btn_min = lv_btn_create(bg_middle, btn_plus);
 	lv_obj_align(btn_min, bfo_spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 	lv_obj_set_event_cb(btn_min, lv_spinbox_decrement_event_cb);
 	lv_obj_set_style_local_value_str(btn_min, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+	
+	// Keep de order of the focus correct
 	lv_group_add_obj(vfo_group, btn_min);
+	lv_group_add_obj(vfo_group, bfo_spinbox);
+	lv_group_add_obj(vfo_group, btn_plus);
+	lv_group_add_obj(vfo_group, Band_roller);
 
+
+	// TX objects shown when VFO is in TX mode
 	static lv_color_t needle_colors[1];
 	needle_colors[0] = LV_COLOR_ORANGE;
 	
@@ -354,14 +394,15 @@ void guiTask(void* arg) {
 	lv_obj_add_style(Swr_gauge, LV_GAUGE_PART_NEEDLE, &gauge_style);
 	lv_obj_align(Swr_gauge, NULL, LV_ALIGN_CENTER, 100, 45);
 	lv_gauge_set_needle_count(Swr_gauge, 1, needle_colors);
-	lv_obj_set_size(Swr_gauge, 150, 150);
-	lv_gauge_set_range(Swr_gauge, 0, 10);
+	lv_obj_set_size(Swr_gauge, 160, 160);
+	lv_gauge_set_range(Swr_gauge, 0, 100);
 	int line_cnt, label_cnt = 5, sub_div = 3;
 	line_cnt = (sub_div + 1) * (label_cnt - 1) + 1;
 	lv_gauge_set_scale(Swr_gauge, 270, line_cnt, label_cnt);
-	lv_gauge_set_critical_value(Swr_gauge, 4);
+	lv_gauge_set_critical_value(Swr_gauge, 40);
 	lv_gauge_set_angle_offset(Swr_gauge,0);
 	/*Allow recoloring of the images according to the needles' color*/
+	lv_gauge_set_formatter_cb(Swr_gauge, lv_gauge_format_swr);
 	lv_obj_set_style_local_image_recolor_opa(Swr_gauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_COVER);
 	
 	lv_obj_t* swr_label = lv_label_create(Swr_gauge, NULL);
@@ -379,12 +420,14 @@ void guiTask(void* arg) {
 	lv_obj_add_style(pwr_gauge, LV_GAUGE_PART_NEEDLE, &gauge_style);
 	lv_obj_align(pwr_gauge, NULL, LV_ALIGN_CENTER, -65, 45);
 	lv_gauge_set_needle_count(pwr_gauge, 1, needle_colors);
-	lv_obj_set_size(pwr_gauge, 150, 150);
-	lv_gauge_set_range(pwr_gauge, 0, 10);
+	lv_obj_set_size(pwr_gauge, 160, 160);
+	lv_gauge_set_range(pwr_gauge, 0, R.scale_watt *10);
 	label_cnt = 5; sub_div = 3;
 	line_cnt = (sub_div + 1) * (label_cnt - 1) + 1;
 	lv_gauge_set_scale(pwr_gauge, 270, line_cnt, label_cnt);
+	lv_gauge_set_critical_value(pwr_gauge, (R.scale_watt * 10));
 	lv_gauge_set_angle_offset(pwr_gauge, 0);
+	lv_gauge_set_formatter_cb(pwr_gauge, lv_gauge_format_pwr);
 	/*Allow recoloring of the images according to the needles' color*/
 	lv_obj_set_style_local_image_recolor_opa(pwr_gauge, LV_GAUGE_PART_NEEDLE, LV_STATE_DEFAULT, LV_OPA_COVER);
 	lv_obj_t* pwr_label = lv_label_create(pwr_gauge, NULL);
@@ -398,9 +441,14 @@ void guiTask(void* arg) {
 	gui_setup(scr);
 	gui_si5351(scr);
 	init_wifi_gui(scr);
+	init_cal_ad8307_gui(scr);
 
-	long frq = get_vfo_frequency(active_vfo);
-	setfrequencylabel(frq);
+	BfoLabel(get_bfo(0) / 1000, 0);
+	setfrequencylabel(get_vfo_frequency(active_vfo));
+	
+	// Set default focus to band selector
+	lv_group_focus_obj(Band_roller);
+
 	xSemaphoreGive(GuiBinarySemaphore);
 	int tt = 0;
 	while (1) {
@@ -436,7 +484,7 @@ void guiTask(void* arg) {
 		
 		static volatile int lastPowerEncoding;
 		static	bool	hide_rx = true;
-		if (f_rxtx)
+		if ((f_rxtx) && (f_cal_ad8307 == false))
 		{
 			if (hide_rx == false)
 			{
@@ -449,20 +497,25 @@ void guiTask(void* arg) {
 				lv_obj_set_hidden(Swr_gauge, false);
 				lv_obj_set_hidden(pwr_gauge, false);
 			}
+			pswr_sync_from_interrupt();
+			calc_SWR_and_power();
 			int currMillis = millis();
 			if (currMillis - lastPowerEncoding > POLL_TIMER)
 			{
 				uint16_t swr, pep;
 
-				pswr_sync_from_interrupt(); 
-				calc_SWR_and_power();
+
 				swr = print_swr();
-				pep = power_mw_pep / 10000.0;//print_p_mw(power_mw_pep);
-				lv_gauge_set_value(Swr_gauge, 0, swr/20);
+				pep = (uint16_t) (power_mw_pep / 100.0);
+				lv_gauge_set_value(Swr_gauge, 0, swr/10);
 				lv_gauge_set_value(pwr_gauge, 0, pep);
-				lv_label_set_text(swr_vlabel, String((double)swr/20.0).c_str());
-				lv_label_set_text(pwr_vlabel, String((double)power_mw_pep / 10000.0).c_str());
-				Serial.println("SWR: " + String(swr) + "Power: " + String(pep));
+				char buf[32];
+				sprintf(buf,"1:%d.%d", swr / 100, (swr / 10) % 10);
+				lv_label_set_text(swr_vlabel, buf);
+				print_p_mw(power_mw_pep);
+				lv_label_set_text(pwr_vlabel, lcd_buf);
+				//lv_label_set_text(pwr_vlabel, String((double)power_mw_pep / 1000.0).c_str());
+				//Serial.println("SWR: " + String(swr) + " Power: " + String(power_mw_pep));
 				lastPowerEncoding = currMillis;
 			}
 
@@ -481,7 +534,34 @@ void guiTask(void* arg) {
 				lv_obj_set_hidden(pwr_gauge, true);
 			}
 		}
-		vTaskDelay(5);
+		if (f_cal_ad8307)
+		{
+			uint8_t inputq = check_input_cal();
+			lv_color_t color_t = LV_COLOR_RED;
+			String	sStr;
+
+			switch (inputq)
+			{
+			case CAL_FWD:
+				color_t = LV_COLOR_GREEN;
+				sStr = String("Power Ok:");
+				break;
+			case CAL_REV:
+				color_t = LV_COLOR_ORANGE;
+				sStr = String("Power rev:");
+				break;
+			case CAL_BAD:
+				color_t = LV_COLOR_RED;
+				sStr = String("Power Low:");
+				break;
+			}
+			uint16_t fwd, rev;
+
+			fwd = analogRead(FWD_METER);
+			rev = analogRead(REV_METER);
+			updateBottomStatus(color_t, String(sStr + " Fwd: " + String(adc_ref * ((double)fwd / 4096.0)) + "V Rev: " + String(adc_ref * ((double)rev / 4096.0))).c_str(),0);
+		}
+		vTaskDelay(1);
 	}
 }
 
@@ -490,6 +570,7 @@ static void rotary_button_eventhandler(AceButton*, uint8_t eventType, uint8_t bu
 	switch (eventType) {
 	case AceButton::kEventLongPressed:
 		ToggleSetup(true);
+		enc_button_state = LV_INDEV_STATE_REL;
 		break;
 	case AceButton::kEventPressed:
 		enc_button_state = LV_INDEV_STATE_PR;
@@ -677,17 +758,27 @@ static void lv_spinbox_decrement_event_cb(lv_obj_t* btn, lv_event_t e)
 static void event_button_save(lv_obj_t* btn, lv_event_t e)
 {
 	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		save_vfo();
 		SaveEEPROM();
 	}
 }
 
-void ToggleSetup(bool show) {
-	xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
+void ToggleSetup(bool show, uint8_t sem) 
+{
+	if (sem) xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
 	if (show)
+	{
 		lv_obj_move_foreground(bg_middle2);
+		lv_indev_set_group(encoder_indev_t, setup_group);
+		lv_group_focus_obj(btn_matrix);
+	}
 	else
+	{
 		lv_obj_move_background(bg_middle2);
-	xSemaphoreGive(GuiBinarySemaphore);
+		lv_indev_set_group(encoder_indev_t, vfo_group);
+		lv_group_focus_obj(Band_roller);
+	}
+	if (sem) xSemaphoreGive(GuiBinarySemaphore);
 }
 
 void BfoLabel(uint32_t num, uint8_t sem) {
@@ -728,10 +819,14 @@ static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event)
 		case 1:
 			//Si5351 calibration
 			lv_obj_move_foreground(bg_middle3);
+			lv_indev_set_group(encoder_indev_t, si_5351_group);
 			start_cal();
 			break;
 		case 2:
-			
+			lv_obj_move_foreground(bg_calgui);
+			lv_obj_move_foreground(bg_top_cal);
+			lv_indev_set_group(encoder_indev_t, cal_group);
+			start_ad8307_cal();
 			break;
 		case 3:
 			memset(&R, 0, sizeof(R));
@@ -744,9 +839,9 @@ static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event)
 	}
 }
 
-static void gui_setup(lv_obj_t *scr)
+static void gui_setup(lv_obj_t* scr)
 {
-	static const char* setup_btnm_map[] = { "Wifi", "Si5351", "Calibrate\n AD8307", "Reset", "" };
+	static const char* setup_btnm_map[] = { LV_SYMBOL_WIFI, "Si5351", "Calibrate\n AD8307", "Reset", "" };
 
 	bg_middle2 = lv_obj_create(scr, NULL);
 	lv_obj_clean_style_list(bg_middle2, LV_OBJ_PART_MAIN);
@@ -756,16 +851,17 @@ static void gui_setup(lv_obj_t *scr)
 	lv_obj_set_size(bg_middle2, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
 	lv_obj_move_background(bg_middle2);
 
-	lv_obj_t* btnm1 = lv_btnmatrix_create(bg_middle2, NULL);
-	lv_btnmatrix_set_map(btnm1, setup_btnm_map);
-	lv_obj_align(btnm1, NULL, LV_ALIGN_CENTER, 0, 0);
-	lv_btnmatrix_set_btn_ctrl(btnm1, 6, LV_BTNMATRIX_CTRL_CHECKABLE);
-	lv_obj_set_event_cb(btnm1, gui_setup_event_handler);
+	btn_matrix = lv_btnmatrix_create(bg_middle2, NULL);
+	lv_btnmatrix_set_map(btn_matrix, setup_btnm_map);
+	lv_obj_align(btn_matrix, NULL, LV_ALIGN_CENTER, 0, 0);
+	lv_btnmatrix_set_btn_ctrl(btn_matrix, 6, LV_BTNMATRIX_CTRL_CHECKABLE);
+	lv_obj_set_event_cb(btn_matrix, gui_setup_event_handler);
+	setup_group = lv_group_create();
+	lv_group_add_obj(setup_group, btn_matrix);
 
 	lv_obj_t* pwd_label1 = lv_label_create(bg_middle2, NULL);
 	lv_label_set_text(pwd_label1, "Setup");
-	lv_obj_align(pwd_label1, btnm1, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
-
+	lv_obj_align(pwd_label1, btn_matrix, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
 }
 
 static void lv_spinbox_increment_event_si(lv_obj_t* btn, lv_event_t e)
@@ -811,6 +907,7 @@ static void lv_spinbox_save_event_si(lv_obj_t* btn, lv_event_t e)
 		updateBottomStatus(LV_COLOR_GREEN, "Si5351 calibration saved", 0);
 		lv_obj_move_foreground(bg_middle);
 		lv_obj_move_background(bg_middle3);
+		lv_indev_set_group(encoder_indev_t, vfo_group);
 	}
 }
 
@@ -819,6 +916,7 @@ static void lv_spinbox_cancel_event_si(lv_obj_t* btn, lv_event_t e)
 	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
 		lv_obj_move_foreground(bg_middle);
 		lv_obj_move_background(bg_middle3);
+		lv_indev_set_group(encoder_indev_t, vfo_group);
 	}
 }
 
@@ -832,6 +930,8 @@ static void gui_si5351(lv_obj_t* scr)
 	lv_obj_set_size(bg_middle3, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
 	lv_obj_move_background(bg_middle3);
 
+	si_5351_group = lv_group_create();
+	
 	si_spinbox = lv_spinbox_create(bg_middle3, NULL);
 	lv_spinbox_set_range(si_spinbox, -150000, 150000);
 	lv_spinbox_set_digit_format(si_spinbox, 7, 0);
@@ -839,23 +939,27 @@ static void gui_si5351(lv_obj_t* scr)
 	lv_obj_set_width(si_spinbox, 120);
 	lv_obj_align(si_spinbox, NULL, LV_ALIGN_CENTER, 0, -50);
 	lv_spinbox_set_value(si_spinbox, 0);
-
+	
 	lv_obj_t* pwd_label1 = lv_label_create(bg_middle3, NULL);
 	lv_label_set_text(pwd_label1, "Vfo Si5351");
 	lv_obj_align(pwd_label1, si_spinbox, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
 
 	lv_coord_t h = lv_obj_get_height(si_spinbox);
-	lv_obj_t* btn = lv_btn_create(bg_middle3, NULL);
-	lv_obj_set_size(btn, h, h);
-	lv_obj_align(btn, si_spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-	lv_theme_apply(btn, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
-	lv_obj_set_event_cb(btn, lv_spinbox_increment_event_si);
+	lv_obj_t* btn_plus1 = lv_btn_create(bg_middle3, NULL);
+	lv_obj_set_size(btn_plus1, h, h);
+	lv_obj_align(btn_plus1, si_spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+	lv_theme_apply(btn_plus1, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_plus1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
+	lv_obj_set_event_cb(btn_plus1, lv_spinbox_increment_event_si);
 
-	btn = lv_btn_create(bg_middle3, btn);
-	lv_obj_align(btn, si_spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
-	lv_obj_set_event_cb(btn, lv_spinbox_decrement_event_si);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+	lv_obj_t* btn_min1= lv_btn_create(bg_middle3, btn_plus1);
+	lv_obj_align(btn_min1, si_spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+	lv_obj_set_event_cb(btn_min1, lv_spinbox_decrement_event_si);
+	lv_obj_set_style_local_value_str(btn_min1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+
+	lv_group_add_obj(si_5351_group, btn_min1);
+	lv_group_add_obj(si_5351_group, si_spinbox);
+	lv_group_add_obj(si_5351_group, btn_plus1);
 
 	si_spinbox2 = lv_spinbox_create(bg_middle3, NULL);
 	lv_spinbox_set_range(si_spinbox2, -150000, 150000);
@@ -870,28 +974,387 @@ static void gui_si5351(lv_obj_t* scr)
 	lv_obj_align(pwd_label1, si_spinbox2, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
 
 	h = lv_obj_get_height(si_spinbox2);
-	btn = lv_btn_create(bg_middle3, NULL);
-	lv_obj_set_size(btn, h, h);
-	lv_obj_align(btn, si_spinbox2, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-	lv_theme_apply(btn, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
-	lv_obj_set_event_cb(btn, lv_spinbox_increment_event_si2);
+	lv_obj_t* btn_plus2 = lv_btn_create(bg_middle3, NULL);
+	lv_obj_set_size(btn_plus2, h, h);
+	lv_obj_align(btn_plus2, si_spinbox2, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+	lv_theme_apply(btn_plus2, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_plus2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
+	lv_obj_set_event_cb(btn_plus2, lv_spinbox_increment_event_si2);
 
-	btn = lv_btn_create(bg_middle3, btn);
-	lv_obj_align(btn, si_spinbox2, LV_ALIGN_OUT_LEFT_MID, -5, 0);
-	lv_obj_set_event_cb(btn, lv_spinbox_decrement_event_si2);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+	lv_obj_t* btn_min2 = lv_btn_create(bg_middle3, btn_plus2);
+	lv_obj_align(btn_min2, si_spinbox2, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+	lv_obj_set_event_cb(btn_min2, lv_spinbox_decrement_event_si2);
+	lv_obj_set_style_local_value_str(btn_min2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
 
+	lv_group_add_obj(si_5351_group, btn_min2);
+	lv_group_add_obj(si_5351_group, si_spinbox2);
+	lv_group_add_obj(si_5351_group, btn_plus2);
 
-	btn = lv_btn_create(bg_middle3, NULL);
-	lv_obj_align(btn, NULL, LV_ALIGN_CENTER, -70, 70);
-	lv_theme_apply(btn, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Save");
-	lv_obj_set_event_cb(btn, lv_spinbox_save_event_si);
+	lv_obj_t* btn_save = lv_btn_create(bg_middle3, NULL);
+	lv_obj_align(btn_save, NULL, LV_ALIGN_CENTER, -70, 70);
+	lv_theme_apply(btn_save, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_save, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Save");
+	lv_obj_set_event_cb(btn_save, lv_spinbox_save_event_si);
 
-	btn = lv_btn_create(bg_middle3, NULL);
-	lv_obj_align(btn, NULL, LV_ALIGN_CENTER, 70, 70);
-	lv_theme_apply(btn, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Cancel");
-	lv_obj_set_event_cb(btn, lv_spinbox_cancel_event_si);
+	lv_obj_t* btn_cancel = lv_btn_create(bg_middle3, NULL);
+	lv_obj_align(btn_cancel, NULL, LV_ALIGN_CENTER, 70, 70);
+	lv_theme_apply(btn_cancel, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_cancel, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Cancel");
+	lv_obj_set_event_cb(btn_cancel, lv_spinbox_cancel_event_si);
+
+	lv_group_add_obj(si_5351_group, btn_save); 
+	lv_group_add_obj(si_5351_group, btn_cancel);
 }
+
+static void mode_button_cal_cancel(lv_obj_t* obj, lv_event_t event)
+{
+	if (event == LV_EVENT_CLICKED) {
+		lv_obj_move_background(bg_calgui);
+		lv_obj_move_foreground(bg_middle);
+		lv_obj_move_background(bg_top_cal);
+		lv_obj_move_foreground(bg_top);
+		f_cal_ad8307 = false;
+		start_measurement();
+		lv_indev_set_group(encoder_indev_t, vfo_group);
+	}
+}
+
+static void mode_button_cal_save(lv_obj_t* obj, lv_event_t event)
+{
+	if (event == LV_EVENT_CLICKED) {
+		lv_obj_move_background(bg_calgui);
+		lv_obj_move_foreground(bg_middle);
+		lv_obj_move_background(bg_top_cal);
+		lv_obj_move_foreground(bg_top);
+		f_cal_ad8307 = false;
+		Serial.println("db10m[0]: " + String(R.cal_AD[0].db10m) + " Fwd[0]: " + String(R.cal_AD[0].Fwd) + " Rev[0]: " + String(R.cal_AD[0].Rev));
+		Serial.println("db10m[1]: " + String(R.cal_AD[1].db10m) + " Fwd[1]: " + String(R.cal_AD[1].Fwd) + " Rev[1]: " + String(R.cal_AD[1].Rev));
+		start_measurement();
+		SaveEEPROM();
+		lv_indev_set_group(encoder_indev_t, vfo_group);
+	}
+}
+
+static void lv_spinbox_increment_event_ad1(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_increment(ad_spinbox1);
+		R.cal_AD[0].db10m = lv_spinbox_get_value(ad_spinbox1);
+	}
+}
+
+static void lv_spinbox_decrement_event_ad1(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_decrement(ad_spinbox1);
+		R.cal_AD[0].db10m = lv_spinbox_get_value(ad_spinbox1);
+	}
+}
+
+static void lv_spinbox_increment_event_ad2(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_increment(ad_spinbox2);
+		R.cal_AD[1].db10m = lv_spinbox_get_value(ad_spinbox2);
+	}
+}
+
+static void lv_spinbox_increment_event_ad4(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_increment(ad_spinbox4);
+		R.cal_AD[1].Fwd = (double)lv_spinbox_get_value(ad_spinbox4) / 1000.0;
+	}
+}
+
+static void lv_spinbox_decrement_event_ad3(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_decrement(ad_spinbox3);
+		R.scale_watt = lv_spinbox_get_value(ad_spinbox3);
+	}
+}
+
+static void lv_spinbox_increment_event_ad3(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_increment(ad_spinbox3);
+		R.scale_watt = lv_spinbox_get_value(ad_spinbox3);
+	}
+}
+
+static void lv_spinbox_decrement_event_ad2(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_decrement(ad_spinbox2);
+		R.cal_AD[1].db10m = lv_spinbox_get_value(ad_spinbox2);
+	}
+}
+
+static void lv_spinbox_decrement_event_ad4(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		lv_spinbox_decrement(ad_spinbox4);
+		R.cal_AD[1].Fwd = (double)lv_spinbox_get_value(ad_spinbox4) / 1000.0;
+	}
+}
+
+static void lv_spinbox_event_save(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		
+		R.cal_AD[0].db10m = lv_spinbox_get_value(ad_spinbox1);
+		R.cal_AD[0].Rev = R.cal_AD[0].Fwd = adc_ref * ((double)analogRead(FWD_METER) / 4096.0);
+		lv_spinbox_set_value(ad_spinbox4, (uint32_t)(R.cal_AD[0].Fwd * 1000.0));
+	}
+}
+
+static void lv_spinbox_event_save1(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+
+		R.cal_AD[1].db10m = lv_spinbox_get_value(ad_spinbox2);
+		R.cal_AD[1].Rev = R.cal_AD[1].Fwd = adc_ref * ((double)analogRead(FWD_METER) / 4096.0);
+		lv_spinbox_set_value(ad_spinbox4, (uint32_t)(R.cal_AD[0].Fwd * 1000.0));
+	}
+}
+
+static void lv_spinbox_event_copy(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) 
+	{
+		// Set second calibration point at 30 dB less
+		R.cal_AD[1].db10m = R.cal_AD[0].db10m - 300;
+		R.cal_AD[1].Fwd = R.cal_AD[0].Fwd - LOGAMP1_SLOPE * .001 * 30;
+		R.cal_AD[1].Rev = R.cal_AD[0].Fwd - LOGAMP2_SLOPE * .001 * 30;
+		lv_spinbox_set_value(ad_spinbox2, R.cal_AD[1].db10m);
+	}
+}
+
+static void lv_spinbox_event_save4(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		uint32_t value;
+
+		value = lv_spinbox_get_value(ad_spinbox4);
+		R.cal_AD[0].Rev = R.cal_AD[0].Fwd = (double) value / 1000.0;
+	}
+}
+
+static void lv_spinbox_event_save5(lv_obj_t* btn, lv_event_t e)
+{
+	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+		uint32_t value;
+
+		value = lv_spinbox_get_value(ad_spinbox4);
+		R.cal_AD[1].Rev = R.cal_AD[1].Fwd = (double)value / 1000.0;
+	}
+}
+
+static void init_cal_ad8307_gui(lv_obj_t* scr)
+{
+	bg_top_cal = lv_obj_create(scr, bg_top);
+	lv_obj_move_background(bg_top_cal);
+
+	bg_calgui = lv_obj_create(scr, NULL);
+	lv_obj_clean_style_list(bg_calgui, LV_OBJ_PART_MAIN);
+	lv_obj_set_style_local_bg_opa(bg_calgui, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
+	lv_obj_set_style_local_bg_color(bg_calgui, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+	lv_obj_set_pos(bg_calgui, 0, topHeight);
+	lv_obj_set_size(bg_calgui, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
+	lv_obj_move_background(bg_calgui);
+
+	label_cal = lv_label_create(bg_top_cal, NULL);
+	lv_label_set_text(label_cal, "AD8307 Calibration");
+	lv_obj_align(label_cal, NULL, LV_ALIGN_IN_TOP_MID, 50, 5);
+
+#define XPOS_SPIN		-50
+#define POS_SPIN		-60
+#define POS_SPIN_DELTA	45
+
+	cal_group = lv_group_create();
+
+	ad_spinbox1 = lv_spinbox_create(bg_calgui, NULL);
+	lv_spinbox_set_range(ad_spinbox1, 0, 999);
+	lv_spinbox_set_digit_format(ad_spinbox1, 3, 2);
+	lv_spinbox_step_prev(ad_spinbox1);
+	lv_obj_set_width(ad_spinbox1, 50);
+	lv_obj_align(ad_spinbox1, NULL, LV_ALIGN_CENTER, XPOS_SPIN, POS_SPIN);
+	lv_spinbox_set_value(ad_spinbox1, R.cal_AD[0].db10m);
+
+	ad_spinbox2 = lv_spinbox_create(bg_calgui, NULL);
+	lv_spinbox_set_range(ad_spinbox2, 0, 999);
+	lv_spinbox_set_digit_format(ad_spinbox2, 3, 2);
+	lv_spinbox_step_prev(ad_spinbox2);
+	lv_obj_set_width(ad_spinbox2, 50);
+	lv_obj_align(ad_spinbox2, NULL, LV_ALIGN_CENTER, XPOS_SPIN, POS_SPIN + POS_SPIN_DELTA);
+	lv_spinbox_set_value(ad_spinbox2, R.cal_AD[1].db10m);
+
+	ad_spinbox3 = lv_spinbox_create(bg_calgui, NULL);
+	lv_spinbox_set_range(ad_spinbox3, 0, 999);
+	lv_spinbox_set_digit_format(ad_spinbox3, 3, 0);
+	lv_spinbox_step_prev(ad_spinbox3);
+	lv_obj_set_width(ad_spinbox3, 50);
+	lv_obj_align(ad_spinbox3, NULL, LV_ALIGN_CENTER, XPOS_SPIN, POS_SPIN + 2* POS_SPIN_DELTA);
+	lv_spinbox_set_value(ad_spinbox3, R.scale_watt);
+
+	ad_spinbox4 = lv_spinbox_create(bg_calgui, NULL);
+	lv_spinbox_set_range(ad_spinbox4, 0, 9999);
+	lv_spinbox_set_digit_format(ad_spinbox4, 4, 1);
+	lv_spinbox_step_prev(ad_spinbox4);
+	lv_obj_set_width(ad_spinbox4, 50);
+	lv_obj_align(ad_spinbox4, NULL, LV_ALIGN_CENTER, XPOS_SPIN, POS_SPIN + 3 * POS_SPIN_DELTA);
+	lv_spinbox_set_value(ad_spinbox4, (int32_t)(R.cal_AD[0].Fwd * 1000.0));
+
+	lv_obj_t* pwd_label1 = lv_label_create(bg_calgui, NULL);
+	lv_label_set_text(pwd_label1, "Ref1:");
+	lv_obj_align(pwd_label1, ad_spinbox1, LV_ALIGN_OUT_LEFT_MID, -45, 0); 
+
+	pwd_label1 = lv_label_create(bg_calgui, NULL);
+	lv_label_set_text(pwd_label1, "Ref2:");
+	lv_obj_align(pwd_label1, ad_spinbox2, LV_ALIGN_OUT_LEFT_MID, -45, 0);
+
+	pwd_label1 = lv_label_create(bg_calgui, NULL);
+	lv_label_set_text(pwd_label1, "Watt:");
+	lv_obj_align(pwd_label1, ad_spinbox3, LV_ALIGN_OUT_LEFT_MID, -45, 0);
+	
+	pwd_label1 = lv_label_create(bg_calgui, NULL);
+	lv_label_set_text(pwd_label1, "dbm");
+	lv_obj_align(pwd_label1, ad_spinbox1, LV_ALIGN_OUT_TOP_MID, 0, 0);
+
+	pwd_label1 = lv_label_create(bg_calgui, NULL);
+	lv_label_set_text(pwd_label1, "Volt:");
+	lv_obj_align(pwd_label1, ad_spinbox4, LV_ALIGN_OUT_LEFT_MID, -45, 0);
+
+	lv_coord_t h = lv_obj_get_height(ad_spinbox1);
+	lv_obj_t* btn_plus1 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_plus1, h, h);
+	lv_obj_align(btn_plus1, ad_spinbox1, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+	lv_theme_apply(btn_plus1, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_plus1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
+	lv_obj_set_event_cb(btn_plus1, lv_spinbox_increment_event_ad1);
+
+	lv_obj_t* btn_min1 = lv_btn_create(bg_calgui, btn_plus1);
+	lv_obj_align(btn_min1, ad_spinbox1, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+	lv_obj_set_event_cb(btn_min1, lv_spinbox_decrement_event_ad1);
+	lv_obj_set_style_local_value_str(btn_min1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+
+	lv_obj_t* btn_ok1 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_ok1, h, h);
+	lv_obj_align(btn_ok1, ad_spinbox1, LV_ALIGN_OUT_RIGHT_MID, 40, 0);
+	lv_theme_apply(btn_ok1, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_ok1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_OK);
+	lv_obj_set_event_cb(btn_ok1, lv_spinbox_event_save);
+
+	lv_obj_t* btn_plus2 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_plus2, h, h);
+	lv_obj_align(btn_plus2, ad_spinbox2, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+	lv_theme_apply(btn_plus2, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_plus2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
+	lv_obj_set_event_cb(btn_plus2, lv_spinbox_increment_event_ad2);
+
+	lv_obj_t* btn_min2 = lv_btn_create(bg_calgui, btn_plus2);
+	lv_obj_align(btn_min2, ad_spinbox2, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+	lv_obj_set_event_cb(btn_min2, lv_spinbox_decrement_event_ad2);
+	lv_obj_set_style_local_value_str(btn_min2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+
+	lv_obj_t* btn_ok2 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_ok2, h, h);
+	lv_obj_align(btn_ok2, ad_spinbox2, LV_ALIGN_OUT_RIGHT_MID, 40, 0);
+	lv_theme_apply(btn_ok2, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_ok2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_OK);
+	lv_obj_set_event_cb(btn_ok2, lv_spinbox_event_save1);
+
+	lv_obj_t* btn_refr = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_refr, h, h);
+	lv_obj_align(btn_refr, ad_spinbox2, LV_ALIGN_OUT_RIGHT_MID, 80, 0);
+	lv_theme_apply(btn_refr, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_refr, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_REFRESH);
+	lv_obj_set_event_cb(btn_refr, lv_spinbox_event_copy);
+	
+
+	lv_obj_t* btn_save = lv_btn_create(bg_top_cal, NULL);
+	lv_obj_set_event_cb(btn_save, mode_button_cal_save);
+	lv_obj_align(btn_save, NULL, LV_ALIGN_IN_TOP_LEFT, 5, 5);
+	lv_obj_set_size(btn_save, 50, 20);
+	lv_obj_set_style_local_value_str(btn_save, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "save");
+	
+	lv_obj_t* btn_cancel = lv_btn_create(bg_top_cal, NULL);
+	lv_obj_set_event_cb(btn_cancel, mode_button_cal_cancel);
+	lv_obj_align(btn_cancel, NULL, LV_ALIGN_IN_TOP_LEFT, 60, 5);
+	lv_obj_set_size(btn_cancel, 50, 20);
+	lv_obj_set_style_local_value_str(btn_cancel, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Cancel");
+	
+	lv_obj_t* btn_plus3 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_plus3, h, h);
+	lv_obj_align(btn_plus3, ad_spinbox3, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+	lv_theme_apply(btn_plus3, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_plus3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
+	lv_obj_set_event_cb(btn_plus3, lv_spinbox_increment_event_ad3);
+
+	lv_obj_t* btn_min3 = lv_btn_create(bg_calgui, btn_plus3);
+	lv_obj_align(btn_min3, ad_spinbox3, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+	lv_obj_set_event_cb(btn_min3, lv_spinbox_decrement_event_ad3);
+	lv_obj_set_style_local_value_str(btn_min3, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+
+	lv_obj_t* btn_plus4 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_plus4, h, h);
+	lv_obj_align(btn_plus4, ad_spinbox4, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
+	lv_theme_apply(btn_plus4, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_plus4, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
+	lv_obj_set_event_cb(btn_plus4, lv_spinbox_increment_event_ad4);
+
+	lv_obj_t* btn_min4 = lv_btn_create(bg_calgui, btn_plus4);
+	lv_obj_align(btn_min4, ad_spinbox4, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+	lv_obj_set_event_cb(btn_min4, lv_spinbox_decrement_event_ad4);
+	lv_obj_set_style_local_value_str(btn_min4, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
+
+	lv_obj_t* btn_ok4 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_ok4, h, h);
+	lv_obj_align(btn_ok4, ad_spinbox4, LV_ALIGN_OUT_RIGHT_MID, 40, 0);
+	lv_theme_apply(btn_ok4, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_ok4, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "R1");
+	lv_obj_set_event_cb(btn_ok4, lv_spinbox_event_save4);
+
+	lv_obj_t* btn_ok5 = lv_btn_create(bg_calgui, NULL);
+	lv_obj_set_size(btn_ok5, h, h);
+	lv_obj_align(btn_ok5, ad_spinbox4, LV_ALIGN_OUT_RIGHT_MID, 80, 0);
+	lv_theme_apply(btn_ok5, LV_THEME_SPINBOX_BTN);
+	lv_obj_set_style_local_value_str(btn_ok5, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "R2");
+	lv_obj_set_event_cb(btn_ok5, lv_spinbox_event_save5);
+
+//	pwd_label1 = lv_label_create(bg_calgui, NULL);
+//	lv_label_set_text(pwd_label1, "Watt");
+//	lv_obj_align(pwd_label1, btn_min3, LV_ALIGN_OUT_LEFT_MID, -10,0);
+
+	lv_group_add_obj(cal_group, btn_min1);
+	lv_group_add_obj(cal_group, ad_spinbox1);
+	lv_group_add_obj(cal_group, btn_plus1);
+	lv_group_add_obj(cal_group, btn_ok1);
+
+	lv_group_add_obj(cal_group, btn_min2);
+	lv_group_add_obj(cal_group, ad_spinbox2);
+	lv_group_add_obj(cal_group, btn_plus2);
+	lv_group_add_obj(cal_group, btn_ok2);
+	lv_group_add_obj(cal_group, btn_refr);
+
+	lv_group_add_obj(cal_group, btn_min3);
+	lv_group_add_obj(cal_group, ad_spinbox3);
+	lv_group_add_obj(cal_group, btn_plus3);
+
+	lv_group_add_obj(cal_group, btn_min4);
+	lv_group_add_obj(cal_group, ad_spinbox4);
+	lv_group_add_obj(cal_group, btn_plus4);
+	lv_group_add_obj(cal_group, btn_ok4);
+	lv_group_add_obj(cal_group, btn_ok5);
+
+	lv_group_add_obj(cal_group, btn_save);
+	lv_group_add_obj(cal_group, btn_cancel);
+}
+
+static void start_ad8307_cal()
+{
+	stop_measurement();
+	f_cal_ad8307 = true;
+}
+

@@ -1,14 +1,27 @@
 #include <arduino.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <WebServer.h>
+#include <ESPmDNS.h>
+#include <Update.h>
+#include <ArduinoOTA.h>
+#include <ESP32Encoder.h>
+#include <AceButton.h>
+using namespace ace_button;
+
 #include "i2c.h"
 #include "si5351.h"
 #include "measurement.h"
+#include "IO.h"
+#include "network.h"
+
 
 volatile adbuffer_t measure;// Two 256 byte circular buffers carrying the sampled adc-inputs
                             // from the interrupt function to the main loop.
                             
 double      adc_ref;        // ADC reference (Teensy or external AD7991)
-int16_t     fwd;            // AD input - 12 bit value, v-forward
-int16_t     rev;            // AD input - 12 bit value, v-reverse
+uint16_t      fwd;            // AD input - 12 bit value, v-forward
+uint16_t      rev;            // AD input - 12 bit value, v-reverse
 double      f_inst;         // Calculated Forward voltage
 double      r_inst;         // Calculated Reverse voltagedouble      
 double      ad8307_FdBm;    // Measured AD8307 forward voltage in dBm
@@ -41,21 +54,17 @@ void adc_init(void)
   adc_ref = ADC_RES;  
 }
 
-/*
-double ReadVoltage(byte pin){
-  double reading = analogRead(pin); // Reference voltage is 3v3 so maximum reading is 3v3 = 4095 in range 0 to 4095
-  if(reading < 1 || reading > 4095) return 0;
-  // return -0.000000000009824 * pow(reading,3) + 0.000000016557283 * pow(reading,2) + 0.000854596860691 * reading + 0.065440348345433;
-  return -0.000000000000016 * pow(reading,4) + 0.000000000118171 * pow(reading,3)- 0.000000301211691 * pow(reading,2)+ 0.001109019271794 * reading + 0.034143524634089;
-} // Added an improved polynomial, use either, comment out as required
-
-*/
-
 TaskHandle_t    Task_poll;
 
 void start_measurement()
 {
+    memset((void *)&measure, 0, sizeof(adbuffer_t));
     xTaskCreatePinnedToCore(adc_poll_and_feed_circular, "adc_poll", 4096, NULL, 1, &Task_poll, 0);
+}
+
+void stop_measurement()
+{
+    vTaskDelete(Task_poll);
 }
 
 
@@ -66,14 +75,13 @@ void adc_poll_and_feed_circular(void* pvParameters)
   // Each poll of the builtin ADC is measured to take 130us if averaging set at 8.
     while(1)
     {
-        int16_t result_fwd = (int16_t)random(1025, 3000); // analogRead(Pfwd);
-        int16_t result_ref = (int16_t)random(1000, 2000); // analogRead(Pref);  // ref=ADC0, fwd=ADC1
-        //int16_t result_fwd = analogRead(FWD_METER);
-        //int16_t result_ref = analogRead(REV_METER);  // ref=ADC0, fwd=ADC1
-    
-        measure.fwd[measure.incount] = result_fwd;
-        measure.rev[measure.incount] = result_ref;
+        //int16_t result_fwd = (int16_t)random(1025, 3000); // analogRead(Pfwd);
+        //int16_t result_ref = (int16_t)random(1000, 2000); // analogRead(Pref);  // ref=ADC0, fwd=ADC1
+        xSemaphoreTake(swrBinarySemaphore, portMAX_DELAY);
+        measure.fwd[measure.incount] = analogRead(FWD_METER); 
+        measure.rev[measure.incount] = analogRead(REV_METER); 
         measure.incount++;                        // 8 bit value, rolls over at 256
+        xSemaphoreGive(swrBinarySemaphore);
         vTaskDelay(1);
     }
 }
@@ -89,18 +97,20 @@ void pswr_sync_from_interrupt(void)
   {
     fwd = measure.fwd[measure.outcount];      // Transfer data from circular buffers
     rev = measure.rev[measure.outcount];
-
     measure.outcount++;                       // 8 bit value, rolls over at 256
     
     determine_power_pep_pk();                 // Determine Instantaneous power, pep, pk and avg
-/*
-    if (modScopeActive)                       // Modulation Scope
-    {
-      ModScope.adddata(power_mw, power_mw_long);    
-    }
-*/
+
     in = measure.incount;
   }
+ // char str[82];
+ // sprintf(str,"ad8307_FdBm %f  ad8307_RdBm %f\r\n", ad8307_FdBm,ad8307_RdBm );
+ // DebugServer.writeAll((const uint8_t*)str, strlen(str));
+ // sprintf(str,"fwd_power_mw %f ref_power_mw %f power_mw %f\r\n", fwd_power_mw, ref_power_mw, power_mw );
+ // DebugServer.writeAll((const uint8_t*)str, strlen(str));
+ // sprintf(str,"rev_power_db %f power_db %f power_db_pk %f\r\n", rev_power_db, power_db , power_db_pk);
+ // DebugServer.writeAll((const uint8_t*)str, strlen(str));
+
   xSemaphoreGive( swrBinarySemaphore );
 }
 
@@ -128,17 +138,27 @@ void pswr_determine_dBm(void)
   delta_Rdb = delta_db/delta_R;
   //
   // measured dB values are: (V - V_Cal1) * slope_gradient + dB_Cal1
- 
   //char str[82];
-  //sprintf(str,"fwd %d  rev %d", fwd,rev );
-  //Serial.println (str);
-  
-  ad8307_FdBm = (adc_ref * (fwd/4096.0) - R.cal_AD[0].Fwd) * delta_Fdb + R.cal_AD[0].db10m/10.0;
-  ad8307_RdBm = (adc_ref * (rev/4096.0) - R.cal_AD[0].Rev) * delta_Rdb + R.cal_AD[0].db10m/10.0;
+  //sprintf(str, "R.cal_AD[0].Fwd %f  R.cal_AD[0].Rev %f R.cal_AD[0].db10m %d\r\n", R.cal_AD[0].Fwd, R.cal_AD[0].Rev, R.cal_AD[0].db10m);
+  //DebugServer.writeAll((const uint8_t*)str, strlen(str));
+  //sprintf(str, "R.cal_AD[1].Fwd %f  R.cal_AD[1].Rev R.cal_AD[1].db10m %d \r\n", R.cal_AD[1].Fwd, R.cal_AD[1].Rev, R.cal_AD[1].db10m);
+ // DebugServer.writeAll((const uint8_t*)str, strlen(str));
 
-  //sprintf(str,"ad8307_FdBm %f  ad8307_RdBm %f", ad8307_FdBm,ad8307_RdBm );
+  //Serial.println (str);
+  //sprintf(str, "delta_db %f  delta_F %f delta_R %f\r\n", delta_db, delta_F, delta_R);
+  //DebugServer.writeAll((const uint8_t*)str, strlen(str));
+
+
+  //sprintf(str,"fwd %f  rev %f\r\n", fwd,rev );
+  //DebugServer.writeAll((const uint8_t*)str, strlen(str));
   //Serial.println (str);
   
+  ad8307_FdBm = (adc_ref * (fwd / 4096.0) - R.cal_AD[0].Fwd) * delta_Fdb + R.cal_AD[0].db10m/10.0;
+  ad8307_RdBm = (adc_ref * (rev / 4096.0) - R.cal_AD[0].Rev) * delta_Rdb + R.cal_AD[0].db10m/10.0;
+
+  //sprintf(str,"ad8307_FdBm %f  ad8307_RdBm %f\r\n", ad8307_FdBm,ad8307_RdBm );
+  //Serial.println (str);
+  //DebugServer.writeAll((const uint8_t*)str, strlen(str));
 
   // Test for direction of power - Always designate the higher power as "forward"
   // while setting the "Reverse" flag on reverse condition.
@@ -179,8 +199,7 @@ void determine_power_pep_pk(void)
   static uint16_t c;                            // Long: ring buffer counter
   static uint16_t d;                            // avg: short ring buffer counter
   static uint16_t e;                            // avg: 1s ring buffer counter
-
-  #if AD8307_INSTALLED     
+   
   //---------------------------------------------------------------------------------
   // Process Forward and Reflected power measurements from 2x AD8307
   //---------------------------------------------------------------------------------
@@ -194,7 +213,12 @@ void determine_power_pep_pk(void)
   // Instantaneous reverse voltage and power
   r_inst = pow(10,(ad8307_RdBm)/20.0);
   ref_power_mw = SQR(r_inst);
+  
+  //char str[80];
 
+  //sprintf(str, "fwd_power_mw %f  ref_power_mw %f\r\n", fwd_power_mw, ref_power_mw);
+  //Serial.println (str);
+  //DebugServer.writeAll((const uint8_t*)str, strlen(str));
 
   // We need some sane boundaries (4kW) to determine reasonable variable defs for further calculations
   if (fwd_power_mw > 4000000) fwd_power_mw = 4000000;
@@ -205,60 +229,6 @@ void determine_power_pep_pk(void)
   power_db = 10 * log10(power_mw);
   rev_power_db = 10 * log10(ref_power_mw);
 
-  //char str[82];
-  //sprintf(str,"fwd_power_mw %f ref_power_mw %f power_mw %f", fwd_power_mw, ref_power_mw, power_mw );
-  //Serial.println (str);
-
-  //sprintf(str,"rev_power_db %f power_db %f ", rev_power_db, power_db );
-  //Serial.println (str);
-
-  #else
-  //---------------------------------------------------------------------------------
-  // Measure Forward and Reflected power from Diode Detecotrs
-  //---------------------------------------------------------------------------------
-  // Test for direction of power - Always designate the higher power as "forward"
-  // while setting the "Reverse" flag on reverse condition.
-  if (fwd > rev)                                // Forward direction
-  {
-    Reverse = false;
-  }
-  else                                          // Reverse direction
-  {
-    uint16_t temp = rev;
-    rev = fwd;
-    fwd = temp;
-    Reverse = true;
-  }
-
-  // Instantaneous forward voltage and power, milliwatts
-  //
-  // Establish actual measured voltage at diode
-  f_inst = (double) fwd * adc_ref/4096.0;
-  // Convert to VRMS in Bridge
-  if (f_inst >= D_VDROP) f_inst = 1/1.4142135 * (f_inst - D_VDROP) + D_VDROP;
-  // Take Bridge Coupling into account
-  f_inst = f_inst * BRIDGE_COUPLING * R.meter_cal/100.0;
-  // Convert into milliwatts
-  fwd_power_mw = 1000 * SQR(f_inst)/50.0;
-    
-  // Instantaneous reflected voltage and power
-  //
-  // Establish actual measured voltage at diode
-  r_inst = (double) rev * adc_ref/4096.0;
-  // Convert to VRMS in Bridge
-  if (r_inst >= D_VDROP) r_inst = 1/1.4142135 * (r_inst - D_VDROP) + D_VDROP;
-  // Take Bridge Coupling into account
-  r_inst = r_inst * BRIDGE_COUPLING * R.meter_cal/100.0;
-  // Convert into milliwatts
-  ref_power_mw = 1000 * SQR(r_inst)/50.0;
-  
-  // Instantaneous Real Power Output
-  power_mw = fwd_power_mw - ref_power_mw;
-  if (power_mw <  0) power_mw = power_mw * -1;
-  power_db = 10 * log10(power_mw);
-
-  #endif
-   
   //------------------------------------------
   // Find peaks and averages
 
@@ -416,6 +386,12 @@ void calc_SWR_and_power(void)
   power_mw_pep  = pow(10,power_db_pep/10.0);   
   power_mw_long = pow(10,power_db_long/10.0);   
   
+ // char str[82];
+//  sprintf(str, "power_mw_pep %f power_db_pep %f \r\n", power_mw_pep, power_db_pep);
+  //Serial.println (str);
+//  DebugServer.writeAll((const uint8_t*)str, strlen(str));
+
+
   // Only calculate SWR if meaningful power
 
   if ((power_mw > MIN_PWR_FOR_SWR_CALC) || (power_mw < -MIN_PWR_FOR_SWR_CALC))
@@ -494,4 +470,34 @@ uint16_t  print_swr(void)
     sprintf(lcd_buf,"9999");
   }
 return swr_avg * 100;
+}
+
+
+uint8_t check_input_cal()
+{
+    double fwd, rev;
+    uint8_t   cal_sig_direction_quality = 0, cal_sig_direction_quality_old = 3;
+
+    fwd = (adc_ref * ((double)analogRead(FWD_METER) / 4096.0)) ;
+    rev = (adc_ref * ((double)analogRead(REV_METER) / 4096.0)) ;
+    
+  //  DebugServer.print(0,"Fwd: " + String(fwd) + "Fwd: " + String(rev) + "slope: " + String(((fwd - rev) * 1000.0 / LOGAMP2_SLOPE)) + "\r\n");
+    
+    if ((((fwd - rev) * 1000.0 / LOGAMP2_SLOPE) > CAL_INP_QUALITY) && (cal_sig_direction_quality != CAL_FWD))
+    {
+        cal_sig_direction_quality = CAL_FWD;
+    }
+    // Check reverse direction and sufficient level
+    else if ((((rev - fwd) * 1000.0 / LOGAMP1_SLOPE) > CAL_INP_QUALITY)
+        && (cal_sig_direction_quality != CAL_REV))
+    {
+        cal_sig_direction_quality = CAL_REV;
+    }
+    // Check insufficient level
+    else if (((ABS((fwd - rev)) * 1000.0 / LOGAMP2_SLOPE) <= CAL_INP_QUALITY)
+        && (cal_sig_direction_quality != CAL_BAD))
+    {
+        cal_sig_direction_quality = CAL_BAD;
+    }
+    return cal_sig_direction_quality;
 }

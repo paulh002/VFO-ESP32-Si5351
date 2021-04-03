@@ -29,7 +29,7 @@ void showWifidropdown(void);
 void showWifilabel(bool show);
 void setfrequencylabel(long freq, uint8_t sem = 0);
 void ToggleTX(uint8_t show);
-void ToggleSetup(bool show);
+void ToggleSetup(bool show, uint8_t sem = 1);
 void BfoLabel(uint32_t num, uint8_t sem);
 void Togglemode(int mode, uint8_t sem = 1);
 
@@ -41,10 +41,13 @@ static void mode_button_vfo(lv_obj_t* obj, lv_event_t event);
 static void band_event_handler(lv_obj_t* obj, lv_event_t event);
 static void lv_spinbox_decrement_event_cb(lv_obj_t* btn, lv_event_t e);
 static void lv_spinbox_increment_event_cb(lv_obj_t* btn, lv_event_t e);
-static void gui_setup(lv_obj_t* scr);
 static void gui_si5351(lv_obj_t* scr);
+static void gui_setup(lv_obj_t* scr);
 static void rotary_button_eventhandler(AceButton*, uint8_t eventType, uint8_t buttonState);
 static void event_button_save(lv_obj_t* btn, lv_event_t e);
+static void start_ad8307_cal();
+static void init_cal_ad8307_gui(lv_obj_t* scr);
+static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event);
 
 extern lv_obj_t* ddlist;
 extern lv_obj_t* bg_top;

@@ -51,5 +51,6 @@ void cal_vfo();
 void cal_bfo();
 void shiftOut(byte bpf, byte lpf, int rxtx);
 void filter_init(void);
+void setvfo_rxtx(uint8_t rxtx);
 #endif
 
