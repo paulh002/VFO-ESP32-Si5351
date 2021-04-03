@@ -17,15 +17,13 @@ Changes:
 - libraries are moved to library directory 
 - source code includes a visual studio project file
 - TX GUI with power and SWR measurement
+- GUI supported AD8307 calibration
 
 Notes
 - The si5351 library is customized for esp32 support and can be found in the library directory
 - Libraries used
    -  Acebutton https://github.com/bxparks/AceButton
    -  ESP32Encoder https://github.com/madhephaestus/ESP32Encoder
-
-Todo
-- GUI supported AD8307 calibration
 
 
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/lvgl_gui.jpg)
