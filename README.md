@@ -24,6 +24,7 @@ Notes
 - Libraries used
    -  Acebutton https://github.com/bxparks/AceButton
    -  ESP32Encoder https://github.com/madhephaestus/ESP32Encoder
+   -  lvgl https://lvgl.io/
 
 
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/lvgl_gui.jpg)
