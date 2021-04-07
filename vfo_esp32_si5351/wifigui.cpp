@@ -28,6 +28,7 @@ lv_obj_t* wifi_button;
 lv_obj_t* bg_wifiota;
 lv_obj_t* ota_label;
 lv_obj_t* ota_label1;
+lv_group_t* wifi_group;
 
 TaskHandle_t hWifiTask;
 String	ssidName, password;
@@ -151,7 +152,7 @@ void init_wifi_gui(lv_obj_t* scr)
 	lv_obj_set_event_cb(cancel_btn, close_event_handler);
 	lv_obj_set_style_local_value_str(cancel_btn, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Cancel");
 	
-	wifi_button = lv_btn_create(bg_bottom, NULL);
+	wifi_button = lv_btn_create(bg_top, NULL);
 	lv_obj_set_event_cb(wifi_button, wifi_button_eh);
 	lv_obj_align(wifi_button, NULL, LV_ALIGN_CENTER, 170, 10);
 	lv_btn_set_checkable(wifi_button, true);
@@ -194,6 +195,12 @@ void init_wifi_gui(lv_obj_t* scr)
 	lv_obj_align(ota_label1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 30);
 	lv_obj_move_background(bg_wifiota);
 
+	wifi_group = lv_group_create();
+	lv_indev_set_group(encoder_indev_t, wifi_group);
+	
+	lv_group_add_obj(wifi_group, wifi_scan_list);
+	lv_group_add_obj(wifi_group, cancel_btn);
+
 	//ota_cancel_btn = lv_btn_create(bg_wifiota, NULL);
 	//lv_obj_align(ota_cancel_btn, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
 	//lv_obj_set_event_cb(ota_cancel_btn, ota_event_handler);
@@ -205,6 +212,7 @@ void show_wifi_gui(int show)
 	if (show)
 	{
 		lv_obj_move_foreground(bg_wifigui);
+		lv_indev_set_group(encoder_indev_t, wifi_group);
 		lv_obj_set_hidden(wifi_scan_list, false);
 		lv_obj_set_hidden(cancel_btn, false);
 		xTaskCreate(wifi_scan_network,"wifi_scan",4096,NULL,1,&hWifiTask); 
@@ -214,6 +222,7 @@ void show_wifi_gui(int show)
 		vTaskDelete(hWifiTask);
 		lv_obj_move_background(bg_wifigui);
 		lv_obj_move_foreground(bg_middle);
+		lv_indev_set_group(encoder_indev_t, vfo_group);
 	}
 }
 

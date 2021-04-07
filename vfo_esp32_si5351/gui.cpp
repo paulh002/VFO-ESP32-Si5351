@@ -22,7 +22,8 @@ using namespace ace_button;
 #define ROTARY_B      19
 #define ROTARY_PRESS  26
 
-LV_FONT_DECLARE(FreeSansOblique);
+LV_FONT_DECLARE(FreeSansOblique42);
+LV_FONT_DECLARE(FreeSansOblique32);
 
 /*-------------------------------------------------------
    Optical Rotary encoder settings (used for frequency)
@@ -48,10 +49,13 @@ static lv_disp_buf_t disp_buf;
 static lv_color_t buf[LV_HOR_RES_MAX * 10];
 
 lv_obj_t* slider_label;
-int screenWidth = 320;
-int screenHeight = 240;
-int	bottomHeight = 20;
-int	topHeight = 30;
+const int screenWidth = 320;
+const int screenHeight = 240;
+const int bottomHeight = 40;
+const int topHeight = 25;
+const int nobuttons = 6;
+const int bottombutton_width = (screenWidth / nobuttons) - 2;
+const int bottombutton_width1 = (screenWidth / nobuttons);
 
 lv_obj_t* ddlist;
 lv_obj_t* bg_top;
@@ -64,15 +68,17 @@ lv_obj_t* s_meter;
 lv_obj_t* usb_button;
 lv_obj_t* lsb_button;
 lv_obj_t* vfo_frequency;
+lv_obj_t* vfo2_frequency;
 lv_obj_t* label_wifi;
 lv_obj_t* vfo_unit;
+lv_obj_t* vfo2_unit;
+lv_obj_t* vfo2_label;
 lv_obj_t* vfo1_button;
 lv_obj_t* vfo2_button;
-lv_obj_t* Band_roller;
+lv_obj_t* Band_btn;
+lv_obj_t* Band_btn_label;
 lv_obj_t* Tx_led1;
-lv_obj_t* bfo_spinbox;
-lv_obj_t* btn_plus;
-lv_obj_t* btn_min;
+lv_obj_t* bfo_label;
 lv_obj_t* s_canvas;
 lv_obj_t* bg_middle2;
 lv_obj_t* bg_middle3;
@@ -156,7 +162,7 @@ void guisetup() {
 	rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureLongPress);
 	rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureSuppressAfterLongPress);
 	ESP32Encoder::useInternalWeakPullResistors = NONE;
-	GuiEncoder.attachHalfQuad(ROTARY_B, ROTARY_A);
+	GuiEncoder.attachHalfQuad(ROTARY_B, ROTARY_A, 1024);
 	Enc_vfo.attachHalfQuad(PULSE_INPUT_PIN, PULSE_CTRL_PIN);
 
 	xTaskCreate(guiTask,
@@ -222,15 +228,15 @@ void guiTask(void* arg) {
 	bg_bottom = lv_obj_create(scr, NULL);
 	lv_obj_clean_style_list(bg_bottom, LV_OBJ_PART_MAIN);
 	lv_obj_set_style_local_bg_opa(bg_bottom, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
-	lv_obj_set_style_local_bg_color(bg_bottom, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_ORANGE);
+	lv_obj_set_style_local_bg_color(bg_bottom, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_obj_set_pos(bg_bottom, 0, screenHeight - bottomHeight);
 	lv_obj_set_size(bg_bottom, LV_HOR_RES, bottomHeight);
 	
-	label_status = lv_label_create(bg_bottom, NULL);
+	label_status = lv_label_create(bg_top, NULL);
 	lv_label_set_long_mode(label_status, LV_LABEL_LONG_SROLL_CIRC);
 	lv_obj_set_width(label_status, LV_HOR_RES - 20);
 	lv_label_set_text(label_status, "");
-	lv_obj_align(label_status, NULL, LV_ALIGN_CENTER, 0, 0);
+	lv_obj_align(label_status, NULL, LV_ALIGN_CENTER, 20, 0);
 
 	bg_middle = lv_obj_create(scr, NULL);
 	lv_obj_clean_style_list(bg_middle, LV_OBJ_PART_MAIN);
@@ -239,58 +245,92 @@ void guiTask(void* arg) {
 	lv_obj_set_pos(bg_middle, 0, topHeight);
 	lv_obj_set_size(bg_middle, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
 
-	smeter = new CSmeter(bg_middle, LV_ALIGN_CENTER, 240, 50, 0, 60);
+	smeter = new CSmeter(bg_middle, LV_ALIGN_CENTER, 255, 50, 0, 50);
 
 	// Create groups for encoder support for the different screens
 	vfo_group = lv_group_create();
 	lv_indev_set_group(encoder_indev_t, vfo_group);
-
-	lv_obj_t* save_button = lv_btn_create(bg_top, NULL);
-	lv_obj_set_event_cb(save_button, event_button_save);
-	lv_obj_align(save_button, NULL, LV_ALIGN_CENTER, -45, 10);
-	lv_obj_set_size(save_button, 50, 20);
-	lv_obj_t* label = lv_label_create(save_button, NULL);
-	lv_label_set_text(label, "Save");
-	lv_group_add_obj(vfo_group, save_button); 
-
-	vfo2_button = lv_btn_create(bg_top, NULL);
-	lv_obj_set_event_cb(vfo2_button, mode_button_vfo);
-	lv_obj_align(vfo2_button, NULL, LV_ALIGN_CENTER, 10, 10);
-	lv_btn_set_checkable(vfo2_button, true);
-	//lv_btn_toggle(vfo2_button);
-	lv_obj_set_size(vfo2_button, 50, 20);
-	label = lv_label_create(vfo2_button, NULL);
-	lv_label_set_text(label, "Vfo 2");
-	lv_group_add_obj(vfo_group, vfo2_button); 
 	
-	vfo1_button = lv_btn_create(bg_top, NULL);
-	lv_obj_set_event_cb(vfo1_button, mode_button_vfo);
-	lv_obj_align(vfo1_button, NULL, LV_ALIGN_CENTER, 65, 10);
-	lv_btn_set_checkable(vfo1_button, true);
-	lv_btn_toggle(vfo1_button);
-	lv_obj_set_size(vfo1_button, 50, 20);
-	label = lv_label_create(vfo1_button, NULL);
-	lv_label_set_text(label, "Vfo 1");
-	lv_group_add_obj(vfo_group, vfo1_button);
+	static lv_style_t style_btn;
+	lv_style_init(&style_btn);
 
-	lsb_button = lv_btn_create(bg_top, NULL);
+	lv_style_set_radius(&style_btn, LV_STATE_DEFAULT, 10);
+	lv_style_set_bg_color(&style_btn, LV_STATE_DEFAULT, lv_color_make(0x60, 0x60, 0x60));
+	lv_style_set_bg_grad_color(&style_btn, LV_STATE_DEFAULT, lv_color_make(0x00, 0x00, 0x00));
+	lv_style_set_bg_grad_dir(&style_btn, LV_STATE_DEFAULT, LV_GRAD_DIR_VER);
+	lv_style_set_bg_opa(&style_btn, LV_STATE_DEFAULT, 255);
+	lv_style_set_border_color(&style_btn, LV_STATE_DEFAULT, lv_color_make(0x9b, 0x36, 0x36) ); // lv_color_make(0x2e, 0x44, 0xb2)
+	lv_style_set_border_width(&style_btn, LV_STATE_DEFAULT, 2);
+	lv_style_set_border_opa(&style_btn, LV_STATE_DEFAULT, 255);
+	lv_style_set_outline_color(&style_btn, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+	lv_style_set_outline_opa(&style_btn, LV_STATE_DEFAULT, 255);
+	
+	lv_style_set_border_width(&style_btn, LV_STATE_FOCUSED, 2);
+	lv_style_set_outline_color(&style_btn, LV_STATE_FOCUSED, LV_COLOR_RED);
+	//lv_style_set_border_color(&style_btn, LV_STATE_FOCUSED, LV_COLOR_WHITE);
+	//lv_style_set_outline_color(&style_btn, LV_STATE_FOCUSED, LV_COLOR_WHITE);
+	//lv_style_set_bg_color(&style_btn, LV_STATE_FOCUSED, LV_COLOR_OLIVE);
+
+	//lv_style_set_border_color(&style_btn, LV_STATE_CHECKED, lv_color_make(0x9b, 0x36, 0x36)); // lv_color_make(0x2e, 0x44, 0xb2)
+	//lv_style_set_border_color(&style_btn, LV_STATE_CHECKED, LV_COLOR_BLACK); // lv_color_make(0x2e, 0x44, 0xb2)
+	//lv_style_set_border_width(&style_btn, LV_STATE_CHECKED, 2);
+
+	/*Set the text style*/
+	lv_style_set_text_color(&style_btn, LV_STATE_DEFAULT, LV_COLOR_WHITE);
+
+	lsb_button = lv_btn_create(bg_bottom, NULL);
+	lv_obj_add_style(lsb_button, LV_BTN_PART_MAIN, &style_btn);
 	lv_obj_set_event_cb(lsb_button, mode_button_eh);
-	lv_obj_align(lsb_button, NULL, LV_ALIGN_CENTER, 120, 10);
+	lv_obj_align(lsb_button, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 	lv_btn_set_checkable(lsb_button, true);
 	lv_btn_toggle(lsb_button);
-	lv_obj_set_size(lsb_button, 40, 20);
-	label = lv_label_create(lsb_button, NULL);
+	lv_obj_set_size(lsb_button, bottombutton_width, bottomHeight);
+	lv_obj_t* label = lv_label_create(lsb_button, NULL);
 	lv_label_set_text(label, "Lsb");
-	lv_group_add_obj(vfo_group, lsb_button); 
 	
-	usb_button = lv_btn_create(bg_top, NULL);
+	usb_button = lv_btn_create(bg_bottom, NULL);
+	lv_obj_add_style(usb_button, LV_BTN_PART_MAIN, &style_btn);
 	lv_obj_set_event_cb(usb_button, mode_button_eh);
-	lv_obj_align(usb_button, NULL, LV_ALIGN_CENTER, 170, 10);
+	lv_obj_align(usb_button, NULL, LV_ALIGN_IN_TOP_LEFT, bottombutton_width1, 0);
 	lv_btn_set_checkable(usb_button, true);
-	lv_obj_set_size(usb_button, 40, 20);
+	lv_obj_set_size(usb_button, bottombutton_width, bottomHeight);
 	label = lv_label_create(usb_button, NULL);
 	lv_label_set_text(label, "Usb");
-	lv_group_add_obj(vfo_group, usb_button);
+	
+	vfo1_button = lv_btn_create(bg_bottom, NULL);
+	lv_obj_add_style(vfo1_button, LV_BTN_PART_MAIN, &style_btn); 
+	lv_obj_set_event_cb(vfo1_button, mode_button_vfo);
+	lv_obj_align(vfo1_button, NULL, LV_ALIGN_IN_TOP_LEFT, 2 * bottombutton_width1, 0);
+	lv_btn_set_checkable(vfo1_button, true);
+	lv_btn_toggle(vfo1_button);
+	lv_obj_set_size(vfo1_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(vfo1_button, NULL);
+	lv_label_set_text(label, "Vfo 1");
+	
+	vfo2_button = lv_btn_create(bg_bottom, NULL);
+	lv_obj_add_style(vfo2_button, LV_BTN_PART_MAIN, &style_btn); 
+	lv_obj_set_event_cb(vfo2_button, mode_button_vfo);
+	lv_obj_align(vfo2_button, NULL, LV_ALIGN_IN_TOP_LEFT, 3 * bottombutton_width1, 0);
+	lv_btn_set_checkable(vfo2_button, true);
+	lv_obj_set_size(vfo2_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(vfo2_button, NULL);
+	lv_label_set_text(label, "Vfo 2");
+	
+	Band_btn = lv_btn_create(bg_bottom, NULL);
+	lv_obj_add_style(Band_btn, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(Band_btn, event_band_button);
+	lv_obj_align(Band_btn, NULL, LV_ALIGN_IN_TOP_LEFT, 4 * bottombutton_width1, 0);
+	lv_obj_set_size(Band_btn, bottombutton_width, bottomHeight);
+	Band_btn_label = lv_label_create(Band_btn, NULL);
+	lv_label_set_text(Band_btn_label, "80m");
+
+	lv_obj_t* save_button = lv_btn_create(bg_bottom, NULL);
+	lv_obj_add_style(save_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(save_button, event_button_save);
+	lv_obj_align(save_button, NULL, LV_ALIGN_IN_TOP_LEFT, 5 * bottombutton_width1, 0);
+	lv_obj_set_size(save_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(save_button, NULL);
+	lv_label_set_text(label, "Save");
 
 	static lv_style_t text_style;
 	lv_style_init(&text_style);
@@ -300,7 +340,7 @@ void guiTask(void* arg) {
 	lv_style_set_bg_opa(&text_style, LV_STATE_DEFAULT, LV_OPA_COVER);
 	lv_style_set_bg_color(&text_style, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_style_set_value_align(&text_style, LV_STATE_DEFAULT, LV_ALIGN_CENTER);
-	lv_style_set_text_font(&text_style, LV_STATE_DEFAULT, &FreeSansOblique);
+	lv_style_set_text_font(&text_style, LV_STATE_DEFAULT, &FreeSansOblique42);
 
 	vfo_frequency = lv_label_create(bg_middle, NULL);
 	lv_label_set_long_mode(vfo_frequency, LV_LABEL_LONG_CROP);
@@ -308,15 +348,49 @@ void guiTask(void* arg) {
 	lv_obj_set_width(vfo_frequency, LV_HOR_RES - 20);
 	lv_label_set_text(vfo_frequency, "");
 	lv_obj_set_height(vfo_frequency, 40);
-	lv_obj_align(vfo_frequency, NULL, LV_ALIGN_CENTER, -30, -65);
+	lv_obj_align(vfo_frequency, bg_middle, LV_ALIGN_CENTER, -30, -62);
 	lv_label_set_align(vfo_frequency, LV_LABEL_ALIGN_CENTER);
 
 	vfo_unit = lv_label_create(bg_middle, NULL);
 	lv_obj_add_style(vfo_unit, LV_OBJ_PART_MAIN, &text_style);
-	lv_label_set_text(vfo_unit, "Mhz");
+	lv_label_set_text(vfo_unit, "Khz");
 	lv_obj_set_height(vfo_unit, 40);
-	lv_obj_align(vfo_unit, NULL, LV_ALIGN_CENTER, 110, -68);
+	lv_obj_align(vfo_unit, bg_middle, LV_ALIGN_CENTER, 110, -65);
 	lv_label_set_align(vfo_unit, LV_LABEL_ALIGN_CENTER);
+
+	static lv_style_t text_style12;
+	lv_style_init(&text_style12);
+
+	/*Set a background color and a radius*/
+	lv_style_set_radius(&text_style12, LV_STATE_DEFAULT, 5);
+	lv_style_set_bg_opa(&text_style12, LV_STATE_DEFAULT, LV_OPA_COVER);
+	lv_style_set_bg_color(&text_style12, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+	lv_style_set_value_align(&text_style12, LV_STATE_DEFAULT, LV_ALIGN_CENTER);
+	lv_style_set_text_font(&text_style12, LV_STATE_DEFAULT, &FreeSansOblique32);
+	lv_style_set_text_color(&text_style12, LV_STATE_DEFAULT, LV_COLOR_OLIVE);
+
+	vfo2_frequency = lv_label_create(bg_middle, NULL);
+	lv_label_set_long_mode(vfo2_frequency, LV_LABEL_LONG_CROP);
+	lv_obj_add_style(vfo2_frequency, LV_OBJ_PART_MAIN, &text_style12);
+	lv_obj_set_width(vfo2_frequency, LV_HOR_RES - 20);
+	;
+	lv_label_set_text(vfo2_frequency, "28.000.00");
+	lv_obj_set_height(vfo2_frequency, 40);
+	lv_obj_align(vfo2_frequency, bg_middle, LV_ALIGN_CENTER, -35, -22);
+	lv_label_set_align(vfo2_frequency, LV_LABEL_ALIGN_CENTER);
+	
+	vfo2_unit = lv_label_create(bg_middle, NULL);
+	lv_obj_add_style(vfo2_unit, LV_OBJ_PART_MAIN, &text_style12);
+	lv_label_set_text(vfo2_unit, "Khz");
+	lv_obj_set_height(vfo2_unit, 40);
+	lv_obj_align(vfo2_unit, bg_middle, LV_ALIGN_CENTER, 120, -32);
+	lv_label_set_align(vfo2_unit, LV_LABEL_ALIGN_CENTER);
+
+	bfo_label = lv_label_create(bg_middle, NULL);
+	lv_label_set_long_mode(bfo_label, LV_LABEL_LONG_CROP);
+	lv_obj_set_width(bfo_label, 120);
+	lv_label_set_text(bfo_label, "8998.0");
+	lv_obj_align(bfo_label, NULL, LV_ALIGN_IN_LEFT_MID, 10, 0);
 
 	label_wifi = lv_label_create(bg_top, NULL);
 	lv_label_set_long_mode(label_wifi, LV_LABEL_LONG_SROLL_CIRC);
@@ -325,16 +399,6 @@ void guiTask(void* arg) {
 	lv_obj_align(label_wifi, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 5);
 	lv_obj_set_hidden(label_wifi, true);
 
-	char str[80];
-	
-	band_roller_str(str);
-	Band_roller = lv_roller_create(bg_middle, NULL);
-	lv_roller_set_options(Band_roller,str, LV_ROLLER_MODE_INFINITE);
-	lv_obj_align(Band_roller,NULL, LV_ALIGN_CENTER, 120, 10);
-	lv_obj_set_width(Band_roller, 80);
-	lv_obj_set_event_cb(Band_roller, band_event_handler);
-	lv_roller_set_visible_row_count(Band_roller, 2);
-	
 	Tx_led1 = lv_led_create(bg_middle, NULL);
 	lv_obj_align(Tx_led1, NULL, LV_ALIGN_CENTER, -125, -50);
 	lv_led_off(Tx_led1);
@@ -344,33 +408,13 @@ void guiTask(void* arg) {
 	lv_obj_align(Tx_ledlabel, Tx_led1, LV_ALIGN_OUT_TOP_MID, 7, 0);
 	lv_label_set_text(Tx_ledlabel, "TX");
 
-	bfo_spinbox = lv_spinbox_create(bg_middle, NULL);
-	lv_spinbox_set_range(bfo_spinbox, 8900, 9900);
-	lv_spinbox_set_digit_format(bfo_spinbox, 4, 0);
-	lv_spinbox_step_prev(bfo_spinbox);
-	lv_obj_set_width(bfo_spinbox, 60);
-	lv_obj_align(bfo_spinbox, NULL, LV_ALIGN_CENTER, -80, -20);
-	lv_textarea_set_cursor_hidden(bfo_spinbox, true);
-
-	lv_coord_t h = lv_obj_get_height(bfo_spinbox);
-	btn_plus = lv_btn_create(bg_middle, NULL);
-	lv_obj_set_size(btn_plus, h, h);
-	lv_obj_align(btn_plus, bfo_spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-	lv_theme_apply(btn_plus, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn_plus, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
-	lv_obj_set_event_cb(btn_plus, lv_spinbox_increment_event_cb);
-	
-	btn_min = lv_btn_create(bg_middle, btn_plus);
-	lv_obj_align(btn_min, bfo_spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
-	lv_obj_set_event_cb(btn_min, lv_spinbox_decrement_event_cb);
-	lv_obj_set_style_local_value_str(btn_min, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
-	
 	// Keep de order of the focus correct
-	lv_group_add_obj(vfo_group, btn_min);
-	lv_group_add_obj(vfo_group, bfo_spinbox);
-	lv_group_add_obj(vfo_group, btn_plus);
-	lv_group_add_obj(vfo_group, Band_roller);
-
+	lv_group_add_obj(vfo_group, lsb_button);
+	lv_group_add_obj(vfo_group, usb_button);
+	lv_group_add_obj(vfo_group, vfo1_button);
+	lv_group_add_obj(vfo_group, vfo2_button);
+	lv_group_add_obj(vfo_group, Band_btn);
+	lv_group_add_obj(vfo_group, save_button);
 
 	// TX objects shown when VFO is in TX mode
 	static lv_color_t needle_colors[1];
@@ -443,11 +487,13 @@ void guiTask(void* arg) {
 	init_wifi_gui(scr);
 	init_cal_ad8307_gui(scr);
 
-	BfoLabel(get_bfo(0) / 1000, 0);
-	setfrequencylabel(get_vfo_frequency(active_vfo));
-	
+	BfoLabel(get_bfo(active_vfo) / 100, 0);
+	setfrequencylabel(get_vfo_frequency(active_vfo), get_vfo_frequency(1 - active_vfo));
+	ToggleVfo(active_vfo, 0);
+
 	// Set default focus to band selector
-	lv_group_focus_obj(Band_roller);
+	lv_indev_set_group(encoder_indev_t, vfo_group); 
+	lv_group_focus_obj(usb_button);
 
 	xSemaphoreGive(GuiBinarySemaphore);
 	int tt = 0;
@@ -467,14 +513,12 @@ void guiTask(void* arg) {
 * Translate the encoder movement to a new frequency
 * If the band is changed also update the band roller
 */
-
+			char str[32];
 			long frq = set_encoder_count_to_vfo_frequency(count, active_vfo);
 			Enc_vfo.clearCount();
-			setfrequencylabel(frq);
-			uint16_t i = get_band();
-			uint16_t ii = lv_roller_get_selected(Band_roller);
-			if (i != ii)
-				lv_roller_set_selected(Band_roller, i , LV_ANIM_ON);
+			setfrequencylabel(frq, get_vfo_frequency(1 - active_vfo));
+			uint16_t i = get_band(str);
+			lv_label_set_text(Band_btn_label, str);
 		}
 /*
 * Process rotary press button messages
@@ -488,11 +532,7 @@ void guiTask(void* arg) {
 		{
 			if (hide_rx == false)
 			{
-				hide_rx = true;
-				lv_obj_set_hidden(btn_min, true);
-				lv_obj_set_hidden(btn_plus, true);
-				lv_obj_set_hidden(bfo_spinbox, true);
-				lv_obj_set_hidden(Band_roller, true);				
+				hide_rx = true;		
 				smeter->hide(true);
 				lv_obj_set_hidden(Swr_gauge, false);
 				lv_obj_set_hidden(pwr_gauge, false);
@@ -525,10 +565,6 @@ void guiTask(void* arg) {
 			if (hide_rx == true)
 			{
 				hide_rx = false;
-				lv_obj_set_hidden(btn_min, false);
-				lv_obj_set_hidden(btn_plus, false);
-				lv_obj_set_hidden(bfo_spinbox, false);
-				lv_obj_set_hidden(Band_roller, false);
 				smeter->hide(false);
 				lv_obj_set_hidden(Swr_gauge, true);
 				lv_obj_set_hidden(pwr_gauge, true);
@@ -639,12 +675,12 @@ bool my_touchpad_read(lv_indev_drv_t* indev_driver, lv_indev_data_t* data)
 		data->point.x = touchX;
 		data->point.y = touchY;
 
-		Serial.print("Data x");
+	/*	Serial.print("Data x");
 		Serial.println(touchX);
 
 		Serial.print("Data y");
 		Serial.println(touchY);
-
+	*/
 	}
 
 	return false; /*Return `false` because we are not buffering and no more data to read*/
@@ -652,48 +688,85 @@ bool my_touchpad_read(lv_indev_drv_t* indev_driver, lv_indev_data_t* data)
 
 static void mode_button_eh(lv_obj_t* obj, lv_event_t event)
 {
-	if (event == LV_EVENT_CLICKED) {
-		//printf("Clicked\n");
-	}
-	else if (event == LV_EVENT_VALUE_CHANGED) {
+ if (event == LV_EVENT_PRESSED)
+	{	
+		bool bchecked = lv_btn_get_state(obj) & LV_STATE_CHECKED;
+		//Serial.println(String("state checked:") + String(bchecked));
+
 		if (obj == usb_button)
 		{
-			lv_btn_toggle(lsb_button);
-			switch_mode(MODE_USB, active_vfo);
+			if (bchecked)
+			{
+				lv_obj_clear_state(lsb_button, LV_STATE_CHECKED);
+				switch_mode(MODE_USB, active_vfo);
+			}
+			else
+			{
+				lv_obj_add_state(lsb_button, LV_STATE_CHECKED);
+				switch_mode(MODE_LSB, active_vfo);
+			}
 		}
 		if (obj == lsb_button)
 		{
-			lv_btn_toggle(usb_button);
-			switch_mode(MODE_LSB, active_vfo);
+			if (bchecked)
+			{
+				lv_obj_clear_state(usb_button, LV_STATE_CHECKED);
+				switch_mode(MODE_LSB, active_vfo);
+			}
+			else
+			{
+				lv_obj_add_state(usb_button, LV_STATE_CHECKED);
+				switch_mode(MODE_USB, active_vfo);
+			}
 		}
 	}
 }
 
 static void mode_button_vfo(lv_obj_t* obj, lv_event_t event)
 {
-	if (event == LV_EVENT_CLICKED) {
+	/*if (event == LV_EVENT_CLICKED) {
 		//printf("Clicked\n");
 	}
-	else if (event == LV_EVENT_VALUE_CHANGED) {
+	else */  
+	if (event == LV_EVENT_PRESSED /*LV_EVENT_VALUE_CHANGED*/) {
+
+		bool bchecked = lv_btn_get_state(obj) & LV_STATE_CHECKED;
+		//Serial.println(String("state vfo checked:") + String(bchecked));
+
 		if (obj == vfo1_button)
 		{
-			lv_btn_toggle(vfo2_button);
-			active_vfo = 0;
+			if (bchecked)
+			{
+				lv_obj_clear_state(vfo2_button, LV_STATE_CHECKED);
+				active_vfo = 0;
+			}
+			else
+			{
+				lv_obj_add_state(vfo2_button, LV_STATE_CHECKED);
+				active_vfo = 1;
+			}
 		}
 		if (obj == vfo2_button)
 		{
-			lv_btn_toggle(vfo1_button);
-			active_vfo = 1;
+			if (bchecked)
+			{
+				lv_obj_clear_state(vfo1_button, LV_STATE_CHECKED);
+				active_vfo = 1;
+			}
+			else
+			{
+				lv_obj_add_state(vfo1_button, LV_STATE_CHECKED);
+				active_vfo = 0;
+			}
 		}
 		long frq = switch_vfo(active_vfo);
-		setfrequencylabel(frq);
-		
+		setfrequencylabel(frq, get_vfo_frequency(1 - active_vfo));
 	}
 }
 
 void updateBottomStatus(lv_color_t color, String text, uint8_t sem) {
 	if (sem) xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
-	lv_obj_set_style_local_bg_color(bg_bottom, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, color);
+	lv_obj_set_style_local_bg_color(bg_top, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, color);
 	lv_label_set_text(label_status, text.c_str());
 	if (sem) xSemaphoreGive(GuiBinarySemaphore);
 }
@@ -706,26 +779,30 @@ void showWifilabel(bool show) {
 
 
 // this function is used to set the display frequency, it is not using semaphore because this is done from main loop
-void setfrequencylabel(long freq, uint8_t sem) {
+void setfrequencylabel(long freq, long freq2, uint8_t sem) {
 	if (sem) xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
 	char str[80];
 
 	sprintf(str, "%3d.%03d,%02d", freq / 1000000, (freq / 1000) % 1000, (freq / 10) % 100);
 	lv_label_set_text(vfo_frequency, str);
+	
+	sprintf(str, "%3d.%03d,%02d", freq2 / 1000000, (freq2 / 1000) % 1000, (freq2 / 10) % 100);
+	lv_label_set_text(vfo2_frequency, str);
 	if (sem) xSemaphoreGive(GuiBinarySemaphore);
 }
 
-static void band_event_handler(lv_obj_t* obj, lv_event_t event)
+static void event_band_button(lv_obj_t* obj, lv_event_t event)
 {
-	if (event == LV_EVENT_VALUE_CHANGED) {
+	if (event == LV_EVENT_PRESSED) {
 		char	buf[80];
 		long	frq;
 
-		lv_roller_get_selected_str(obj, buf, sizeof(buf));
+		strcpy(buf, lv_label_get_text(Band_btn_label));
 		buf[2] = '\0';
-		frq = band_select(buf, active_vfo);
-		setfrequencylabel(frq);
+		frq = band_select_next(buf, active_vfo);
+		setfrequencylabel(frq, get_vfo_frequency(1 - active_vfo));
 		set_vfo_frequency(frq, active_vfo);
+		lv_label_set_text(Band_btn_label, buf);
 	}
 }
 
@@ -738,22 +815,6 @@ void ToggleTX(uint8_t show) {
 	xSemaphoreGive(GuiBinarySemaphore);
 }
 
-
-static void lv_spinbox_increment_event_cb(lv_obj_t* btn, lv_event_t e)
-{
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
-		lv_spinbox_increment(bfo_spinbox);
-		lv_textarea_set_cursor_hidden(bfo_spinbox, false);
-	}
-}
-
-static void lv_spinbox_decrement_event_cb(lv_obj_t* btn, lv_event_t e)
-{
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
-		lv_spinbox_decrement(bfo_spinbox);
-		lv_textarea_set_cursor_hidden(bfo_spinbox, false);
-	}
-}
 
 static void event_button_save(lv_obj_t* btn, lv_event_t e)
 {
@@ -776,7 +837,7 @@ void ToggleSetup(bool show, uint8_t sem)
 	{
 		lv_obj_move_background(bg_middle2);
 		lv_indev_set_group(encoder_indev_t, vfo_group);
-		lv_group_focus_obj(Band_roller);
+		lv_group_focus_obj(lsb_button);
 	}
 	if (sem) xSemaphoreGive(GuiBinarySemaphore);
 }
@@ -784,7 +845,10 @@ void ToggleSetup(bool show, uint8_t sem)
 void BfoLabel(uint32_t num, uint8_t sem) {
 	if (sem)
 		xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
-	lv_spinbox_set_value(bfo_spinbox, num);
+	char str[32];
+	sprintf(str, "Bfo: %ld.%ld Khz", num / 10, num % 10);
+	lv_label_set_text(bfo_label, str);
+	//lv_spinbox_set_value(bfo_spinbox, num);
 	if (sem)
 		xSemaphoreGive(GuiBinarySemaphore);
 }
@@ -805,6 +869,22 @@ void Togglemode(int mode, uint8_t sem)
 	}
 	if (sem)
 		xSemaphoreGive(GuiBinarySemaphore);
+}
+
+void ToggleVfo(int active_vfo, uint8_t sem)
+{
+	if (sem) xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
+	if (active_vfo)
+	{
+		lv_obj_add_state(vfo2_button, LV_STATE_CHECKED);
+		lv_obj_clear_state(vfo1_button, LV_STATE_CHECKED);
+	}
+	else
+	{
+		lv_obj_add_state(vfo1_button, LV_STATE_CHECKED);
+		lv_obj_clear_state(vfo2_button, LV_STATE_CHECKED);
+	}
+	if (sem) xSemaphoreGive(GuiBinarySemaphore);
 }
 
 static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event)

@@ -569,12 +569,12 @@ R1_2
 $Comp
 L Device:R R10
 U 1 1 5D988F6A
-P 6050 5300
-F 0 "R10" H 6120 5346 50  0000 L CNN
-F 1 "10k" H 6120 5255 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5980 5300 50  0001 C CNN
-F 3 "~" H 6050 5300 50  0001 C CNN
-	1    6050 5300
+P 5950 5300
+F 0 "R10" H 6020 5346 50  0000 L CNN
+F 1 "10k" H 6020 5255 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 5880 5300 50  0001 C CNN
+F 3 "~" H 5950 5300 50  0001 C CNN
+	1    5950 5300
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -599,13 +599,13 @@ F 3 "~" H 5350 5300 50  0001 C CNN
 	1    5350 5300
 	1    0    0    -1  
 $EndComp
-Text GLabel 6050 5450 3    50   Input ~ 0
+Text GLabel 5950 5450 3    50   Input ~ 0
 R3_2
 Text GLabel 5350 5150 1    50   Input ~ 0
 R1_2a
 Text GLabel 5650 5150 1    50   Input ~ 0
 R2_2a
-Text GLabel 6050 5150 1    50   Input ~ 0
+Text GLabel 5950 5150 1    50   Input ~ 0
 R3_2a
 $Comp
 L power:GND #PWR07

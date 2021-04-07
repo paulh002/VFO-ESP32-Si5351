@@ -58,7 +58,8 @@ void start_vfo()
 	memcpy(current_frq2, R.current_frq2, sizeof(current_frq2));
 	f_band[0] = R.band[0];
 	f_band[1] = R.band[1];
-	active_vfo = R.active_vfo;
+	active_vfo = R.active_vfo ;
+	//Serial.println("active_vfo: " + String(active_vfo));
 	R.scale_watt = 50;
 
 	uint8_t band = f_band[active_vfo];
@@ -171,7 +172,7 @@ void mode_select(int new_band, int active_vfo)
 			// USB
 			uint32_t bfo_frq = USB_FREQUENCY;
 			f_mode[active_vfo] = MODE_USB;
-			BfoLabel(bfo_frq / 1000,0);
+			BfoLabel(bfo_frq / 100,0);
 			setbfo(bfo_frq);
 			CAT.SetMDB(MODE_USB+1);
 			CAT.SetMDA(MODE_USB+1);
@@ -181,7 +182,7 @@ void mode_select(int new_band, int active_vfo)
 			// LSB
 			uint32_t bfo_frq = LSB_FREQUENCY;
 			f_mode[active_vfo] = MODE_LSB;
-			BfoLabel(bfo_frq / 1000,0);
+			BfoLabel(bfo_frq / 100,0);
 			setbfo(bfo_frq);
 			CAT.SetMDB(MODE_LSB+1);
 			CAT.SetMDA(MODE_LSB+1);
@@ -212,6 +213,31 @@ long band_select(char *buf, int active_vfo)
 		return current_frq2[f_band[1]];
 }
 
+//translate gui string to frequency stored in current_freq variable
+long band_select_next(char* buf, int active_vfo)
+{
+	for (uint8_t i = 0; i <= bmax; i++)
+	{
+		if (bandswitch[i] == atol(buf))
+		{
+			long freq = 0L;
+			uint8_t band = i;
+
+			band++; if (band > bmax) band = 0;
+			next_band(1, band, freq);
+			mode_select(band, active_vfo);
+			sprintf(buf, "%ldm", bandswitch[band]);
+			if (active_vfo == 0)
+				return current_frq1[band];
+			else
+				return current_frq2[band];
+		}
+	}
+	if (active_vfo == 0)
+		return current_frq1[f_band[0]];
+	else
+		return current_frq2[f_band[1]];
+}
 
 void band_roller_str(char* str)
 {
@@ -230,21 +256,10 @@ void band_roller_str(char* str)
 		*ptr = '\0';
 }
 
-uint16_t get_band(void)
+uint16_t get_band(char *str)
 {
-	uint16_t ii = 0;
-
-	for (int i = 0; i < bmax; i++)
-	{
-		if (f_band[active_vfo] == i)
-			break;
-
-		if (bandconf[i] > 0)
-		{
-			ii++;
-		}
-	}
-	return (uint16_t)ii;
+	sprintf(str, "%ldm", bandswitch[f_band[active_vfo]]);
+	return (uint16_t)f_band[active_vfo];
 }
 
 void check_rx_tx()
@@ -282,8 +297,10 @@ void check_rx_tx()
 long  set_encoder_count_to_vfo_frequency(int count, int active_vfo)
 {
 	long frq;
-	uint8_t band = f_band[active_vfo];
+	uint8_t  band = f_band[active_vfo];
+	uint8_t  old_band;
 
+	old_band = band;
 	if (active_vfo == 0)
 		frq = current_frq1[band];
 	else
@@ -308,6 +325,12 @@ long  set_encoder_count_to_vfo_frequency(int count, int active_vfo)
 	else
 		CAT.SetFA(frq);
 	setvfo(frq, bfo_frq[active_vfo]);
+	if (old_band != band)
+	{
+		// switch band
+		switch_band(active_vfo);
+		//Serial.println("change band");
+	}
 	return frq;
 }
 
@@ -452,7 +475,7 @@ bool CheckCAT()
 		else
 			current_frq2[f_band[active_vfo]] = frq1;
 		setvfo(frq1, bfo_frq[active_vfo]);
-		setfrequencylabel(frq1,1);
+		setfrequencylabel(frq1, get_vfo_frequency(1 - active_vfo),1);
 	}
 }
 
@@ -463,7 +486,7 @@ void switch_mode(uint8_t mode, int active_vfo)
 		// LSB
 		uint32_t bfo_frq = LSB_FREQUENCY;
 		f_mode[active_vfo] = MODE_LSB;
-		BfoLabel(bfo_frq / 1000, 0);
+		BfoLabel(bfo_frq / 100, 0);
 		setbfo(bfo_frq);
 		CAT.SetMDB(MODE_LSB + 1);
 		CAT.SetMDA(MODE_LSB + 1);
@@ -473,7 +496,7 @@ void switch_mode(uint8_t mode, int active_vfo)
 		// USB
 		uint32_t bfo_frq = USB_FREQUENCY;
 		f_mode[active_vfo] = MODE_USB;
-		BfoLabel(bfo_frq / 1000, 0);
+		BfoLabel(bfo_frq / 100, 0);
 		setbfo(bfo_frq);
 		CAT.SetMDB(MODE_USB + 1);
 		CAT.SetMDA(MODE_USB + 1);

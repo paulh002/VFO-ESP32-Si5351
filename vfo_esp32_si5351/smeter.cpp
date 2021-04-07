@@ -33,14 +33,14 @@ CSmeter::CSmeter(lv_obj_t* parent, lv_align_t align ,lv_coord_t width, lv_coord_
 	lv_obj_align(s_canvas, parent, align, ofs_x, ofs_y);
 	lv_canvas_fill_bg(s_canvas, LV_COLOR_BLACK, LV_OPA_COVER);
 	
-	lv_point_t	point[2] = { { 0,26 }, { m_width - 19, 26 } };
+	lv_point_t	point[2] = { { 0,26 }, { m_width - 34, 26 } };
 	lv_canvas_draw_line(s_canvas, point, 2, &m_line_dsc);
 	
 	// lv_point_t	point[2] = { { 0, m_height - 2 }, { m_width - 19, m_height - 2 } };
 	
 	point[0].x = 0;
 	point[0].y = m_height - 2;
-	point[1].x = m_width - 19;
+	point[1].x = m_width - 34;//19;
 	point[1].y = m_height - 2;
 
 

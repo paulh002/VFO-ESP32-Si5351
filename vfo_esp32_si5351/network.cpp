@@ -39,7 +39,7 @@ using namespace ace_button;
 --------------------------------------------------------*/
 TrxNetwork vfo_network;
 
-const char* host = "esp32-amp";
+const char* host = "esp32-vfo";
 const char* vfo_host = "esp32-vfo-f8649";
 
 // Static  classes only used here
@@ -141,7 +141,7 @@ uint8_t TrxNetwork::begin(uint8_t type_network)
 	}
 	String ip = WiFi.localIP().toString();
 	sString = String("IP address: ") + ip;
-	updateBottomStatus(LV_COLOR_OLIVE, sString);
+	updateBottomStatus(LV_COLOR_NAVY, sString);
 	showWifilabel(false);
 	init_ota();
 
