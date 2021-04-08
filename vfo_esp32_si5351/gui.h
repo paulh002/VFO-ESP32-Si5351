@@ -51,6 +51,7 @@ static void init_cal_ad8307_gui(lv_obj_t* scr);
 static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event);
 static void lv_bfo_spinbox_event_cb(lv_obj_t* btn, lv_event_t e);
 static void event_band_button(lv_obj_t* obj, lv_event_t event);
+static void hide_buttons(bool show);
 
 extern lv_obj_t* ddlist;
 extern lv_obj_t* bg_top;

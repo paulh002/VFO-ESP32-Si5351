@@ -1,10 +1,9 @@
-# VFO-ESP32-Si5351 v2.41 beta
-update-- added Power and SWR gauges
-![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/swr_pwr.jpg)
-# VFO-ESP32-Si5351 v2.4 beta
-Version 2.33 source code is moved to the main branch, as I am now working on a new version of the GUI based on LVGL userinterface.
-This because the old userinterface became to complex to maintain if I want to add wifi management and other setup pages.
-The software is not yet complete, however enough to test.
+# VFO-ESP32-Si5351 v2.42 beta
+In this version the GUI is changed to support touch using simple buttons at the bottom of the screen.
+It took some time to have them also supported by using the rotary encoder.
+
+Todo:
+- Bfo adjustment, have to decide how to change the bfo frequency. An idea is to use the optical encoder for this. A button select bfo adjustment and use the optical encoder to change frequency.
 
 Changes:
 - TFT library has been changed to TFT_eSPI, download the library in Arduine IDE and config the User_Setup.h to your configuration or use the one in this repository for the PCB in this project
@@ -26,8 +25,17 @@ Notes
    -  ESP32Encoder https://github.com/madhephaestus/ESP32Encoder
    -  lvgl https://lvgl.io/
 
-
+New GUI with buttons at the bottom   
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/lvgl_gui.jpg)
+
+# VFO-ESP32-Si5351 v2.41 beta
+update-- added Power and SWR gauges
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/swr_pwr.jpg)
+# VFO-ESP32-Si5351 v2.4 beta
+Version 2.33 source code is moved to the main branch, as I am now working on a new version of the GUI based on LVGL userinterface.
+This because the old userinterface became to complex to maintain if I want to add wifi management and other setup pages.
+The software is not yet complete, however enough to test.
+
 Gui supported Wifi settings
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/wifi_gui.jpg)
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/wifi_gui2.jpg)
