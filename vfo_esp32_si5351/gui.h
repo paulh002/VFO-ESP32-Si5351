@@ -33,6 +33,7 @@ void ToggleSetup(bool show, uint8_t sem = 1);
 void BfoLabel(uint32_t num, uint8_t sem);
 void Togglemode(int mode, uint8_t sem = 1);
 void ToggleVfo(int active_vfo, uint8_t sem = 1);
+void si_setcalfrequency(long freq);
 
 static void mode_button_eh(lv_obj_t* obj, lv_event_t event);
 static void popupPW();
@@ -52,6 +53,12 @@ static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event);
 static void lv_bfo_spinbox_event_cb(lv_obj_t* btn, lv_event_t e);
 static void event_band_button(lv_obj_t* obj, lv_event_t event);
 static void hide_buttons(bool show);
+static void event_button_setting_cb(lv_obj_t* obj, lv_event_t event);
+static void event_button_wifi_cb(lv_obj_t* obj, lv_event_t event);
+static void event_button_si5351_cb(lv_obj_t* obj, lv_event_t event);
+static void event_button_reset_cb(lv_obj_t* obj, lv_event_t event);
+static void event_button_ad8307_cb(lv_obj_t* obj, lv_event_t event);
+static void hide_setting(bool hide);
 
 extern lv_obj_t* ddlist;
 extern lv_obj_t* bg_top;
@@ -71,4 +78,5 @@ extern lv_group_t* vfo_group;
 
 extern int active_vfo;
 #endif
+
 

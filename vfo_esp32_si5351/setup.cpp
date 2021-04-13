@@ -6,6 +6,7 @@
 #include <ESP32Encoder.h>
 #include <AceButton.h>
 using namespace ace_button;
+
 #include "gui.h"
 #include "setup.h"
 #include "network.h"
@@ -14,8 +15,11 @@ using namespace ace_button;
 #include "FT891_CAT.h"
 #include "credentials.h"
 
+
+
 SemaphoreHandle_t GuiBinarySemaphore = NULL;
 SemaphoreHandle_t swrBinarySemaphore = NULL;
+
 
 // the setup function runs once when you press reset or power the board
 void setup() {

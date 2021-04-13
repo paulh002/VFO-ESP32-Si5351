@@ -15,8 +15,8 @@
 #include "_EEPROMAnything.h"
 #include "measurement.h"
 
-extern	var_t	R;
-extern	SemaphoreHandle_t GuiBinarySemaphore;
+extern	var_t				R;
+extern	SemaphoreHandle_t	GuiBinarySemaphore;
 
 void SaveEEPROM();
 void LoadEEPROM();

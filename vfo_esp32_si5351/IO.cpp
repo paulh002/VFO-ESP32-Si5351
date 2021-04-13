@@ -180,9 +180,6 @@ void start_cal()
 
 	updateBottomStatus(LV_COLOR_RED, "Calibration frequency 10 Mhz",0);
 
-	lv_spinbox_set_value(si_spinbox,  R.correction_si5351_no1);
-	lv_spinbox_set_value(si_spinbox2, R.correction_si5351_no2);
-
 	setbfo(frq);
 	setvfo(frq,0);
 }
@@ -199,6 +196,6 @@ void cal_bfo()
 {
 	long frq = CAL_FREQ;
 
-	si5351_bfo.set_correction(R.correction_si5351_no1, SI5351_PLL_INPUT_XO);
+	si5351_bfo.set_correction(R.correction_si5351_no2, SI5351_PLL_INPUT_XO);
 	si5351_bfo.set_freq(frq * SI5351_FREQ_MULT, CLK_VFO_RX);
 }

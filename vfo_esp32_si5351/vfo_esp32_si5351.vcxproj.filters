@@ -56,9 +56,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FreeSansOblique.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="FT891_CAT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -84,6 +81,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="wifigui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeSansOblique32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeSansOblique42.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

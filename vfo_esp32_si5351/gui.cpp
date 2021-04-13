@@ -18,9 +18,7 @@ using namespace ace_button;
 #include "smeter.h"
 
 #define LVGL_TICK_PERIOD 60
-#define ROTARY_A      14      
-#define ROTARY_B      19
-#define ROTARY_PRESS  26
+
 
 LV_FONT_DECLARE(FreeSansOblique42);
 LV_FONT_DECLARE(FreeSansOblique32);
@@ -30,15 +28,18 @@ LV_FONT_DECLARE(FreeSansOblique32);
 --------------------------------------------------------*/
 #define PULSE_INPUT_PIN 34  // Rotaty Encoder A
 #define PULSE_CTRL_PIN  35  // Rotaty Encoder B
+#define ROTARY_A      14      
+#define ROTARY_B      19
+#define ROTARY_PRESS  26
 
 ESP32Encoder    Enc_vfo;
+AceButton		rotary_button(ROTARY_PRESS);
 
 /*-------------------------------------------------------
    Rotary hardware connection (used for bandswitching, and mode switching)
 --------------------------------------------------------*/
 static	ESP32Encoder	GuiEncoder;
-static	volatile int	enc_button_state = LV_INDEV_STATE_REL;
-AceButton				rotary_button(ROTARY_PRESS);
+volatile int			enc_button_state = LV_INDEV_STATE_REL;
 void					rotary_button_eventhandler(AceButton*, uint8_t, uint8_t);
 
 int active_vfo = 0;  // holds which vfo is active selected using radio buttons
@@ -81,8 +82,6 @@ lv_obj_t* bfo_label;
 lv_obj_t* s_canvas;
 lv_obj_t* bg_middle2;
 lv_obj_t* bg_middle3;
-lv_obj_t* si_spinbox;
-lv_obj_t* si_spinbox2;
 lv_obj_t* Swr_gauge;
 lv_obj_t* pwr_gauge;
 lv_obj_t* swr_vlabel;
@@ -100,6 +99,20 @@ lv_obj_t* label_cal;
 lv_obj_t* watt_cal;
 lv_obj_t* btn_matrix;
 
+lv_obj_t* setting_button;
+lv_obj_t* wifi1_button;
+lv_obj_t* si5351_button;
+lv_obj_t* ad8307_button;
+lv_obj_t* reset_button;
+
+lv_obj_t* si_vfo_button;
+lv_obj_t* si_bfo_button;
+lv_obj_t* si_save_button;
+lv_obj_t* si_frequency;
+lv_obj_t* si_unit;
+lv_obj_t* si_label1;
+lv_obj_t* si_cancel_button;
+
 lv_group_t* vfo_group;
 lv_group_t* si_5351_group;
 lv_group_t* setup_group;
@@ -110,6 +123,7 @@ CSmeter* smeter;
 
 static lv_color_t* cbuf;
 static lv_style_t cal_led_style;
+static lv_style_t style_btn;
 
 // VFO States
 // The VFO can be in different states:
@@ -118,6 +132,9 @@ static lv_style_t cal_led_style;
 // active_vfo determines if VFO 0 or VFO 1 is active
 
 static bool f_cal_ad8307 = false;
+static bool f_cal_si5351 = false;
+static bool f_cal_si5351_vfo = true;
+static bool show_setting = false;
 
 #if USE_LV_LOG != 0
 /* Serial debugging */
@@ -129,7 +146,25 @@ void my_print(lv_log_level_t level, const char* file, uint32_t line, const char*
 }
 #endif
 
+static void rotary_button_eventhandler(AceButton*, uint8_t eventType, uint8_t buttonState)
+{
+	switch (eventType) {
+	case AceButton::kEventLongPressed:
+		ToggleSetup(true);
+		//enc_button_state = LV_INDEV_STATE_REL;
+		Serial.println("Long press");
+		break;
+	case AceButton::kEventPressed:
+		enc_button_state = LV_INDEV_STATE_PR;
+		Serial.println("Pressed");
+		break;
 
+	case AceButton::kEventReleased:
+		enc_button_state = LV_INDEV_STATE_REL;
+		Serial.println("Released");
+		break;
+	}
+}
 
 bool read_encoder(lv_indev_drv_t* indev, lv_indev_data_t* data)
 {
@@ -158,8 +193,8 @@ void guisetup() {
 	xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
 	pinMode(ROTARY_PRESS, INPUT);
 	rotary_button.setEventHandler(rotary_button_eventhandler);
-	rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureLongPress);
-	rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureSuppressAfterLongPress);
+	//rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureLongPress);
+	//rotary_button.getButtonConfig()->setFeature(ButtonConfig::kFeatureSuppressAfterLongPress);
 	ESP32Encoder::useInternalWeakPullResistors = NONE;
 	GuiEncoder.attachHalfQuad(ROTARY_B, ROTARY_A, 1024);
 	Enc_vfo.attachHalfQuad(PULSE_INPUT_PIN, PULSE_CTRL_PIN);
@@ -243,7 +278,6 @@ void guiTask(void* arg) {
 	vfo_group = lv_group_create();
 	lv_indev_set_group(encoder_indev_t, vfo_group);
 	
-	static lv_style_t style_btn;
 	lv_style_init(&style_btn);
 
 	lv_style_set_radius(&style_btn, LV_STATE_DEFAULT, 10);
@@ -316,13 +350,59 @@ void guiTask(void* arg) {
 	Band_btn_label = lv_label_create(band_button, NULL);
 	lv_label_set_text(Band_btn_label, "80m");
 
+	setting_button = lv_btn_create(bg_middle, NULL);
+	lv_obj_add_style(setting_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(setting_button, event_button_setting_cb);
+	lv_btn_set_checkable(setting_button, true);
+	lv_obj_align(setting_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 5 * bottombutton_width1, 0);
+	lv_obj_set_size(setting_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(setting_button, NULL);
+	lv_label_set_text(label, LV_SYMBOL_SETTINGS);
+
+	wifi1_button = lv_btn_create(bg_middle, NULL);
+	lv_obj_add_style(wifi1_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(wifi1_button, event_button_wifi_cb);
+	lv_obj_align(wifi1_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 0, -1*(bottomHeight+2));
+	lv_obj_set_size(wifi1_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(wifi1_button, NULL);
+	lv_label_set_text(label, LV_SYMBOL_WIFI);
+	lv_obj_set_hidden(wifi1_button, true);
+	
+	si5351_button = lv_btn_create(bg_middle, NULL);
+	lv_obj_add_style(si5351_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(si5351_button, event_button_si5351_cb);
+	lv_obj_align(si5351_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, bottombutton_width1, -1 * (bottomHeight + 2));
+	lv_obj_set_size(si5351_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(si5351_button, NULL);
+	lv_label_set_text(label, "5351");
+	lv_obj_set_hidden(si5351_button, true);
+
+	ad8307_button = lv_btn_create(bg_middle, NULL);
+	lv_obj_add_style(ad8307_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(ad8307_button, event_button_ad8307_cb);
+	lv_obj_align(ad8307_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 2 * bottombutton_width1, -1 * (bottomHeight + 2));
+	lv_obj_set_size(ad8307_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(ad8307_button, NULL);
+	lv_label_set_text(label, "8307");
+	lv_obj_set_hidden(ad8307_button, true);
+	
+	reset_button = lv_btn_create(bg_middle, NULL);
+	lv_obj_add_style(reset_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(reset_button, event_button_reset_cb);
+	lv_obj_align(reset_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 3 *  bottombutton_width1, -1 * (bottomHeight + 2));
+	lv_obj_set_size(reset_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(reset_button, NULL);
+	lv_label_set_text(label, "Reset");
+	lv_obj_set_hidden(reset_button, true);
+	
 	save_button = lv_btn_create(bg_middle, NULL);
 	lv_obj_add_style(save_button, LV_BTN_PART_MAIN, &style_btn);
 	lv_obj_set_event_cb(save_button, event_button_save);
-	lv_obj_align(save_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 5 * bottombutton_width1, 0);
+	lv_obj_align(save_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 5 * bottombutton_width1, -1 * (bottomHeight + 2));
 	lv_obj_set_size(save_button, bottombutton_width, bottomHeight);
 	label = lv_label_create(save_button, NULL);
 	lv_label_set_text(label, "Save");
+	lv_obj_set_hidden(save_button, true);
 
 	static lv_style_t text_style;
 	lv_style_init(&text_style);
@@ -405,6 +485,12 @@ void guiTask(void* arg) {
 	lv_group_add_obj(vfo_group, vfo1_button);
 	lv_group_add_obj(vfo_group, vfo2_button);
 	lv_group_add_obj(vfo_group, band_button);
+	lv_group_add_obj(vfo_group, setting_button);
+
+	lv_group_add_obj(vfo_group, wifi1_button);
+	lv_group_add_obj(vfo_group, si5351_button);
+	lv_group_add_obj(vfo_group, ad8307_button);
+	lv_group_add_obj(vfo_group, reset_button);
 	lv_group_add_obj(vfo_group, save_button);
 
 	// TX objects shown when VFO is in TX mode
@@ -497,29 +583,34 @@ void guiTask(void* arg) {
 		xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
 		lv_task_handler();
 		xSemaphoreGive(GuiBinarySemaphore);
-		int count = Enc_vfo.getCount();
-		if (count != 0)
+		
+		if (f_cal_si5351 == false)
 		{
-/*
-* Translate the encoder movement to a new frequency
-* If the band is changed also update the band roller
-*/
-			char str[32];
-			long frq = set_encoder_count_to_vfo_frequency(count, active_vfo);
-			Enc_vfo.clearCount();
-			setfrequencylabel(frq, get_vfo_frequency(1 - active_vfo));
-			uint16_t i = get_band(str);
-			lv_label_set_text(Band_btn_label, str);
+			int count = Enc_vfo.getCount();
+			if (count != 0)
+			{
+				/*
+				* Translate the encoder movement to a new frequency
+				* If the band is changed also update the band roller
+				*/
+				char str[32];
+				long frq = set_encoder_count_to_vfo_frequency(count, active_vfo);
+				Enc_vfo.clearCount();
+				setfrequencylabel(frq, get_vfo_frequency(1 - active_vfo));
+				uint16_t i = get_band(str);
+				lv_label_set_text(Band_btn_label, str);
+			}
 		}
-/*
+
+/*		
 * Process rotary press button messages
 */
-		rotary_button.check();
 		smeter->Draw(get_smeter());
-		
+		rotary_button.check();
+
 		static volatile int lastPowerEncoding;
 		static	bool	hide_rx = true;
-		if ((f_rxtx) && (f_cal_ad8307 == false))
+		if ((f_rxtx) && (f_cal_ad8307 == false) && (f_cal_si5351 == false))
 		{
 			if (hide_rx == false)
 			{
@@ -560,7 +651,9 @@ void guiTask(void* arg) {
 				smeter->hide(false);
 				lv_obj_set_hidden(Swr_gauge, true);
 				lv_obj_set_hidden(pwr_gauge, true);
-				hide_buttons(false);				
+				hide_buttons(false);	
+				hide_setting(true);
+				lv_obj_clear_state(setting_button, LV_STATE_CHECKED);
 			}
 		}
 		if (f_cal_ad8307)
@@ -590,27 +683,55 @@ void guiTask(void* arg) {
 			rev = analogRead(REV_METER);
 			updateBottomStatus(color_t, String(sStr + " Fwd: " + String(adc_ref * ((double)fwd / 4096.0)) + "V Rev: " + String(adc_ref * ((double)rev / 4096.0))).c_str(),0);
 		}
+
+		
+		// Calibrate si5351
+		
+		if (f_cal_si5351 == true)
+		{
+			int count = Enc_vfo.getCount();
+			if (count != 0)
+			{
+				/*
+				* Translate the encoder movement to a new frequency
+				* If the band is changed also update the band roller
+				*/
+				char str[32];
+				long freq = 0L;
+				Enc_vfo.clearCount();
+				if (f_cal_si5351_vfo)
+				{
+					R.correction_si5351_no1 += count;
+					if (R.correction_si5351_no1 < -100000L) R.correction_si5351_no1 = -100000L;
+					if (R.correction_si5351_no1 > 100000L) R.correction_si5351_no1 = 0;
+					freq = R.correction_si5351_no1;
+					cal_vfo();
+				}
+				else
+				{
+					R.correction_si5351_no2 += count; 
+					if (R.correction_si5351_no2 < -100000L) R.correction_si5351_no2 = -100000L;
+					if (R.correction_si5351_no2 > 100000L) R.correction_si5351_no2 = 0;
+					freq = R.correction_si5351_no2;
+					cal_bfo();
+				}
+				si_setcalfrequency(freq);
+			}
+		}		
 		vTaskDelay(1);
 	}
 }
 
-static void rotary_button_eventhandler(AceButton*, uint8_t eventType, uint8_t buttonState)
+void si_setcalfrequency(long freq)
 {
-	switch (eventType) {
-	case AceButton::kEventLongPressed:
-		ToggleSetup(true);
-		enc_button_state = LV_INDEV_STATE_REL;
-		break;
-	case AceButton::kEventPressed:
-		enc_button_state = LV_INDEV_STATE_PR;
-		break;
+	char	str[80];
 
-	case AceButton::kEventReleased:
-		enc_button_state = LV_INDEV_STATE_REL;
-		break;
-	}
+	if (freq < 0)
+		sprintf(str, "-%ld,%03ld", abs(freq) / 1000L, (abs(freq)) % 1000L);
+	else
+		sprintf(str, "%ld,%03ld", abs(freq) / 1000L, (abs(freq)) % 1000L);
+	lv_label_set_text(si_frequency, str);
 }
-
 
 // Callbacks
 
@@ -681,7 +802,7 @@ bool my_touchpad_read(lv_indev_drv_t* indev_driver, lv_indev_data_t* data)
 
 static void mode_button_eh(lv_obj_t* obj, lv_event_t event)
 {
- if (event == LV_EVENT_PRESSED)
+	if (event == LV_EVENT_PRESSED)
 	{	
 		bool bchecked = lv_btn_get_state(obj) & LV_STATE_CHECKED;
 		//Serial.println(String("state checked:") + String(bchecked));
@@ -715,19 +836,80 @@ static void mode_button_eh(lv_obj_t* obj, lv_event_t event)
 	}
 }
 
-static void hide_buttons(bool show)
+static void hide_buttons(bool hide)
 {
-	lv_obj_set_hidden(usb_button, show);
-	lv_obj_set_hidden(lsb_button, show);
-	lv_obj_set_hidden(vfo1_button, show);
-	lv_obj_set_hidden(vfo2_button, show);
-	lv_obj_set_hidden(band_button, show);
-	lv_obj_set_hidden(save_button, show);
-	lv_obj_set_hidden(bfo_label, show);
-	lv_obj_set_hidden(vfo2_frequency, show);
-	lv_obj_set_hidden(vfo2_unit, show);
+	lv_obj_set_hidden(usb_button, hide);
+	lv_obj_set_hidden(lsb_button, hide);
+	lv_obj_set_hidden(vfo1_button, hide);
+	lv_obj_set_hidden(vfo2_button, hide);
+	lv_obj_set_hidden(band_button, hide);
+	lv_obj_set_hidden(setting_button, hide);
+	lv_obj_set_hidden(bfo_label, hide);
+	lv_obj_set_hidden(vfo2_frequency, hide);
+	lv_obj_set_hidden(vfo2_unit, hide);
 }
 
+static void hide_setting(bool hide)
+{
+	smeter->hide(!hide);
+	lv_obj_set_hidden(save_button, hide);
+	lv_obj_set_hidden(wifi1_button, hide);
+	lv_obj_set_hidden(si5351_button, hide);
+	lv_obj_set_hidden(ad8307_button, hide);
+	lv_obj_set_hidden(reset_button, hide);
+	show_setting = !hide;
+}
+
+
+
+static void event_button_setting_cb(lv_obj_t* obj, lv_event_t event)
+{
+	
+	if (event == LV_EVENT_VALUE_CHANGED) {
+		
+		hide_setting(show_setting);
+	}
+}
+
+static void event_button_wifi_cb(lv_obj_t* obj, lv_event_t event)
+{
+	if (event == LV_EVENT_PRESSED) {
+		show_wifi_gui(true);
+	}
+}
+
+static void event_button_si5351_cb(lv_obj_t* obj, lv_event_t event)
+{
+	if (event == LV_EVENT_PRESSED) {
+		vTaskDelay(100);
+		f_cal_si5351 = true;
+		lv_obj_move_foreground(bg_middle3);
+		lv_indev_set_group(encoder_indev_t, si_5351_group);
+		si_setcalfrequency(R.correction_si5351_no1);
+		lv_obj_add_state(si_vfo_button, LV_STATE_CHECKED);
+		start_cal();
+	}
+}
+
+static void event_button_reset_cb(lv_obj_t* obj, lv_event_t event)
+{
+	if (event == LV_EVENT_PRESSED) {
+		memset(&R, 0, sizeof(R));
+		init_vfo();
+		SaveEEPROM();
+		ESP.restart();
+	}
+}
+
+static void event_button_ad8307_cb(lv_obj_t* obj, lv_event_t event)
+{
+	if (event == LV_EVENT_PRESSED) {
+		lv_obj_move_foreground(bg_calgui);
+		lv_obj_move_foreground(bg_top_cal);
+		lv_indev_set_group(encoder_indev_t, cal_group);
+		start_ad8307_cal();
+	}
+}
 
 static void mode_button_vfo(lv_obj_t* obj, lv_event_t event)
 {
@@ -905,8 +1087,12 @@ static void gui_setup_event_handler(lv_obj_t* obj, lv_event_t event)
 			break;
 		case 1:
 			//Si5351 calibration
+			vTaskDelay(100);
+			f_cal_si5351 = true;
 			lv_obj_move_foreground(bg_middle3);
 			lv_indev_set_group(encoder_indev_t, si_5351_group);
+			si_setcalfrequency(R.correction_si5351_no1);
+			lv_obj_add_state(si_vfo_button, LV_STATE_CHECKED); 
 			start_cal();
 			break;
 		case 2:
@@ -935,7 +1121,7 @@ static void gui_setup(lv_obj_t* scr)
 	lv_obj_set_style_local_bg_opa(bg_middle2, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
 	lv_obj_set_style_local_bg_color(bg_middle2, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_obj_set_pos(bg_middle2, 0, topHeight);
-	lv_obj_set_size(bg_middle2, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
+	lv_obj_set_size(bg_middle2, LV_HOR_RES, screenHeight - topHeight);
 	lv_obj_move_background(bg_middle2);
 
 	btn_matrix = lv_btnmatrix_create(bg_middle2, NULL);
@@ -951,59 +1137,76 @@ static void gui_setup(lv_obj_t* scr)
 	lv_obj_align(pwd_label1, btn_matrix, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
 }
 
-static void lv_spinbox_increment_event_si(lv_obj_t* btn, lv_event_t e)
+
+static void si_vfo_button_cb(lv_obj_t* obj, lv_event_t e)
 {
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
-		lv_spinbox_increment(si_spinbox);
-		R.correction_si5351_no1 = lv_spinbox_get_value(si_spinbox);
-		cal_vfo();
+	if (e == LV_EVENT_PRESSED )
+	{
+		bool bchecked = lv_btn_get_state(obj) & LV_STATE_CHECKED;
+		if (obj == si_vfo_button)
+		{
+			if (bchecked)
+			{
+				lv_obj_clear_state(si_bfo_button, LV_STATE_CHECKED);
+				f_cal_si5351_vfo = true;
+				lv_label_set_text(si_label1, "Calibrating si5351 VFO");
+				si_setcalfrequency(R.correction_si5351_no1);
+			}
+			else
+			{
+				lv_obj_add_state(si_bfo_button, LV_STATE_CHECKED);
+				f_cal_si5351_vfo = false;
+				lv_label_set_text(si_label1, "Calibrating si5351 BFO");
+				si_setcalfrequency(R.correction_si5351_no2);
+			}
+		}
 	}
 }
 
-static void lv_spinbox_decrement_event_si(lv_obj_t* btn, lv_event_t e)
+static void si_bfo_button_cb(lv_obj_t* obj, lv_event_t e)
 {
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
-		lv_spinbox_decrement(si_spinbox);
-		R.correction_si5351_no1 = lv_spinbox_get_value(si_spinbox);
-		cal_vfo();
+	if (e == LV_EVENT_PRESSED) 
+	{
+		bool bchecked = lv_btn_get_state(obj) & LV_STATE_CHECKED;
+		if (obj == si_bfo_button)
+		{
+			if (bchecked)
+			{
+				lv_obj_clear_state(si_vfo_button, LV_STATE_CHECKED);
+				f_cal_si5351_vfo = false;
+				lv_label_set_text(si_label1, "Calibrating si5351 BFO");
+				si_setcalfrequency(R.correction_si5351_no2);
+			}
+			else
+			{
+				lv_obj_add_state(si_vfo_button, LV_STATE_CHECKED);
+				f_cal_si5351_vfo = true;
+				lv_label_set_text(si_label1, "Calibrating si5351 VFO");
+				si_setcalfrequency(R.correction_si5351_no1);
+			}
+		}
 	}
 }
 
-static void lv_spinbox_increment_event_si2(lv_obj_t* btn, lv_event_t e)
+static void si_save_button_cb(lv_obj_t* btn, lv_event_t e)
 {
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
-		lv_spinbox_increment(si_spinbox2);
-		R.correction_si5351_no2 = lv_spinbox_get_value(si_spinbox);
-		cal_bfo();
-	}
-}
-
-static void lv_spinbox_decrement_event_si2(lv_obj_t* btn, lv_event_t e)
-{
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
-		lv_spinbox_decrement(si_spinbox2);
-		R.correction_si5351_no2 = lv_spinbox_get_value(si_spinbox);
-		cal_bfo();
-	}
-}
-
-static void lv_spinbox_save_event_si(lv_obj_t* btn, lv_event_t e)
-{
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+	if (e == LV_EVENT_PRESSED) {
 		SaveEEPROM();
 		updateBottomStatus(LV_COLOR_GREEN, "Si5351 calibration saved", 0);
 		lv_obj_move_foreground(bg_middle);
 		lv_obj_move_background(bg_middle3);
 		lv_indev_set_group(encoder_indev_t, vfo_group);
+		f_cal_si5351 = false;
 	}
 }
 
-static void lv_spinbox_cancel_event_si(lv_obj_t* btn, lv_event_t e)
+static void si_cancel_button_cb(lv_obj_t* btn, lv_event_t e)
 {
-	if (e == LV_EVENT_SHORT_CLICKED || e == LV_EVENT_LONG_PRESSED_REPEAT) {
+	if (e == LV_EVENT_PRESSED) {
 		lv_obj_move_foreground(bg_middle);
 		lv_obj_move_background(bg_middle3);
 		lv_indev_set_group(encoder_indev_t, vfo_group);
+		f_cal_si5351 = false;
 	}
 }
 
@@ -1014,83 +1217,81 @@ static void gui_si5351(lv_obj_t* scr)
 	lv_obj_set_style_local_bg_opa(bg_middle3, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
 	lv_obj_set_style_local_bg_color(bg_middle3, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_obj_set_pos(bg_middle3, 0, topHeight);
-	lv_obj_set_size(bg_middle3, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
+	lv_obj_set_size(bg_middle3, LV_HOR_RES, screenHeight - topHeight);
 	lv_obj_move_background(bg_middle3);
 
-	si_5351_group = lv_group_create();
+	si_vfo_button = lv_btn_create(bg_middle3, NULL);
+	lv_obj_add_style(si_vfo_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(si_vfo_button, si_vfo_button_cb);
+	lv_obj_align(si_vfo_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
+	lv_btn_set_checkable(si_vfo_button, true);
+	lv_obj_set_size(si_vfo_button, bottombutton_width, bottomHeight);
+	lv_obj_t* label = lv_label_create(si_vfo_button, NULL);
+	lv_label_set_text(label, "VFO");
+	lv_obj_add_state(si_vfo_button, LV_STATE_CHECKED);
+
+	si_bfo_button = lv_btn_create(bg_middle3, NULL);
+	lv_obj_add_style(si_bfo_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(si_bfo_button, si_bfo_button_cb);
+	lv_obj_align(si_bfo_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, bottombutton_width1, 0);
+	lv_btn_set_checkable(si_bfo_button, true);
+	lv_btn_toggle(vfo1_button); 
+	lv_obj_set_size(si_bfo_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(si_bfo_button, NULL);
+	lv_label_set_text(label, "BFO");
+
+	si_save_button = lv_btn_create(bg_middle3, NULL);
+	lv_obj_add_style(si_save_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(si_save_button, si_save_button_cb);
+	lv_obj_align(si_save_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 2 * bottombutton_width1, 0);
+	lv_obj_set_size(si_save_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(si_save_button, NULL);
+	lv_label_set_text(label, "Save");
+
+	si_cancel_button = lv_btn_create(bg_middle3, NULL);
+	lv_obj_add_style(si_cancel_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(si_cancel_button, si_cancel_button_cb);
+	lv_obj_align(si_cancel_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 3 * bottombutton_width1, 0);
+	lv_obj_set_size(si_cancel_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(si_cancel_button, NULL);
+	lv_label_set_text(label, "Cancel");
+
+	static lv_style_t text_style;
+	lv_style_init(&text_style);
+
+	/*Set a background color and a radius*/
+	lv_style_set_radius(&text_style, LV_STATE_DEFAULT, 5);
+	lv_style_set_bg_opa(&text_style, LV_STATE_DEFAULT, LV_OPA_COVER);
+	lv_style_set_bg_color(&text_style, LV_STATE_DEFAULT, LV_COLOR_BLACK);
+	lv_style_set_value_align(&text_style, LV_STATE_DEFAULT, LV_ALIGN_CENTER);
+	lv_style_set_text_font(&text_style, LV_STATE_DEFAULT, &FreeSansOblique42);
+
+	si_frequency = lv_label_create(bg_middle3, NULL);
+	lv_label_set_long_mode(si_frequency, LV_LABEL_LONG_CROP);
+	lv_obj_add_style(si_frequency, LV_OBJ_PART_MAIN, &text_style);
+	lv_obj_set_width(si_frequency, LV_HOR_RES - 20);
+	lv_label_set_text(si_frequency, "");
+	lv_obj_set_height(si_frequency, 40);
+	lv_obj_align(si_frequency, bg_middle, LV_ALIGN_CENTER, -30, -84);
+	lv_label_set_align(si_frequency, LV_LABEL_ALIGN_CENTER);
+
+	si_unit = lv_label_create(bg_middle3, NULL);
+	lv_obj_add_style(si_unit, LV_OBJ_PART_MAIN, &text_style);
+	lv_label_set_text(si_unit, "Khz");
+	lv_obj_set_height(si_unit, 40);
+	lv_obj_align(si_unit, bg_middle, LV_ALIGN_CENTER, 110, -87);
+	lv_label_set_align(si_unit, LV_LABEL_ALIGN_CENTER);
+
+
+	si_label1 = lv_label_create(bg_middle3, NULL);
+	lv_label_set_text(si_label1, "Calibrating si5351 VFO");
+	lv_obj_align(si_label1, NULL, LV_ALIGN_CENTER, 0, 0);
+
+	si_5351_group = lv_group_create(); 
+	lv_group_add_obj(si_5351_group, si_vfo_button);
+	lv_group_add_obj(si_5351_group, si_bfo_button);
+	lv_group_add_obj(si_5351_group, si_save_button);
 	
-	si_spinbox = lv_spinbox_create(bg_middle3, NULL);
-	lv_spinbox_set_range(si_spinbox, -150000, 150000);
-	lv_spinbox_set_digit_format(si_spinbox, 7, 0);
-	lv_spinbox_step_prev(si_spinbox);
-	lv_obj_set_width(si_spinbox, 120);
-	lv_obj_align(si_spinbox, NULL, LV_ALIGN_CENTER, 0, -50);
-	lv_spinbox_set_value(si_spinbox, 0);
-	
-	lv_obj_t* pwd_label1 = lv_label_create(bg_middle3, NULL);
-	lv_label_set_text(pwd_label1, "Vfo Si5351");
-	lv_obj_align(pwd_label1, si_spinbox, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
-
-	lv_coord_t h = lv_obj_get_height(si_spinbox);
-	lv_obj_t* btn_plus1 = lv_btn_create(bg_middle3, NULL);
-	lv_obj_set_size(btn_plus1, h, h);
-	lv_obj_align(btn_plus1, si_spinbox, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-	lv_theme_apply(btn_plus1, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn_plus1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
-	lv_obj_set_event_cb(btn_plus1, lv_spinbox_increment_event_si);
-
-	lv_obj_t* btn_min1= lv_btn_create(bg_middle3, btn_plus1);
-	lv_obj_align(btn_min1, si_spinbox, LV_ALIGN_OUT_LEFT_MID, -5, 0);
-	lv_obj_set_event_cb(btn_min1, lv_spinbox_decrement_event_si);
-	lv_obj_set_style_local_value_str(btn_min1, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
-
-	lv_group_add_obj(si_5351_group, btn_min1);
-	lv_group_add_obj(si_5351_group, si_spinbox);
-	lv_group_add_obj(si_5351_group, btn_plus1);
-
-	si_spinbox2 = lv_spinbox_create(bg_middle3, NULL);
-	lv_spinbox_set_range(si_spinbox2, -150000, 150000);
-	lv_spinbox_set_digit_format(si_spinbox2, 7, 0);
-	lv_spinbox_step_prev(si_spinbox2);
-	lv_obj_set_width(si_spinbox2, 120);
-	lv_obj_align(si_spinbox2, NULL, LV_ALIGN_CENTER, 0, +20);
-	lv_spinbox_set_value(si_spinbox2, 0);
-
-	pwd_label1 = lv_label_create(bg_middle3, NULL);
-	lv_label_set_text(pwd_label1, "Bfo Si5351");
-	lv_obj_align(pwd_label1, si_spinbox2, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
-
-	h = lv_obj_get_height(si_spinbox2);
-	lv_obj_t* btn_plus2 = lv_btn_create(bg_middle3, NULL);
-	lv_obj_set_size(btn_plus2, h, h);
-	lv_obj_align(btn_plus2, si_spinbox2, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-	lv_theme_apply(btn_plus2, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn_plus2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_PLUS);
-	lv_obj_set_event_cb(btn_plus2, lv_spinbox_increment_event_si2);
-
-	lv_obj_t* btn_min2 = lv_btn_create(bg_middle3, btn_plus2);
-	lv_obj_align(btn_min2, si_spinbox2, LV_ALIGN_OUT_LEFT_MID, -5, 0);
-	lv_obj_set_event_cb(btn_min2, lv_spinbox_decrement_event_si2);
-	lv_obj_set_style_local_value_str(btn_min2, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, LV_SYMBOL_MINUS);
-
-	lv_group_add_obj(si_5351_group, btn_min2);
-	lv_group_add_obj(si_5351_group, si_spinbox2);
-	lv_group_add_obj(si_5351_group, btn_plus2);
-
-	lv_obj_t* btn_save = lv_btn_create(bg_middle3, NULL);
-	lv_obj_align(btn_save, NULL, LV_ALIGN_CENTER, -70, 70);
-	lv_theme_apply(btn_save, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn_save, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Save");
-	lv_obj_set_event_cb(btn_save, lv_spinbox_save_event_si);
-
-	lv_obj_t* btn_cancel = lv_btn_create(bg_middle3, NULL);
-	lv_obj_align(btn_cancel, NULL, LV_ALIGN_CENTER, 70, 70);
-	lv_theme_apply(btn_cancel, LV_THEME_SPINBOX_BTN);
-	lv_obj_set_style_local_value_str(btn_cancel, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Cancel");
-	lv_obj_set_event_cb(btn_cancel, lv_spinbox_cancel_event_si);
-
-	lv_group_add_obj(si_5351_group, btn_save); 
-	lv_group_add_obj(si_5351_group, btn_cancel);
 }
 
 static void mode_button_cal_cancel(lv_obj_t* obj, lv_event_t event)
@@ -1248,7 +1449,7 @@ static void init_cal_ad8307_gui(lv_obj_t* scr)
 	lv_obj_set_style_local_bg_opa(bg_calgui, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
 	lv_obj_set_style_local_bg_color(bg_calgui, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_obj_set_pos(bg_calgui, 0, topHeight);
-	lv_obj_set_size(bg_calgui, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
+	lv_obj_set_size(bg_calgui, LV_HOR_RES, screenHeight - topHeight);
 	lv_obj_move_background(bg_calgui);
 
 	label_cal = lv_label_create(bg_top_cal, NULL);
@@ -1256,7 +1457,7 @@ static void init_cal_ad8307_gui(lv_obj_t* scr)
 	lv_obj_align(label_cal, NULL, LV_ALIGN_IN_TOP_MID, 50, 5);
 
 #define XPOS_SPIN		-50
-#define POS_SPIN		-60
+#define POS_SPIN		-80
 #define POS_SPIN_DELTA	45
 
 	cal_group = lv_group_create();
@@ -1298,17 +1499,21 @@ static void init_cal_ad8307_gui(lv_obj_t* scr)
 	lv_obj_align(pwd_label1, ad_spinbox1, LV_ALIGN_OUT_LEFT_MID, -45, 0); 
 
 	pwd_label1 = lv_label_create(bg_calgui, NULL);
+	lv_label_set_text(pwd_label1, "dbm");
+	lv_obj_align(pwd_label1, ad_spinbox1, LV_ALIGN_OUT_LEFT_MID, -45, 14);
+
+	pwd_label1 = lv_label_create(bg_calgui, NULL);
 	lv_label_set_text(pwd_label1, "Ref2:");
 	lv_obj_align(pwd_label1, ad_spinbox2, LV_ALIGN_OUT_LEFT_MID, -45, 0);
 
 	pwd_label1 = lv_label_create(bg_calgui, NULL);
+	lv_label_set_text(pwd_label1, "dbm");
+	lv_obj_align(pwd_label1, ad_spinbox2, LV_ALIGN_OUT_LEFT_MID, -45, 14); 
+	
+	pwd_label1 = lv_label_create(bg_calgui, NULL);
 	lv_label_set_text(pwd_label1, "Watt:");
 	lv_obj_align(pwd_label1, ad_spinbox3, LV_ALIGN_OUT_LEFT_MID, -45, 0);
 	
-	pwd_label1 = lv_label_create(bg_calgui, NULL);
-	lv_label_set_text(pwd_label1, "dbm");
-	lv_obj_align(pwd_label1, ad_spinbox1, LV_ALIGN_OUT_TOP_MID, 0, 0);
-
 	pwd_label1 = lv_label_create(bg_calgui, NULL);
 	lv_label_set_text(pwd_label1, "Volt:");
 	lv_obj_align(pwd_label1, ad_spinbox4, LV_ALIGN_OUT_LEFT_MID, -45, 0);
@@ -1360,16 +1565,18 @@ static void init_cal_ad8307_gui(lv_obj_t* scr)
 	lv_obj_set_event_cb(btn_refr, lv_spinbox_event_copy);
 	
 
-	lv_obj_t* btn_save = lv_btn_create(bg_top_cal, NULL);
+	lv_obj_t* btn_save = lv_btn_create(bg_calgui, NULL);
+	lv_obj_add_style(btn_save, LV_BTN_PART_MAIN, &style_btn);
 	lv_obj_set_event_cb(btn_save, mode_button_cal_save);
-	lv_obj_align(btn_save, NULL, LV_ALIGN_IN_TOP_LEFT, 5, 5);
-	lv_obj_set_size(btn_save, 50, 20);
+	lv_obj_align(btn_save, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
+	lv_obj_set_size(btn_save, bottombutton_width, bottomHeight);
 	lv_obj_set_style_local_value_str(btn_save, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "save");
 	
-	lv_obj_t* btn_cancel = lv_btn_create(bg_top_cal, NULL);
+	lv_obj_t* btn_cancel = lv_btn_create(bg_calgui, NULL);
+	lv_obj_add_style(btn_cancel, LV_BTN_PART_MAIN, &style_btn);
 	lv_obj_set_event_cb(btn_cancel, mode_button_cal_cancel);
-	lv_obj_align(btn_cancel, NULL, LV_ALIGN_IN_TOP_LEFT, 60, 5);
-	lv_obj_set_size(btn_cancel, 50, 20);
+	lv_obj_align(btn_cancel, NULL, LV_ALIGN_IN_BOTTOM_LEFT, LV_HOR_RES - bottombutton_width, 0);
+	lv_obj_set_size(btn_cancel, bottombutton_width, bottomHeight);
 	lv_obj_set_style_local_value_str(btn_cancel, LV_BTN_PART_MAIN, LV_STATE_DEFAULT, "Cancel");
 	
 	lv_obj_t* btn_plus3 = lv_btn_create(bg_calgui, NULL);

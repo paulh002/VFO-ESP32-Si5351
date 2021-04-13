@@ -132,7 +132,8 @@
     <ClInclude Include="__vm\.vfo_esp32_si5351.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FreeSansOblique.cpp" />
+    <ClCompile Include="FreeSansOblique32.cpp" />
+    <ClCompile Include="FreeSansOblique42.cpp" />
     <ClCompile Include="FT891_CAT.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="IO.cpp" />

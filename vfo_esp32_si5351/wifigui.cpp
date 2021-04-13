@@ -138,7 +138,7 @@ void init_wifi_gui(lv_obj_t* scr)
 	lv_obj_set_style_local_bg_opa(bg_wifigui, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_COVER);
 	lv_obj_set_style_local_bg_color(bg_wifigui, LV_OBJ_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_BLACK);
 	lv_obj_set_pos(bg_wifigui, 0, topHeight);
-	lv_obj_set_size(bg_wifigui, LV_HOR_RES, screenHeight - topHeight - bottomHeight);
+	lv_obj_set_size(bg_wifigui, LV_HOR_RES, screenHeight - topHeight );
 	lv_obj_move_background(bg_wifigui);
 	lv_coord_t h = lv_obj_get_height(bg_wifigui);
 	lv_coord_t w = lv_obj_get_width(bg_wifigui);
