@@ -34,6 +34,7 @@ const uint8_t	bpf_band[] = { BP_160M ,BP_80M, BP_40M, BP_20M, BP_15M, BP_10M };
 const uint8_t	lpf_band[] = { LP_160M ,LP_80M, LP_40M, LP_20M, LP_15M, LP_10M };
 const uint8_t freq_step = 10;           // step[Hz]
 const uint8_t bmax = 5;
+long  current_bfo;
 
 #define USB_FREQUENCY 9001000 //9000500 //8998000 
 #define LSB_FREQUENCY 8998000 //8998000 //8995000 
@@ -332,6 +333,21 @@ long  set_encoder_count_to_vfo_frequency(int count, int active_vfo)
 		//Serial.println("change band");
 	}
 	return frq;
+}
+
+void setbfo(uint32_t bfo_frq)
+{
+	current_bfo = bfo_frq;
+	_setbfo(current_bfo);
+}
+
+long  set_encoder_count_to_bfo_frequency(int count)
+{	
+	current_bfo += count;
+	if (current_bfo > BFO_MAX) current_bfo = BFO_MAX;
+	if (current_bfo < BFO_MIN) current_bfo = BFO_MIN;
+	setbfo(current_bfo);
+	return current_bfo;
 }
 
 

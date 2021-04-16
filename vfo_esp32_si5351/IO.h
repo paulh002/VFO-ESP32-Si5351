@@ -43,7 +43,7 @@
 
 #define LP_TX  0x20
 
-void setbfo(uint32_t bfo_frq);
+void _setbfo(uint32_t bfo_frq);
 void setvfo(uint32_t frq, uint32_t offset_frq);
 void init_io();
 void start_cal();

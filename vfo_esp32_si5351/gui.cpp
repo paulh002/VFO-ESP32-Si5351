@@ -98,6 +98,7 @@ lv_obj_t* btn_rev;
 lv_obj_t* label_cal;
 lv_obj_t* watt_cal;
 lv_obj_t* btn_matrix;
+lv_obj_t* bfo_button;
 
 lv_obj_t* setting_button;
 lv_obj_t* wifi1_button;
@@ -135,6 +136,7 @@ static bool f_cal_ad8307 = false;
 static bool f_cal_si5351 = false;
 static bool f_cal_si5351_vfo = true;
 static bool show_setting = false;
+static bool f_bfo_adjust = false;
 
 #if USE_LV_LOG != 0
 /* Serial debugging */
@@ -395,6 +397,16 @@ void guiTask(void* arg) {
 	lv_label_set_text(label, "Reset");
 	lv_obj_set_hidden(reset_button, true);
 	
+	bfo_button = lv_btn_create(bg_middle, NULL);
+	lv_obj_add_style(bfo_button, LV_BTN_PART_MAIN, &style_btn);
+	lv_obj_set_event_cb(bfo_button, event_button_bfo_cb);
+	lv_btn_set_checkable(bfo_button, true);
+	lv_obj_align(bfo_button, NULL, LV_ALIGN_IN_BOTTOM_LEFT, 4 * bottombutton_width1, -1 * (bottomHeight + 2));
+	lv_obj_set_size(bfo_button, bottombutton_width, bottomHeight);
+	label = lv_label_create(bfo_button, NULL);
+	lv_label_set_text(label, "Bfo");
+	lv_obj_set_hidden(bfo_button, true);
+	
 	save_button = lv_btn_create(bg_middle, NULL);
 	lv_obj_add_style(save_button, LV_BTN_PART_MAIN, &style_btn);
 	lv_obj_set_event_cb(save_button, event_button_save);
@@ -491,6 +503,7 @@ void guiTask(void* arg) {
 	lv_group_add_obj(vfo_group, si5351_button);
 	lv_group_add_obj(vfo_group, ad8307_button);
 	lv_group_add_obj(vfo_group, reset_button);
+	lv_group_add_obj(vfo_group, bfo_button);
 	lv_group_add_obj(vfo_group, save_button);
 
 	// TX objects shown when VFO is in TX mode
@@ -584,7 +597,7 @@ void guiTask(void* arg) {
 		lv_task_handler();
 		xSemaphoreGive(GuiBinarySemaphore);
 		
-		if (f_cal_si5351 == false)
+		if ((f_cal_si5351 == false) && (f_bfo_adjust == false))  // Both si5351 and bfo adjust use optical encoder, so don't change vfo freq at the same time
 		{
 			int count = Enc_vfo.getCount();
 			if (count != 0)
@@ -610,7 +623,7 @@ void guiTask(void* arg) {
 
 		static volatile int lastPowerEncoding;
 		static	bool	hide_rx = true;
-		if ((f_rxtx) && (f_cal_ad8307 == false) && (f_cal_si5351 == false))
+		if ((f_rxtx) && (f_cal_ad8307 == false) && (f_cal_si5351 == false) && (f_bfo_adjust == false))
 		{
 			if (hide_rx == false)
 			{
@@ -656,6 +669,25 @@ void guiTask(void* arg) {
 				lv_obj_clear_state(setting_button, LV_STATE_CHECKED);
 			}
 		}
+		// Capture optical encoder to update BFO frequency
+		if (f_bfo_adjust)
+		{
+			int count = Enc_vfo.getCount();
+			if (count != 0)
+			{
+				/*
+				* Translate the encoder movement to a new bfo frequency
+				* If the band is changed also update the band roller
+				*/
+				char str[32];
+				long freq = 0L;
+				Enc_vfo.clearCount();
+				freq = set_encoder_count_to_bfo_frequency(count);
+				setbfolabel(freq);
+			}
+		}
+		
+		
 		if (f_cal_ad8307)
 		{
 			uint8_t inputq = check_input_cal();
@@ -857,17 +889,30 @@ static void hide_setting(bool hide)
 	lv_obj_set_hidden(si5351_button, hide);
 	lv_obj_set_hidden(ad8307_button, hide);
 	lv_obj_set_hidden(reset_button, hide);
-	show_setting = !hide;
+	lv_obj_set_hidden(bfo_button, hide);
+	lv_obj_clear_state(bfo_button, LV_STATE_CHECKED);
+	//show_setting = !hide;
+	//f_bfo_adjust = !f_bfo_adjust;
 }
 
 
 
 static void event_button_setting_cb(lv_obj_t* obj, lv_event_t event)
 {
-	
-	if (event == LV_EVENT_VALUE_CHANGED) {
-		
-		hide_setting(show_setting);
+	if (event == LV_EVENT_PRESSED)
+	{
+		bool bchecked = lv_btn_get_state(obj) & LV_STATE_CHECKED;
+		f_bfo_adjust = false;
+		hide_setting(!bchecked);
+	}
+}
+
+static void event_button_bfo_cb(lv_obj_t* obj, lv_event_t event)
+{
+	if (event == LV_EVENT_PRESSED)
+	{
+		bool bchecked = lv_btn_get_state(obj) & LV_STATE_CHECKED;
+		f_bfo_adjust = bchecked;
 	}
 }
 
@@ -977,6 +1022,15 @@ void setfrequencylabel(long freq, long freq2, uint8_t sem) {
 	
 	sprintf(str, "%3d.%03d,%02d", freq2 / 1000000, (freq2 / 1000) % 1000, (freq2 / 10) % 100);
 	lv_label_set_text(vfo2_frequency, str);
+	if (sem) xSemaphoreGive(GuiBinarySemaphore);
+}
+
+void setbfolabel(long freq, uint8_t sem) {
+	if (sem) xSemaphoreTake(GuiBinarySemaphore, portMAX_DELAY);
+	char str[80];
+
+	sprintf(str, "Bfo:%2d.%03d,%02d Khz", freq / 1000000, (freq / 1000) % 1000, (freq / 10) % 100);
+	lv_label_set_text(bfo_label, str);
 	if (sem) xSemaphoreGive(GuiBinarySemaphore);
 }
 

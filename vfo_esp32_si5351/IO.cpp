@@ -74,7 +74,7 @@ void init_io()
 	shiftOut(BP_80M, LP_80M,0);
 }
 
-void setbfo(uint32_t bfo_frq)
+void _setbfo(uint32_t bfo_frq)
 {
 	uint64_t freq = (uint64_t)bfo_frq * SI5351_FREQ_MULT;
 	si5351_bfo.set_freq(freq, CLK_BFO_RX);

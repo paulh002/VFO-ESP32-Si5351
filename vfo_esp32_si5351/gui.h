@@ -34,6 +34,7 @@ void BfoLabel(uint32_t num, uint8_t sem);
 void Togglemode(int mode, uint8_t sem = 1);
 void ToggleVfo(int active_vfo, uint8_t sem = 1);
 void si_setcalfrequency(long freq);
+void setbfolabel(long freq, uint8_t sem = 0);
 
 static void mode_button_eh(lv_obj_t* obj, lv_event_t event);
 static void popupPW();
@@ -59,6 +60,7 @@ static void event_button_si5351_cb(lv_obj_t* obj, lv_event_t event);
 static void event_button_reset_cb(lv_obj_t* obj, lv_event_t event);
 static void event_button_ad8307_cb(lv_obj_t* obj, lv_event_t event);
 static void hide_setting(bool hide);
+static void event_button_bfo_cb(lv_obj_t* obj, lv_event_t event);
 
 extern lv_obj_t* ddlist;
 extern lv_obj_t* bg_top;
