@@ -11,7 +11,7 @@ The changes for this version is:
 5) Userinterface based on lgvl
 
 I am working on a overhaule of the userinterface using lvgl. It is still in development but it add touch support and hopefully a better interface, especialy for setup purposes like wifi and the si5351 calibration functions can be accessed without usb connection. 
-![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-v3/IMG_20210316_092140.jpg)
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-v3/pcb.png)
 
 # VFO-ESP32-Si5351 v2.31
 Some PCB updates, added output capacitors and changed the resistor pi network on the output to simple voltage divider.
