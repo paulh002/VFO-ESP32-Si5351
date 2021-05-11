@@ -26,6 +26,7 @@ Notes
 
 New GUI with buttons at the bottom   
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/lvgl_gui.jpg)
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-with-2-Si5351/lvgl_gui2.jpg)
 
 # VFO-ESP32-Si5351 v2.41 beta
 update-- added Power and SWR gauges
