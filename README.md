@@ -1,9 +1,6 @@
-# VFO-ESP32-Si5351 v2.42 beta
+# VFO-ESP32-Si5351 v2.43 beta
 In this version the GUI is changed to support touch using simple buttons at the bottom of the screen.
 It took some time to have them also supported by using the rotary encoder.
-
-Todo:
-- Bfo adjustment, have to decide how to change the bfo frequency. An idea is to use the optical encoder for this. A button select bfo adjustment and use the optical encoder to change frequency.
 
 Changes:
 - TFT library has been changed to TFT_eSPI, download the library in Arduine IDE and config the User_Setup.h to your configuration or use the one in this repository for the PCB in this project
@@ -17,6 +14,8 @@ Changes:
 - source code includes a visual studio project file
 - TX GUI with power and SWR measurement
 - GUI supported AD8307 calibration
+- Bfo adjustment, A button select bfo adjustment and use the optical encoder to change frequency.
+
 
 Notes
 - The si5351 library is customized for esp32 support and can be found in the library directory
