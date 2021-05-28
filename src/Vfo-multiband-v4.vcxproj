@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C5F80730-F44F-4478-BDAE-6634EFC2CA88}</ProjectGuid>
+    <RootNamespace>Vfo_multiband_v4</RootNamespace>
+    <ProjectName>Vfo-multiband-v4</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>
+    </PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Vfo-multiband-v4;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src;$(ProjectDir)..\..\tubes\arduino\libraries\ESP32Encoder\src;$(ProjectDir)..\..\tubes\arduino\libraries\AceButton\src;$(ProjectDir)..\..\tubes\arduino\libraries\credentials;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\apps;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\libb64;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\variants\esp32;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\config;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\app_trace;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\app_update;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\asio;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\bootloader_support;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\bt;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\coap;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\console;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\driver;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp-tls;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp32;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_adc_cal;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_event;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_http_client;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_http_server;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_https_ota;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_ringbuf;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\ethernet;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\expat;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\fatfs;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\freemodbus;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\freertos;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\heap;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\idf_test;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\jsmn;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\json;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\libsodium;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\log;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\lwip;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\mbedtls;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\mdns;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\micro-ecc;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\mqtt;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\newlib;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\nghttp;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\nvs_flash;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\openssl;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\protobuf-c;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\protocomm;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\pthread;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\sdmmc;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\smartconfig_ack;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\soc;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\spi_flash;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\spiffs;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\tcp_transport;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\tcpip_adapter;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\ulp;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\vfs;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\wear_levelling;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\wifi_provisioning;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\wpa_supplicant;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\xtensa-debug-module;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp-face;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp32-camera;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\fb_gfx;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\lib\gcc\xtensa-esp32-elf\5.2.0\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\xtensa-esp32-elf\include\c++\5.2.0\xtensa-esp32-elf;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\xtensa-esp32-elf\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\xtensa-esp32-elf\include\c++\5.2.0;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\include\c++\5.2.0;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\lib\gcc\xtensa-esp32-elf\5.2.0\new;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\lib\gcc\xtensa-esp32-elf\5.2.0\bits;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.Vfo-multiband-v4.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
+      <PreprocessorDefinitions>__ESP32_esp32__;__ESP32_ESP32__;_VMDEBUG_TOOL_esp32prog;ESP_PLATFORM;HAVE_CONFIG_H;GCC_NOT_5_2_0=0;WITH_POSIX;F_CPU=240000000L;ARDUINO=108013;ARDUINO_ESP32_DEV;ARDUINO_ARCH_ESP32;ESP32;CORE_DEBUG_LEVEL=4;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Vfo-multiband-v4;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src;$(ProjectDir)..\..\tubes\arduino\libraries\ESP32Encoder\src;$(ProjectDir)..\..\tubes\arduino\libraries\AceButton\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\src;$(ProjectDir)..\..\tubes\arduino\libraries\lvgl\src;$(ProjectDir)..\..\tubes\arduino\libraries\TFT_eSPI;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPIFFS\src;$(ProjectDir)..\..\tubes\arduino\libraries\credentials;$(ProjectDir)..\..\tubes\arduino\libraries\Etherkit_Si5351\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\src;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\apps;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\libb64;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\variants\esp32;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\config;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\app_trace;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\app_update;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\asio;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\bootloader_support;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\bt;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\coap;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\console;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\driver;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp-tls;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp32;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_adc_cal;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_event;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_http_client;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_http_server;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_https_ota;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp_ringbuf;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\ethernet;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\expat;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\fatfs;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\freemodbus;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\freertos;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\heap;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\idf_test;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\jsmn;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\json;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\libsodium;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\log;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\lwip;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\mbedtls;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\mdns;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\micro-ecc;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\mqtt;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\newlib;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\nghttp;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\nvs_flash;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\openssl;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\protobuf-c;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\protocomm;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\pthread;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\sdmmc;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\smartconfig_ack;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\soc;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\spi_flash;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\spiffs;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\tcp_transport;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\tcpip_adapter;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\ulp;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\vfs;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\wear_levelling;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\wifi_provisioning;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\wpa_supplicant;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\xtensa-debug-module;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp-face;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\esp32-camera;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include\fb_gfx;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\lib\gcc\xtensa-esp32-elf\5.2.0\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\xtensa-esp32-elf\include\c++\5.2.0\xtensa-esp32-elf;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\xtensa-esp32-elf\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\xtensa-esp32-elf\include\c++\5.2.0;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\include\c++\5.2.0;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\tools\sdk\include;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\lib\gcc\xtensa-esp32-elf\5.2.0\new;C:\Users\paulh\AppData\Local\arduino15\packages\esp32\tools\xtensa-esp32-elf-gcc\1.22.0-80-g6c4433a-5.2.0\lib\gcc\xtensa-esp32-elf\5.2.0\bits;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.Vfo-multiband-v4.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PreprocessorDefinitions>__ESP32_esp32__;__ESP32_ESP32__;ESP_PLATFORM;HAVE_CONFIG_H;GCC_NOT_5_2_0=0;WITH_POSIX;F_CPU=240000000L;ARDUINO=108013;ARDUINO_ESP32_DEV;ARDUINO_ARCH_ESP32;ESP32;CORE_DEBUG_LEVEL=4;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="VisualMicro" />
+  </ItemGroup>
+  <PropertyGroup>
+    <DebuggerFlavor>VisualMicroDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\AceButton_8cpp_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\AceButton_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\ace__button_2AceButton_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\AdjustableButtonConfig_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\annotated.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\ButtonConfig_8cpp_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\ButtonConfig_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AceButton-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AceButton.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AdjustableButtonConfig-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AdjustableButtonConfig.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1ButtonConfig-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1ButtonConfig.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded4To2ButtonConfig-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded4To2ButtonConfig.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded8To3ButtonConfig-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded8To3ButtonConfig.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1EncodedButtonConfig-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1EncodedButtonConfig.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1IEventHandler-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1IEventHandler.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1LadderButtonConfig-members.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1LadderButtonConfig.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classes.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\dir_68267d1309a1af8e8297ef4c3efbcdba.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\dir_ebbe9b537c0e01d975153fa119b09658.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\Encoded4To2ButtonConfig_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\Encoded8To3ButtonConfig_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\EncodedButtonConfig_8cpp_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\EncodedButtonConfig_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\files.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions_func.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions_type.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions_vars.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\graph_legend.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\hierarchy.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\IEventHandler_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\index.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\inherits.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\LadderButtonConfig_8cpp_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\LadderButtonConfig_8h_source.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_0.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_1.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_2.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_3.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_4.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_5.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_6.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_7.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_8.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_9.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_a.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_b.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_c.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_d.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_0.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_1.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_2.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_3.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_4.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_0.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_1.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_2.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_3.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_4.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_5.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_6.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_7.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_8.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_9.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_a.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_b.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\nomatches.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\pages_0.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\typedefs_0.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\typedefs_1.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\variables_0.html" />
+    <None Include="..\..\tubes\arduino\libraries\AceButton\library.properties" />
+    <None Include="..\..\tubes\arduino\libraries\ESP32Encoder\library.properties" />
+    <None Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\library.properties" />
+    <None Include="..\..\tubes\arduino\libraries\lvgl\library.json" />
+    <None Include="..\..\tubes\arduino\libraries\lvgl\library.properties" />
+    <None Include="..\..\tubes\arduino\libraries\TFT_eSPI\library.json" />
+    <None Include="..\..\tubes\arduino\libraries\TFT_eSPI\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPIFFS\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\library.properties" />
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\library.properties" />
+    <None Include="Vfo-multiband-v4.ino">
+      <FileType>CppCode</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\arduino folders read me.txt">
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\AceButton.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\AceButton.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\AdjustableButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\ButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\Encoded4To2ButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\Encoded8To3ButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\EncodedButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\IEventHandler.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\LadderButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\EventTracker.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\HelperForButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\HelperForEncodedButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\HelperForLadderButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TestableButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TestableEncodedButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TestableLadderButtonConfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TimingStats.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\credentials\credentials.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\ESP32Encoder\src\ESP32Encoder.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\i2c.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\si5351.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\lvgl.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\lv_conf_template.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lvgl.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_api_map.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_conf_internal.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_conf_kconfig.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_disp.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_group.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_indev.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_obj.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_obj_style_dec.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_refr.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_style.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_arc.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_blend.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_img.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_label.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_line.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_mask.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_rect.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_triangle.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_buf.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_cache.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_decoder.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_fmt_txt.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_loader.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_symbol_def.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp_osa.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_vglite.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_stm32_dma2d.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_disp.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_indev.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_tick.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_anim.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_area.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_async.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_bidi.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_color.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_debug.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_fs.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_gc.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_ll.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_log.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_math.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_mem.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_printf.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_task.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_templ.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt_ap.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_types.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_utils.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_empty.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_material.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_mono.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_template.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_arc.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_bar.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btn.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btnmatrix.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_calendar.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_canvas.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_chart.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_checkbox.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cont.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cpicker.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_dropdown.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_gauge.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_img.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_imgbtn.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_keyboard.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_label.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_led.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_line.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_linemeter.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_list.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_msgbox.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objmask.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objx_templ.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_page.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_roller.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_slider.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinbox.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinner.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_switch.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_table.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tabview.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_textarea.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tileview.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_win.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_assert.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_conf.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_core.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_font_loader.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_obj.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_style.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_widgets\lv_test_label.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\TFT_eSPI\TFT_eSPI.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\TFT_eSPI\User_Setup.h" />
+    <ClInclude Include="..\..\tubes\arduino\libraries\TFT_eSPI\User_Setup_Select.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\apps\sntp\sntp.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Arduino.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\base64.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\binary.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\cbuf.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Client.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\core_version.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Esp.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-adc.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-bt.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-cpu.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-dac.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-gpio.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-i2c.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-ledc.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-log.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-matrix.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-psram.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-rmt.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-sigmadelta.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-spi.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-timer.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-touch.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-uart.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp8266-compat.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\FunctionalInterrupt.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\HardwareSerial.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPAddress.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPv6Address.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\libb64\cdecode.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\libb64\cencode.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\MD5Builder.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\pgmspace.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Print.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Printable.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Server.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\stdlib_noniso.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Stream.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\StreamString.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Udp.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WCharacter.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\wiring_private.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WString.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\src\ArduinoOTA.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\src\EEPROM.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\src\ESPmDNS.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\FS.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\FSImpl.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\vfs_api.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPIFFS\src\SPIFFS.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\src\SPI.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\src\Update.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\mimetable.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\RequestHandler.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\RequestHandlersImpl.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\HTTP_Method.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\WebServer.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\ETH.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFi.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiAP.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiClient.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiGeneric.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiMulti.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiScan.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiServer.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiSTA.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiType.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiUdp.h" />
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\variants\esp32\pins_arduino.h" />
+    <ClInclude Include="FT891_CAT.h" />
+    <ClInclude Include="gui.h" />
+    <ClInclude Include="IO.h" />
+    <ClInclude Include="measurement.h" />
+    <ClInclude Include="network.h" />
+    <ClInclude Include="setup.h" />
+    <ClInclude Include="smeter.h" />
+    <ClInclude Include="vfo.h" />
+    <ClInclude Include="wifigui.h" />
+    <ClInclude Include="_EEPROMAnything.h" />
+    <ClInclude Include="__vm\.Vfo-multiband-v4.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\AceButton.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\ButtonConfig.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\EncodedButtonConfig.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\LadderButtonConfig.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\EventTracker.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\ESP32Encoder\src\ESP32Encoder.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\i2c.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\si5351.cpp" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_disp.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_group.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_indev.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_obj.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_refr.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_style.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_arc.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_blend.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_img.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_label.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_line.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_mask.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_rect.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_triangle.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_buf.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_cache.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_decoder.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_dejavu_16_persian_hebrew.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_fmt_txt.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_loader.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_10.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_12.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_12_subpx.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_14.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_16.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_18.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_20.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_22.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_24.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_26.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_28.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_28_compressed.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_30.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_32.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_34.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_36.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_38.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_40.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_42.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_44.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_46.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_48.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_8.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_simsun_16_cjk.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_unscii_16.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_unscii_8.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp_osa.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_vglite.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_stm32_dma2d.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_disp.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_indev.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_tick.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_anim.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_area.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_async.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_bidi.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_color.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_debug.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_fs.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_gc.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_ll.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_log.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_math.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_mem.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_printf.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_task.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_templ.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt_ap.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_utils.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_empty.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_material.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_mono.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_template.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_arc.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_bar.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btn.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btnmatrix.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_calendar.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_canvas.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_chart.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_checkbox.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cont.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cpicker.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_dropdown.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_gauge.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_img.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_imgbtn.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_keyboard.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_label.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_led.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_line.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_linemeter.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_list.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_msgbox.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objmask.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objx_templ.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_page.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_roller.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_slider.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinbox.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinner.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_switch.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_table.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tabview.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_textarea.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tileview.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_win.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_assert.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_core.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_font_loader.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_obj.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_style.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_fonts\font_1.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_fonts\font_2.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_fonts\font_3.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_main.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_widgets\lv_test_label.c" />
+    <ClCompile Include="..\..\tubes\arduino\libraries\TFT_eSPI\TFT_eSPI.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\base64.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\cbuf.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Esp.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-adc.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-bt.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-cpu.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-dac.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-gpio.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-i2c.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-ledc.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-matrix.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-misc.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-psram.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-rmt.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-sigmadelta.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-spi.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-time.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-timer.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-touch.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-uart.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\FunctionalInterrupt.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\HardwareSerial.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPAddress.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPv6Address.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\main.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\MD5Builder.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Print.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\stdlib_noniso.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Stream.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\StreamString.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\wiring_pulse.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\wiring_shift.c" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WMath.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WString.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\src\ArduinoOTA.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\src\EEPROM.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\src\ESPmDNS.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\FS.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\vfs_api.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPIFFS\src\SPIFFS.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\src\SPI.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\src\Updater.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\mimetable.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\Parsing.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\WebServer.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\ETH.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFi.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiAP.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiClient.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiGeneric.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiMulti.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiScan.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiServer.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiSTA.cpp" />
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiUdp.cpp" />
+    <ClCompile Include="FreeSansOblique.cpp" />
+    <ClCompile Include="FreeSansOblique32.cpp" />
+    <ClCompile Include="FreeSansOblique42.cpp" />
+    <ClCompile Include="FT891_CAT.cpp" />
+    <ClCompile Include="gui.cpp" />
+    <ClCompile Include="IO.cpp" />
+    <ClCompile Include="measurement.cpp" />
+    <ClCompile Include="network.cpp" />
+    <ClCompile Include="smeter.cpp" />
+    <ClCompile Include="Vfo.cpp" />
+    <ClCompile Include="wifigui.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\tubes\arduino\libraries\AceButton\keywords.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\ESP32Encoder\licence.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\keywords.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\licence.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\lvgl\CMakeLists.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\lvgl\LICENCE.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\TFT_eSPI\keywords.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\TFT_eSPI\license.txt" />
+    <Text Include="..\..\tubes\arduino\libraries\TFT_eSPI\README.txt" />
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\keywords.txt" />
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\keywords.txt" />
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\keywords.txt" />
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\keywords.txt" />
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\keywords.txt" />
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\keywords.txt" />
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\keywords.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties arduino.upload.port="COM12" config.Debug.customdebug_esp32_esp32_debugger_type="hwdebugger" config.Debug.customdebug_esp32_esp32_hwdebugger="esp32prog" config.Debug.customdebug_esp32_esp32_vm_disable_optimization="vm_disable_opt_default" custom_esp32_esp32_vm.programmer_name="esp32prog" custom_esp32_esp32_vm.upload.useprogrammer="0" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

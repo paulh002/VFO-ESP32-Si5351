@@ -1,0 +1,1634 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Misc Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>xml;json;txt;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{77c4ba34-b9f6-40ac-8538-d1a611fd0576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly">
+      <UniqueIdentifier>{9561d5e0-66a1-454d-87bb-4efff3a14e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core">
+      <UniqueIdentifier>{2bc1afb9-d6c4-4834-aeea-dc1a07eeeaf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\apps">
+      <UniqueIdentifier>{2bfbc401-01bc-4e3c-be1c-2e129e5ca965}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\apps\sntp">
+      <UniqueIdentifier>{32081e77-1f76-4c93-be8c-f8e6abf81cbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\core\libb64">
+      <UniqueIdentifier>{b11ead4d-9c7e-46de-adf8-25010bd4ed79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries">
+      <UniqueIdentifier>{e42f18ec-fc2b-49cb-a222-513dedbb72e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\WiFi">
+      <UniqueIdentifier>{64bf339f-d51f-4c98-8a74-b8babd8d26c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\ESP32Encoder">
+      <UniqueIdentifier>{54a91072-8edf-4a45-9452-9769dc29d74e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\AceButton">
+      <UniqueIdentifier>{bb37320a-e1e8-49ee-9c76-aed73f0dfa35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\credentials">
+      <UniqueIdentifier>{8dadf90c-4528-4e43-9b29-c105453639e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\EEPROM">
+      <UniqueIdentifier>{fd0ff9a8-f5a2-4936-9de4-1e403f8dfb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\lvgl">
+      <UniqueIdentifier>{025eccff-726a-4727-9dec-6faa029028ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\TFT_eSPI">
+      <UniqueIdentifier>{e761768d-e69a-4f6c-b246-ff7fd1f451eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\SPI">
+      <UniqueIdentifier>{b03aa9dd-82c3-409e-9213-de5537c1a797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\FS">
+      <UniqueIdentifier>{9f476a42-78e3-40b7-b270-e2144a7f5d77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\SPIFFS">
+      <UniqueIdentifier>{3b2bde75-1637-4786-880a-4b8a13640ad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\Etherkit_Si5351">
+      <UniqueIdentifier>{602dbc64-53ec-4843-9daf-857ac9c1c36f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\WebServer">
+      <UniqueIdentifier>{3dacdf04-7b1b-4d1e-84a4-808ea6fbb0c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\ESPmDNS">
+      <UniqueIdentifier>{ae882afe-e2bc-4611-a257-6690408dc0c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\Update">
+      <UniqueIdentifier>{3a482374-5579-458e-9084-2789cfcb353c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\_micro-api-readonly\libraries\ArduinoOTA">
+      <UniqueIdentifier>{c8ac0a7b-2886-451f-b608-0aba40ead1ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Vfo-multiband-v4.ino" />
+    <None Include="src\arduino folders read me.txt">
+      <Filter>Misc Files</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\ESP32Encoder\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\ESP32Encoder</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\AceButton_8cpp_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\AceButton_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\ace__button_2AceButton_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\AdjustableButtonConfig_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\annotated.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\ButtonConfig_8cpp_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\ButtonConfig_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AceButton-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AceButton.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AdjustableButtonConfig-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1AdjustableButtonConfig.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1ButtonConfig-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1ButtonConfig.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded4To2ButtonConfig-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded4To2ButtonConfig.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded8To3ButtonConfig-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1Encoded8To3ButtonConfig.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1EncodedButtonConfig-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1EncodedButtonConfig.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1IEventHandler-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1IEventHandler.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1LadderButtonConfig-members.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classace__button_1_1LadderButtonConfig.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\classes.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\dir_68267d1309a1af8e8297ef4c3efbcdba.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\dir_ebbe9b537c0e01d975153fa119b09658.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\Encoded4To2ButtonConfig_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\Encoded8To3ButtonConfig_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\EncodedButtonConfig_8cpp_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\EncodedButtonConfig_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\files.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions_func.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions_type.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\functions_vars.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\graph_legend.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\hierarchy.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\IEventHandler_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\index.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\inherits.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\LadderButtonConfig_8cpp_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\LadderButtonConfig_8h_source.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_0.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_1.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_2.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_3.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_4.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_5.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_6.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_7.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_8.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_9.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_a.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_b.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_c.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\all_d.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_0.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_1.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_2.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_3.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\classes_4.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_0.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_1.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_2.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_3.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_4.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_5.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_6.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_7.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_8.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_9.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_a.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\functions_b.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\nomatches.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\pages_0.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\typedefs_0.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\typedefs_1.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\AceButton\docs\html\search\variables_0.html">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\EEPROM</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\lvgl\library.json">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\lvgl\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\TFT_eSPI\library.json">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\TFT_eSPI\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\SPI</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\FS</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPIFFS\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\SPIFFS</Filter>
+    </None>
+    <None Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\Etherkit_Si5351</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\ESPmDNS</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\Update</Filter>
+    </None>
+    <None Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\library.properties">
+      <Filter>src\_micro-api-readonly\libraries\ArduinoOTA</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__vm\.Vfo-multiband-v4.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="_EEPROMAnything.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FT891_CAT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="measurement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="setup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="smeter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="wifigui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Arduino.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\base64.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\binary.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\cbuf.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Client.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\core_version.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Esp.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-adc.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-bt.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-cpu.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-dac.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-gpio.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-i2c.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-ledc.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-log.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-matrix.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-psram.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-rmt.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-sigmadelta.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-spi.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-timer.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-touch.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-uart.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp8266-compat.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\FunctionalInterrupt.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\HardwareSerial.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPAddress.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPv6Address.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\MD5Builder.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\pgmspace.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Print.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Printable.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Server.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\stdlib_noniso.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Stream.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\StreamString.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Udp.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WCharacter.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\wiring_private.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WString.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\apps\sntp\sntp.h">
+      <Filter>src\_micro-api-readonly\core\apps\sntp</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\libb64\cdecode.h">
+      <Filter>src\_micro-api-readonly\core\libb64</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\libb64\cencode.h">
+      <Filter>src\_micro-api-readonly\core\libb64</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\variants\esp32\pins_arduino.h">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\ETH.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFi.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiAP.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiClient.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiGeneric.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiMulti.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiScan.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiServer.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiSTA.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiType.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiUdp.h">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\ESP32Encoder\src\ESP32Encoder.h">
+      <Filter>src\_micro-api-readonly\libraries\ESP32Encoder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\AceButton.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\AceButton.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\AdjustableButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\ButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\Encoded4To2ButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\Encoded8To3ButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\EncodedButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\IEventHandler.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\LadderButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\EventTracker.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\HelperForButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\HelperForEncodedButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\HelperForLadderButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TestableButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TestableEncodedButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TestableLadderButtonConfig.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\TimingStats.h">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\credentials\credentials.h">
+      <Filter>src\_micro-api-readonly\libraries\credentials</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\src\EEPROM.h">
+      <Filter>src\_micro-api-readonly\libraries\EEPROM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\lvgl.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\lv_conf_template.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lvgl.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_api_map.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_conf_internal.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_conf_kconfig.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_disp.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_group.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_indev.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_obj.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_obj_style_dec.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_refr.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_style.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_arc.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_blend.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_img.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_label.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_line.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_mask.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_rect.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_triangle.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_buf.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_cache.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_decoder.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_fmt_txt.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_loader.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_symbol_def.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp_osa.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_vglite.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_stm32_dma2d.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_disp.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_indev.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_tick.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_anim.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_area.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_async.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_bidi.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_color.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_debug.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_fs.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_gc.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_ll.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_log.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_math.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_mem.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_printf.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_task.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_templ.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt_ap.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_types.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_utils.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_empty.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_material.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_mono.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_template.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_arc.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_bar.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btn.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btnmatrix.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_calendar.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_canvas.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_chart.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_checkbox.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cont.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cpicker.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_dropdown.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_gauge.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_img.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_imgbtn.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_keyboard.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_label.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_led.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_line.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_linemeter.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_list.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_msgbox.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objmask.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objx_templ.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_page.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_roller.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_slider.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinbox.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinner.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_switch.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_table.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tabview.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_textarea.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tileview.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_win.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_assert.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_conf.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_core.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_font_loader.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_obj.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_style.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_widgets\lv_test_label.h">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\TFT_eSPI\TFT_eSPI.h">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\TFT_eSPI\User_Setup.h">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\TFT_eSPI\User_Setup_Select.h">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\src\SPI.h">
+      <Filter>src\_micro-api-readonly\libraries\SPI</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\FS.h">
+      <Filter>src\_micro-api-readonly\libraries\FS</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\FSImpl.h">
+      <Filter>src\_micro-api-readonly\libraries\FS</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\vfs_api.h">
+      <Filter>src\_micro-api-readonly\libraries\FS</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPIFFS\src\SPIFFS.h">
+      <Filter>src\_micro-api-readonly\libraries\SPIFFS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\i2c.h">
+      <Filter>src\_micro-api-readonly\libraries\Etherkit_Si5351</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\si5351.h">
+      <Filter>src\_micro-api-readonly\libraries\Etherkit_Si5351</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\HTTP_Method.h">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\WebServer.h">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\mimetable.h">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\RequestHandler.h">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\RequestHandlersImpl.h">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\src\ESPmDNS.h">
+      <Filter>src\_micro-api-readonly\libraries\ESPmDNS</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\src\Update.h">
+      <Filter>src\_micro-api-readonly\libraries\Update</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\src\ArduinoOTA.h">
+      <Filter>src\_micro-api-readonly\libraries\ArduinoOTA</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FreeSansOblique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeSansOblique42.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FT891_CAT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="measurement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="smeter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="wifigui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FreeSansOblique32.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\base64.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\cbuf.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Esp.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-adc.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-bt.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-cpu.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-dac.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-gpio.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-i2c.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-ledc.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-matrix.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-misc.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-psram.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-rmt.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-sigmadelta.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-spi.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-time.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-timer.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-touch.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\esp32-hal-uart.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\FunctionalInterrupt.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\HardwareSerial.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPAddress.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\IPv6Address.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\main.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\MD5Builder.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Print.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\stdlib_noniso.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\Stream.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\StreamString.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\wiring_pulse.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\wiring_shift.c">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WMath.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\cores\esp32\WString.cpp">
+      <Filter>src\_micro-api-readonly\core</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\ETH.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFi.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiAP.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiClient.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiGeneric.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiMulti.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiScan.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiServer.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiSTA.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\src\WiFiUdp.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\ESP32Encoder\src\ESP32Encoder.cpp">
+      <Filter>src\_micro-api-readonly\libraries\ESP32Encoder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\AceButton.cpp">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\ButtonConfig.cpp">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\EncodedButtonConfig.cpp">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\LadderButtonConfig.cpp">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\AceButton\src\ace_button\testing\EventTracker.cpp">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\src\EEPROM.cpp">
+      <Filter>src\_micro-api-readonly\libraries\EEPROM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_disp.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_group.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_indev.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_obj.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_refr.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_core\lv_style.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_arc.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_blend.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_img.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_label.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_line.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_mask.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_rect.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_draw_triangle.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_buf.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_cache.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_draw\lv_img_decoder.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_dejavu_16_persian_hebrew.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_fmt_txt.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_loader.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_10.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_12.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_12_subpx.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_14.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_16.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_18.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_20.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_22.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_24.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_26.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_28.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_28_compressed.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_30.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_32.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_34.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_36.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_38.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_40.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_42.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_44.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_46.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_48.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_montserrat_8.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_simsun_16_cjk.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_unscii_16.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_font\lv_font_unscii_8.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_pxp_osa.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_nxp_vglite.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_gpu\lv_gpu_stm32_dma2d.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_disp.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_indev.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_hal\lv_hal_tick.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_anim.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_area.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_async.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_bidi.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_color.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_debug.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_fs.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_gc.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_ll.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_log.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_math.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_mem.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_printf.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_task.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_templ.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_txt_ap.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_misc\lv_utils.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_empty.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_material.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_mono.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_themes\lv_theme_template.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_arc.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_bar.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btn.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_btnmatrix.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_calendar.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_canvas.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_chart.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_checkbox.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cont.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_cpicker.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_dropdown.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_gauge.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_img.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_imgbtn.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_keyboard.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_label.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_led.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_line.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_linemeter.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_list.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_msgbox.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objmask.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_objx_templ.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_page.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_roller.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_slider.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinbox.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_spinner.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_switch.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_table.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tabview.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_textarea.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_tileview.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\src\lv_widgets\lv_win.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_assert.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_main.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_core.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_font_loader.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_obj.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_core\lv_test_style.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_fonts\font_1.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_fonts\font_2.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_fonts\font_3.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\lvgl\tests\lv_test_widgets\lv_test_label.c">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\TFT_eSPI\TFT_eSPI.cpp">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\src\SPI.cpp">
+      <Filter>src\_micro-api-readonly\libraries\SPI</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\FS.cpp">
+      <Filter>src\_micro-api-readonly\libraries\FS</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\FS\src\vfs_api.cpp">
+      <Filter>src\_micro-api-readonly\libraries\FS</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPIFFS\src\SPIFFS.cpp">
+      <Filter>src\_micro-api-readonly\libraries\SPIFFS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\i2c.cpp">
+      <Filter>src\_micro-api-readonly\libraries\Etherkit_Si5351</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\src\si5351.cpp">
+      <Filter>src\_micro-api-readonly\libraries\Etherkit_Si5351</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\Parsing.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\WebServer.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\src\detail\mimetable.cpp">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\src\ESPmDNS.cpp">
+      <Filter>src\_micro-api-readonly\libraries\ESPmDNS</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\src\Updater.cpp">
+      <Filter>src\_micro-api-readonly\libraries\Update</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\src\ArduinoOTA.cpp">
+      <Filter>src\_micro-api-readonly\libraries\ArduinoOTA</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WiFi\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\WiFi</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\ESP32Encoder\licence.txt">
+      <Filter>src\_micro-api-readonly\libraries\ESP32Encoder</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\AceButton\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\AceButton</Filter>
+    </Text>
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\EEPROM\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\EEPROM</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\lvgl\CMakeLists.txt">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\lvgl\LICENCE.txt">
+      <Filter>src\_micro-api-readonly\libraries\lvgl</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\TFT_eSPI\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\TFT_eSPI\license.txt">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\TFT_eSPI\README.txt">
+      <Filter>src\_micro-api-readonly\libraries\TFT_eSPI</Filter>
+    </Text>
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\SPI\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\SPI</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\Etherkit_Si5351</Filter>
+    </Text>
+    <Text Include="..\..\tubes\arduino\libraries\Etherkit_Si5351\licence.txt">
+      <Filter>src\_micro-api-readonly\libraries\Etherkit_Si5351</Filter>
+    </Text>
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\WebServer\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\WebServer</Filter>
+    </Text>
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ESPmDNS\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\ESPmDNS</Filter>
+    </Text>
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\Update\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\Update</Filter>
+    </Text>
+    <Text Include="C:\Users\paulh\AppData\Local\arduino15\packages\esp32\hardware\esp32\1.0.4\libraries\ArduinoOTA\keywords.txt">
+      <Filter>src\_micro-api-readonly\libraries\ArduinoOTA</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
