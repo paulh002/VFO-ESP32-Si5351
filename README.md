@@ -10,7 +10,7 @@ The PCB connectors for JTAG debugging, analog I/O , I2C interface, and Generic I
 The GUI is based on the Lvgl library (https://lvgl.io/) 
 
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-v3/VFO-PCB4.jpg)
-
+![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-v3/vfo1.jpg)
 ![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/ESP32-VFO-v3/smd.jpg)
 ## Features
 
