@@ -33,8 +33,6 @@ Features for this version are:
 16) vfo1 and vfo2 support
 
 ##Notes
-
-Notes
 - The si5351 library is customized for esp32 support and can be found in the library directory
 - Libraries used
    -  Acebutton https://github.com/bxparks/AceButton
