@@ -29,6 +29,17 @@ Features for this version are:
 12) S-meter
 13) Optical encoder for tuning
 14) Encoder for bandswitch and menu
+15) Bfo adjustment, A button select bfo adjustment and use the optical encoder to change frequency.
+16) vfo1 and vfo2 support
+
+##Notes
+
+Notes
+- The si5351 library is customized for esp32 support and can be found in the library directory
+- Libraries used
+   -  Acebutton https://github.com/bxparks/AceButton
+   -  ESP32Encoder https://github.com/madhephaestus/ESP32Encoder
+   -  lvgl https://lvgl.io/
 
 ## Build
 
