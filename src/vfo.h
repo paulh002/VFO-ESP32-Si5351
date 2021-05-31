@@ -11,6 +11,9 @@
 #define MODE_LSB 0
 #define MODE_USB 1
 
+#define USB_FREQUENCY 9001000 //9000500 //8998000 
+#define LSB_FREQUENCY 8998000 //8998000 //8995000
+
 extern uint8_t			f_rxtx;  // initial rx
 
 void next_band(uint8_t dir, uint8_t& band);

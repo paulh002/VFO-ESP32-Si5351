@@ -642,7 +642,7 @@
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties arduino.upload.port="COM12" config.Debug.customdebug_esp32_esp32_debugger_type="hwdebugger" config.Debug.customdebug_esp32_esp32_hwdebugger="esp32prog" config.Debug.customdebug_esp32_esp32_vm_disable_optimization="vm_disable_opt_default" custom_esp32_esp32_vm.programmer_name="esp32prog" custom_esp32_esp32_vm.upload.useprogrammer="0" />
+      <UserProperties arduino.upload.port="192.168.0.86" config.Debug.customdebug_esp32_esp32_debugger_type="hwdebugger" config.Debug.customdebug_esp32_esp32_hwdebugger="esp32prog" config.Debug.customdebug_esp32_esp32_vm_disable_optimization="vm_disable_opt_default" custom_esp32_esp32_vm.programmer_name="esp32prog" custom_esp32_esp32_vm.upload.useprogrammer="0" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

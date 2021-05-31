@@ -3,8 +3,8 @@
 #define _MEASUREMENT_H_
 
 #define TXRX_SWITCH   25
-#define S_METER       32            // GPIO port S-Meter
-#define FWD_METER     33            // GPIO port Fwd-Meter
+#define S_METER       34            // GPIO port S-Meter
+#define FWD_METER     36            // GPIO port Fwd-Meter
 #define REV_METER     39             // GPIO port Rev-Meter
 #define NUMBR_SSID    5                // Store max 5 ssid's and passwords
 

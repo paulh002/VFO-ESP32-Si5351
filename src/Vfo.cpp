@@ -23,21 +23,18 @@ uint8_t			f_rxtx = 0;  // initial rx
 --------------------------------------------------------*/
 uint8_t f_band[2] = { 1, 1 };
 uint8_t f_mode[2] = { 0, 0 };
-const unsigned long bandswitch[] = { 160,80,40,20,15,10 };
-const  uint8_t bandconf[] = { 0,1,1,1,0,1 };
-const unsigned long freqswitch_low[] = { 1800000,3500000,7000000,14000000,21000000,28000000 };
-const unsigned long freqswitch_high[] = { 1880000,3800000,7200000,14350000,21450000,29000000 };
-const uint8_t mode[] = {0,0,0,1,1,1};  //default modes per band 0 LSB, 1 USB
-long  current_frq1[] = { 1800000,3500000,7000000,14000000,21000000,28000000 };
-long  current_frq2[] = { 1800000,3500000,7000000,14000000,21000000,28000000 };
-const uint8_t	bpf_band[] = { BP_160M ,BP_80M, BP_40M, BP_20M, BP_15M, BP_10M };
-const uint8_t	lpf_band[] = { LP_160M ,LP_80M, LP_40M, LP_20M, LP_15M, LP_10M };
+const unsigned long bandswitch[] = { 160,80,60,40,30,20,17,15,10 };
+const  uint8_t bandconf[] = { 1,1,1,1,1,1,1,1,1 };
+const unsigned long freqswitch_low[] = { 1800000,3500000,5350000,7000000,10100000,14000000,18068000,21000000,28000000 };
+const unsigned long freqswitch_high[] = { 1880000,3800000,5450000,7200000,10150000,14350000,18168000,21450000,29000000 };
+const uint8_t mode[] = { 0 ,0, 1 , 0, 1, 0, 1, 1, 0 };  //default modes per band 0 LSB, 1 USB
+long  current_frq1[] = { 1800000,3500000,5350000,7000000,10100000,14000000,18068000,21000000,28000000 };
+long  current_frq2[] = { 1800000,3500000,5350000,7000000,10100000,14000000,18068000,21000000,28000000 };
+const uint8_t	bpf_band[] = { BP_160M ,BP_80M, BP_60M , BP_40M, BP_30M, BP_20M, BP_17M, BP_15M, BP_10M };
+const uint8_t	lpf_band[] = { LP_80M ,LP_80M, LP_40M, LP_40M, LP_20M, LP_20M, LP_10M, LP_10M, LP_10M };
 const uint8_t freq_step = 10;           // step[Hz]
-const uint8_t bmax = 5;
+const uint8_t bmax = 8;
 long  current_bfo;
-
-#define USB_FREQUENCY 9001000 //9000500 //8998000 
-#define LSB_FREQUENCY 8998000 //8998000 //8995000 
 
 
 #define BFO_STEP 100  // BFO adjust 10Hz
@@ -113,8 +110,8 @@ void save_vfo()
 
 void init_vfo()
 {
-	long  current_frq1[] = { 1800000,3500000,7000000,14000000,21000000,28000000 };
-	long  current_frq2[] = { 1800000,3500000,7000000,14000000,21000000,28000000 };
+	long  current_frq1[] = { 1800000,3500000,5350000,7000000,10100000,14000000,18068000,21000000,28000000 };
+	long  current_frq2[] = { 1800000,3500000,5350000,7000000,10100000,14000000,18068000,21000000,28000000 };
 
 	// default settings
 	memset(&R, 0, sizeof(var_t));	

@@ -41,8 +41,8 @@ Si5351 si5351_bfo(SI5351_BUS_BASE_ADDR, I2C_SDA, I2C_SCL, 1);
 --------------------------------------------------------*/
 
 #define SER   19  // (74HC595 GPIO pin 13)
-#define SRCLK 36  // (74HC595 GPIO pin 12)
-#define RCLK  34  // (74HC595 GPIO pin 25)
+#define SRCLK 33  // (74HC595 GPIO pin 12)
+#define RCLK  32  // (74HC595 GPIO pin 25)
 
 void init_io()
 {
@@ -118,6 +118,9 @@ void filter_init(void) {
 	pinMode(latchPin, OUTPUT);
 	pinMode(clockPin, OUTPUT);
 	pinMode(dataPin, OUTPUT);
+	digitalWrite(dataPin, 0);
+	digitalWrite(clockPin, 0);
+	digitalWrite(latchPin, 0);
 }
 
 void shiftOut(byte bpf, byte lpf, int rxtx) {
@@ -173,21 +176,21 @@ void shiftOut(byte bpf, byte lpf, int rxtx) {
 	digitalWrite(latchPin, 1);
 }
 
-#define CAL_FREQ 10000000L
+#define CAL_FREQ		12500000L//10000000L
+#define CAL_BFO_FREQ	LSB_FREQUENCY
+
 
 void start_cal()
 {
-	long frq = CAL_FREQ;
-
-	updateBottomStatus(LV_COLOR_RED, "Calibration frequency 10 Mhz",0);
-
-	setbfo(frq);
-	setvfo(frq,0);
+	cal_bfo();
+	cal_vfo();
 }
 
 void cal_vfo()
 {
 	long frq = CAL_FREQ;
+
+	updateBottomStatus(LV_COLOR_RED, "Calibration frequency " + String(CAL_FREQ / 1000) + " Khz", 0);
 
 	si5351.set_correction(R.correction_si5351_no1, SI5351_PLL_INPUT_XO);
 	si5351.set_freq(frq * SI5351_FREQ_MULT, CLK_VFO_RX);
@@ -195,7 +198,9 @@ void cal_vfo()
 
 void cal_bfo()
 {
-	long frq = CAL_FREQ;
+	long frq = CAL_BFO_FREQ;
+
+	updateBottomStatus(LV_COLOR_RED, "Calibration frequency " + String(CAL_BFO_FREQ / 1000) + " Khz", 0);
 
 	si5351_bfo.set_correction(R.correction_si5351_no2, SI5351_PLL_INPUT_XO);
 	si5351_bfo.set_freq(frq * SI5351_FREQ_MULT, CLK_VFO_RX);

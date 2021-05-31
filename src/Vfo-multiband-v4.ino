@@ -33,6 +33,12 @@ void setup() {
 	memset(&R, 0, sizeof(R));
 	init_vfo(); // load default values for R
 	LoadEEPROM();
+	long  current_frq1[] = { 1800000,3500000,5350000,7000000,10100000,14000000,18068000,21000000,28000000 };
+	long  current_frq2[] = { 1800000,3500000,5350000,7000000,10100000,14000000,18068000,21000000,28000000 };
+
+	memcpy(R.current_frq1, current_frq1, sizeof(current_frq1));
+	memcpy(R.current_frq2, current_frq2, sizeof(current_frq2));
+
 	GuiBinarySemaphore = xSemaphoreCreateMutex();
 	if (GuiBinarySemaphore == NULL) {
 		Serial.println("Error creating the GuiBinarySemaphore");
@@ -53,10 +59,13 @@ void setup() {
 	CAT.begin(true);
 	start_measurement();
 	delay(10);
-	strcpy(R.ssid[0], _ssid[0]);
-	strcpy(R.password[0], _password[0]);
-	strcpy(R.ssid[1], _ssid[1]);
-	strcpy(R.password[1], _password[1]);
+	if (strlen(R.ssid[0]) == 0) // If no ssid configured take from credentials.h
+	{
+		strcpy(R.ssid[0], _ssid[0]);
+		strcpy(R.password[0], _password[0]);
+		strcpy(R.ssid[1], _ssid[1]);
+		strcpy(R.password[1], _password[1]);
+	}
 	if (R.wifi_onoff)
 	{
 		for (int i = 0; i < 5; i++)

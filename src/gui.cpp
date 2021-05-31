@@ -733,17 +733,17 @@ void guiTask(void* arg) {
 				Enc_vfo.clearCount();
 				if (f_cal_si5351_vfo)
 				{
-					R.correction_si5351_no1 += count;
-					if (R.correction_si5351_no1 < -100000L) R.correction_si5351_no1 = -100000L;
-					if (R.correction_si5351_no1 > 100000L) R.correction_si5351_no1 = 0;
+					R.correction_si5351_no1 += count*10;
+					if (R.correction_si5351_no1 < -900000L) R.correction_si5351_no1 = -900000L;
+					if (R.correction_si5351_no1 > 900000L) R.correction_si5351_no1 = 0;
 					freq = R.correction_si5351_no1;
 					cal_vfo();
 				}
 				else
 				{
 					R.correction_si5351_no2 += count; 
-					if (R.correction_si5351_no2 < -100000L) R.correction_si5351_no2 = -100000L;
-					if (R.correction_si5351_no2 > 100000L) R.correction_si5351_no2 = 0;
+					if (R.correction_si5351_no2 < -900000L) R.correction_si5351_no2 = -900000L;
+					if (R.correction_si5351_no2 > 900000L) R.correction_si5351_no2 = 0;
 					freq = R.correction_si5351_no2;
 					cal_bfo();
 				}
@@ -1041,7 +1041,7 @@ static void event_band_button(lv_obj_t* obj, lv_event_t event)
 		long	frq;
 
 		strcpy(buf, lv_label_get_text(Band_btn_label));
-		buf[2] = '\0';
+		buf[strlen(buf)-1] = '\0';
 		frq = band_select_next(buf, active_vfo);
 		setfrequencylabel(frq, get_vfo_frequency(1 - active_vfo));
 		set_vfo_frequency(frq, active_vfo);
@@ -1205,6 +1205,7 @@ static void si_vfo_button_cb(lv_obj_t* obj, lv_event_t e)
 				f_cal_si5351_vfo = true;
 				lv_label_set_text(si_label1, "Calibrating si5351 VFO");
 				si_setcalfrequency(R.correction_si5351_no1);
+				cal_vfo();
 			}
 			else
 			{
@@ -1212,6 +1213,7 @@ static void si_vfo_button_cb(lv_obj_t* obj, lv_event_t e)
 				f_cal_si5351_vfo = false;
 				lv_label_set_text(si_label1, "Calibrating si5351 BFO");
 				si_setcalfrequency(R.correction_si5351_no2);
+				cal_bfo();
 			}
 		}
 	}
@@ -1230,6 +1232,7 @@ static void si_bfo_button_cb(lv_obj_t* obj, lv_event_t e)
 				f_cal_si5351_vfo = false;
 				lv_label_set_text(si_label1, "Calibrating si5351 BFO");
 				si_setcalfrequency(R.correction_si5351_no2);
+				cal_bfo();
 			}
 			else
 			{
@@ -1237,6 +1240,7 @@ static void si_bfo_button_cb(lv_obj_t* obj, lv_event_t e)
 				f_cal_si5351_vfo = true;
 				lv_label_set_text(si_label1, "Calibrating si5351 VFO");
 				si_setcalfrequency(R.correction_si5351_no1);
+				cal_vfo();
 			}
 		}
 	}
@@ -1345,7 +1349,7 @@ static void gui_si5351(lv_obj_t* scr)
 	lv_group_add_obj(si_5351_group, si_vfo_button);
 	lv_group_add_obj(si_5351_group, si_bfo_button);
 	lv_group_add_obj(si_5351_group, si_save_button);
-	
+	lv_group_add_obj(si_5351_group, si_cancel_button);
 }
 
 static void mode_button_cal_cancel(lv_obj_t* obj, lv_event_t event)

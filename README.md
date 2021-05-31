@@ -15,22 +15,23 @@ The GUI is based on the Lvgl library (https://lvgl.io/)
 ## Features
 
 Features for this version are:
-1) 4 Layer PCB
-2) JTAG interface
-3) TCA9548 I2C interface expander
-4) Connector for external I2C interface
-5) Wifi Network CAT interface
-6) Userinterface based on lgvl
-7) Touch screen support
-8) Calibration support for si5351
-9) Calibration support for AD8307
-10) Multi band support
-11) Power and SWR Meter
-12) S-meter
-13) Optical encoder for tuning
-14) Encoder for bandswitch and menu
-15) Bfo adjustment, A button select bfo adjustment and use the optical encoder to change frequency.
-16) vfo1 and vfo2 support
+- 4 Layer PCB
+- JTAG interface
+- TCA9548 I2C interface expander
+- Connector for external I2C interface
+- Wifi Network CAT interface
+- OTA software updates
+- Userinterface based on lgvl
+- Touch screen support
+- Calibration support for si5351
+- Calibration support for AD8307
+- Multi band support
+- Power and SWR Meter
+- S-meter
+- Optical encoder for tuning
+- Encoder for bandswitch and menu
+- Bfo adjustment, A button select bfo adjustment and use the optical encoder to change frequency.
+- vfo1 and vfo2 support
 
 ## Notes
 - The si5351 library is customized for esp32 support and can be found in the library directory

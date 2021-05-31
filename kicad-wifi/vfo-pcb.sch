@@ -358,8 +358,6 @@ F 3 "~" H 6450 2950 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	6150 2800 6450 2800
-Text GLabel 6300 2800 1    50   Input ~ 0
-V33
 Text GLabel 6450 3100 3    50   Input ~ 0
 R2_2
 $Comp
@@ -375,8 +373,6 @@ F 3 "~" H 6750 2950 50  0001 C CNN
 $EndComp
 Text GLabel 6750 3100 3    50   Input ~ 0
 R3_2
-Wire Wire Line
-	6450 2800 6750 2800
 Connection ~ 6450 2800
 $Comp
 L Connector:Screw_Terminal_01x02 J1
@@ -1362,8 +1358,6 @@ F 3 "" H 2550 6400 50  0001 C CNN
 	1    2550 6400
 	1    0    0    -1  
 $EndComp
-Text Notes 3750 7350 0    50   ~ 0
-4
 Text GLabel 2250 2700 0    50   Input ~ 0
 A3P
 Text Notes 1450 5450 0    50   ~ 0
@@ -1468,25 +1462,25 @@ Wire Wire Line
 $Comp
 L Device:C C30
 U 1 1 5FF4718E
-P 1350 7100
-F 0 "C30" H 1235 7054 50  0000 R CNN
-F 1 "100n" H 1235 7145 50  0000 R CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 1388 6950 50  0001 C CNN
-F 3 "~" H 1350 7100 50  0001 C CNN
-	1    1350 7100
+P 3550 7250
+F 0 "C30" H 3435 7204 50  0000 R CNN
+F 1 "100n" H 3435 7295 50  0000 R CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 3588 7100 50  0001 C CNN
+F 3 "~" H 3550 7250 50  0001 C CNN
+	1    3550 7250
 	1    0    0    -1  
 $EndComp
-Text GLabel 1350 6950 0    50   Input ~ 0
+Text GLabel 3550 7100 0    50   Input ~ 0
 RXTX
 $Comp
 L power:GND #PWR038
 U 1 1 5FF48F51
-P 1350 7250
-F 0 "#PWR038" H 1350 7000 50  0001 C CNN
-F 1 "GND" H 1355 7077 50  0000 C CNN
-F 2 "" H 1350 7250 50  0001 C CNN
-F 3 "" H 1350 7250 50  0001 C CNN
-	1    1350 7250
+P 3550 7400
+F 0 "#PWR038" H 3550 7150 50  0001 C CNN
+F 1 "GND" H 3555 7227 50  0000 C CNN
+F 2 "" H 3550 7400 50  0001 C CNN
+F 3 "" H 3550 7400 50  0001 C CNN
+	1    3550 7400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1582,8 +1576,6 @@ F 3 "~" H 1850 2550 50  0001 C CNN
 	1    1850 2550
 	1    0    0    -1  
 $EndComp
-Text GLabel 4700 2500 1    50   Input ~ 0
-V33
 Text GLabel 4300 2700 0    50   Input ~ 0
 SCL
 Text GLabel 4300 2800 0    50   Input ~ 0
@@ -1822,26 +1814,6 @@ F 3 "" H 4000 2300 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Interface_Expansion:TCA9548APWR U3
-U 1 1 608EB6EA
-P 4700 3400
-F 0 "U3" H 4700 4481 50  0000 C CNN
-F 1 "TCA9548APWR" H 4700 4390 50  0000 C CNN
-F 2 "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm" H 4700 2400 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/tca9548a.pdf" H 4750 3650 50  0001 C CNN
-	1    4700 3400
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4300 3700 4300 3200
-Connection ~ 4300 3700
-Wire Wire Line
-	4300 3700 4300 3800
-Connection ~ 4300 3900
-Connection ~ 4300 3800
-Wire Wire Line
-	4300 3800 4300 3900
-$Comp
 L power:GND #PWR023
 U 1 1 608F87CF
 P 4700 4400
@@ -1886,7 +1858,7 @@ L Device:C C8
 U 1 1 5EC7C3EB
 P 1300 1550
 F 0 "C8" H 1185 1504 50  0001 R CNN
-F 1 "10u" H 1185 1595 50  0000 R CNN
+F 1 "100n" H 1185 1595 50  0000 R CNN
 F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 1338 1400 50  0001 C CNN
 F 3 "~" H 1300 1550 50  0001 C CNN
 	1    1300 1550
@@ -2079,4 +2051,87 @@ $EndComp
 Connection ~ 1650 1700
 Wire Wire Line
 	1650 1700 1850 1700
+$Comp
+L Device:C C33
+U 1 1 60ADEAE7
+P 7450 1300
+F 0 "C33" H 7335 1254 50  0000 R CNN
+F 1 "100n" H 7335 1345 50  0000 R CNN
+F 2 "Capacitor_SMD:C_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 7488 1150 50  0001 C CNN
+F 3 "~" H 7450 1300 50  0001 C CNN
+	1    7450 1300
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	7100 1150 7450 1150
+Connection ~ 7100 1150
+Wire Wire Line
+	7450 1450 7100 1450
+Text GLabel 3450 3700 2    50   Input ~ 0
+GPIO19
+Text GLabel 5750 5650 0    50   Input ~ 0
+GPIO19
+$Comp
+L Connector:Conn_01x07_Male J7
+U 1 1 60B4A051
+P 5950 5550
+F 0 "J7" H 5978 5576 50  0000 L CNN
+F 1 "I2C" H 5978 5485 50  0000 L CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_1x07_P2.54mm_Vertical" H 5950 5550 50  0001 C CNN
+F 3 "~" H 5950 5550 50  0001 C CNN
+	1    5950 5550
+	-1   0    0    -1  
+$EndComp
+Text GLabel 5750 5550 0    50   Input ~ 0
+A2P
+Text GLabel 5750 5450 0    50   Input ~ 0
+A1P
+Text GLabel 5750 5750 0    50   Input ~ 0
+Vcc
+$Comp
+L power:GND #PWR041
+U 1 1 60B4ACCA
+P 5750 5850
+F 0 "#PWR041" H 5750 5600 50  0001 C CNN
+F 1 "GND" H 5755 5677 50  0000 C CNN
+F 2 "" H 5750 5850 50  0001 C CNN
+F 3 "" H 5750 5850 50  0001 C CNN
+	1    5750 5850
+	1    0    0    -1  
+$EndComp
+Text GLabel 4300 3200 0    50   Input ~ 0
+V33
+Text Notes 2050 2550 0    50   ~ 0
+36\n
+Text Notes 2050 2850 0    50   ~ 0
+39
+Connection ~ 4300 3800
+Connection ~ 4300 3900
+Wire Wire Line
+	4300 3800 4300 3900
+Wire Wire Line
+	4300 3700 4300 3800
+Wire Wire Line
+	6450 2800 6750 2800
+$Comp
+L Interface_Expansion:TCA9548APWR U3
+U 1 1 608EB6EA
+P 4700 3400
+F 0 "U3" H 4700 4481 50  0000 C CNN
+F 1 "TCA9548APWR" H 4700 4390 50  0000 C CNN
+F 2 "Package_SO:TSSOP-24_4.4x7.8mm_P0.65mm" H 4700 2400 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/tca9548a.pdf" H 4750 3650 50  0001 C CNN
+	1    4700 3400
+	1    0    0    -1  
+$EndComp
+Text GLabel 4700 2500 1    50   Input ~ 0
+V33
+Text GLabel 6300 2800 1    50   Input ~ 0
+V33
+Text Notes 5250 5700 0    50   ~ 0
+SER 19
+Text Notes 5250 5600 0    50   ~ 0
+RCLK 33
+Text Notes 5250 5500 0    50   ~ 0
+SCLK 32
 $EndSCHEMATC

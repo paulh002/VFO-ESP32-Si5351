@@ -22,8 +22,12 @@
 #define BP_80M 0x56     //01010110 
 #define BP_40M 0x59     //01011001
 #define BP_20M 0x65     //01100101
-#define BP_15M 0x55     //01010101  (all off)
 #define BP_10M 0x95     //10010101   
+
+#define BP_60M 0x56     //01010110 
+#define BP_30M 0x95     //10010101   
+#define BP_17M 0x65     //01100101
+#define BP_15M 0x59     //01011001 
 
 // Low pass filter
 // Pin 1 Q4 0x08   80m
