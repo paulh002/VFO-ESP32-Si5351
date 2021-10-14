@@ -354,11 +354,11 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# ESP32_TouchDown-rescue_USB_C_Receptacle_USB2.0-Connector
+# ESP32Vfo_USB_C_Receptacle_USB2.0-Connector
 #
-DEF ESP32_TouchDown-rescue_USB_C_Receptacle_USB2.0-Connector J 0 40 Y Y 1 F N
+DEF ESP32Vfo_USB_C_Receptacle_USB2.0-Connector J 0 40 Y Y 1 F N
 F0 "J" -400 750 50 H V L CNN
-F1 "ESP32_TouchDown-rescue_USB_C_Receptacle_USB2.0-Connector" 750 750 50 H V R CNN
+F1 "ESP32Vfo_USB_C_Receptacle_USB2.0-Connector" 750 750 50 H V R CNN
 F2 "" 150 0 50 H I C CNN
 F3 "" 150 0 50 H I C CNN
 $FPLIST

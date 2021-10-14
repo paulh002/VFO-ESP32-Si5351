@@ -279,7 +279,7 @@ F 3 "https://www.silabs.com/documents/public/data-sheets/cp2102n-datasheet.pdf" 
 	1    0    0    -1  
 $EndComp
 $Comp
-L ESP32_TouchDown-rescue:USB_C_Receptacle_USB2.0-Connector J?
+L ESP32Vfo:USB_C_Receptacle_USB2.0-Connector J?
 U 1 1 614D5451
 P 2550 1900
 AR Path="/614AF034/614D5451" Ref="J?"  Part="1" 

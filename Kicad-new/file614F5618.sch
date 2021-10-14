@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 2
+Sheet 3 5
 Title ""
 Date ""
 Rev ""
@@ -13,41 +13,10 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-$Comp
-L Connector:Conn_01x14_Female J11
-U 1 1 5D7C3C46
-P 3450 6000
-F 0 "J11" H 3478 5976 50  0000 L CNN
-F 1 "ILI9341" H 3478 5885 50  0000 L CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x14_P2.54mm_Vertical" H 3450 6000 50  0001 C CNN
-F 3 "~" H 3450 6000 50  0001 C CNN
-	1    3450 6000
-	1    0    0    -1  
-$EndComp
 Text GLabel 8700 800  1    50   Input ~ 0
 V33
 Text GLabel 8300 2250 0    50   Input ~ 0
 SDA_1
-Text GLabel 3250 5400 0    50   Input ~ 0
-Vcc
-Text GLabel 3250 5500 0    50   Input ~ 0
-GND
-Text GLabel 3250 5600 0    50   Input ~ 0
-CS
-Text GLabel 3250 5800 0    50   Input ~ 0
-DC
-Text GLabel 3250 5900 0    50   Input ~ 0
-SDI
-Text GLabel 3250 6000 0    50   Input ~ 0
-SCK
-Text GLabel 3250 6100 0    50   Input ~ 0
-LED
-Text GLabel 3250 6200 0    50   Input ~ 0
-SDO
-Text GLabel 3250 6400 0    50   Input ~ 0
-T_CS
-Text GLabel 3250 6700 0    50   Input ~ 0
-T_IRQ
 Text GLabel 3450 2600 2    50   Input ~ 0
 DC
 $Comp
@@ -533,15 +502,7 @@ Text Notes 6600 2400 0    50   ~ 0
 26
 Text GLabel 1100 5200 0    50   Input ~ 0
 A1P
-Text GLabel 3250 6300 0    50   Input ~ 0
-SCK
-Text GLabel 3250 6500 0    50   Input ~ 0
-SDI
-Text GLabel 3250 5700 0    50   Input ~ 0
-V33
 Text GLabel 3450 4300 2    50   Input ~ 0
-SDO
-Text GLabel 3250 6600 0    50   Input ~ 0
 SDO
 Wire Wire Line
 	1250 4250 1950 4250
