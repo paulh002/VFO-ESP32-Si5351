@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name RPi_Hat)(type Legacy)(uri H:/OneDrive/tubes/kicad/raspberry/RPi_Hat_v2/RPi_Hat.lib)(options "")(descr ""))
+  (lib (name ESP32Controler-cache)(type Legacy)(uri ${KIPRJMOD}/ESP32Controler-cache.lib)(options "")(descr ""))
+)
