@@ -1668,4 +1668,46 @@ Wire Wire Line
 Connection ~ 2050 1800
 Wire Wire Line
 	2050 1800 2300 1800
+Text GLabel 8850 5050 2    50   Input ~ 0
+SCL_2
+Text GLabel 8850 5150 2    50   Input ~ 0
+SDA_2
+$Comp
+L Device:R R?
+U 1 1 6169519F
+P 10550 1900
+AR Path="/614F5619/6169519F" Ref="R?"  Part="1" 
+AR Path="/61506CC0/6169519F" Ref="R?"  Part="1" 
+AR Path="/6169519F" Ref="R47"  Part="1" 
+F 0 "R47" H 10620 1946 50  0000 L CNN
+F 1 "2.2k" H 10620 1855 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 10480 1900 50  0001 C CNN
+F 3 "~" H 10550 1900 50  0001 C CNN
+	1    10550 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 616958E1
+P 10850 1900
+AR Path="/614F5619/616958E1" Ref="R?"  Part="1" 
+AR Path="/61506CC0/616958E1" Ref="R?"  Part="1" 
+AR Path="/616958E1" Ref="R48"  Part="1" 
+F 0 "R48" H 10920 1946 50  0000 L CNN
+F 1 "2.2k" H 10920 1855 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 10780 1900 50  0001 C CNN
+F 3 "~" H 10850 1900 50  0001 C CNN
+	1    10850 1900
+	1    0    0    -1  
+$EndComp
+Text GLabel 10550 2050 3    50   Input ~ 0
+SCL_2
+Text GLabel 10850 2050 3    50   Input ~ 0
+SDA_2
+Wire Wire Line
+	10200 1750 10550 1750
+Connection ~ 10200 1750
+Connection ~ 10550 1750
+Wire Wire Line
+	10550 1750 10850 1750
 $EndSCHEMATC

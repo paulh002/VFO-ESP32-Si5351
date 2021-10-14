@@ -16,7 +16,7 @@ $EndDescr
 Text GLabel 1900 1850 1    50   Input ~ 0
 V33
 Text GLabel 1500 3300 0    50   Input ~ 0
-SDA_1
+SDA_2
 $Comp
 L Connector:Conn_Coaxial J?
 U 1 1 6150BF31
@@ -96,7 +96,7 @@ F 3 "" H 2000 3500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Text GLabel 1500 3200 0    50   Input ~ 0
-SCL_1
+SCL_2
 $Comp
 L Device:Crystal_GND2_Small Y?
 U 1 1 6150BF56
