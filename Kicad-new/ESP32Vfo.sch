@@ -1070,7 +1070,7 @@ F 3 "" H 10350 5350 50  0001 C CNN
 	1    10350 5350
 	1    0    0    -1  
 $EndComp
-Text GLabel 10350 3550 1    50   Input ~ 0
+Text GLabel 10350 3950 1    50   Input ~ 0
 V33
 Text GLabel 7050 2450 2    50   Input ~ 0
 SCL1
@@ -1195,7 +1195,7 @@ U 1 1 615E332E
 P 4650 950
 F 0 "SW1" H 4650 1235 50  0000 C CNN
 F 1 "SW_Push" H 4650 1144 50  0000 C CNN
-F 2 "ESP32_TouchDown_lib:TS-1088R-02526" H 4650 1150 50  0001 C CNN
+F 2 "ESP32VFO:TS-1088R-02526" H 4650 1150 50  0001 C CNN
 F 3 "~" H 4650 1150 50  0001 C CNN
 	1    4650 950 
 	1    0    0    -1  
@@ -1266,7 +1266,7 @@ U 1 1 615E4204
 P 7850 950
 F 0 "SW2" H 7850 1235 50  0000 C CNN
 F 1 "SW_Push" H 7850 1144 50  0000 C CNN
-F 2 "ESP32_TouchDown_lib:TS-1088R-02526" H 7850 1150 50  0001 C CNN
+F 2 "ESP32VFO:TS-1088R-02526" H 7850 1150 50  0001 C CNN
 F 3 "~" H 7850 1150 50  0001 C CNN
 	1    7850 950 
 	1    0    0    -1  
@@ -1353,7 +1353,7 @@ SCK
 Text GLabel 5100 3150 0    50   Input ~ 0
 SDI
 Text GLabel 5100 2350 0    50   Input ~ 0
-V33
+Reset
 Text GLabel 5100 3250 0    50   Input ~ 0
 SDO
 $Sheet
@@ -1618,10 +1618,6 @@ Text GLabel 5100 2050 0    50   Input ~ 0
 V33
 Text GLabel 5100 2750 0    50   Input ~ 0
 V33
-Text GLabel 9850 5050 0    50   Input ~ 0
-INT
-Text GLabel 7050 1350 2    50   Input ~ 0
-INT
 Text GLabel 800  6850 1    50   Input ~ 0
 A5P
 Text GLabel 7050 2650 2    50   Input ~ 0
@@ -1710,4 +1706,8 @@ Connection ~ 10200 1750
 Connection ~ 10550 1750
 Wire Wire Line
 	10550 1750 10850 1750
+Text GLabel 7650 950  1    50   Input ~ 0
+T_CS
+Text GLabel 7050 1350 2    50   Input ~ 0
+Reset
 $EndSCHEMATC
