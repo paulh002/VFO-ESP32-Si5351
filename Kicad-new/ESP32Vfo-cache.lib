@@ -686,6 +686,32 @@ X C 3 100 200 100 D 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
+# dk_TVS-Diodes_PGB1010603MR
+#
+DEF dk_TVS-Diodes_PGB1010603MR D 0 40 Y Y 1 F N
+F0 "D" -216 108 60 H V L CNN
+F1 "dk_TVS-Diodes_PGB1010603MR" 4 -130 60 H V C CNN
+F2 "digikey-footprints:0603" 200 200 60 H I L CNN
+F3 "https://www.littelfuse.com/data/en/data_sheets/littelfuse_pulseguard-esd_pgb1.pdf" 200 300 60 H I L CNN
+F4 "F2594CT-ND" 200 400 60 H I L CNN "Digi-Key_PN"
+F5 "PGB1010603MR" 200 500 60 H I L CNN "MPN"
+F6 "Circuit Protection" 200 600 60 H I L CNN "Category"
+F7 "TVS - Diodes" 200 700 60 H I L CNN "Family"
+F8 "https://www.littelfuse.com/data/en/data_sheets/littelfuse_pulseguard-esd_pgb1.pdf" 200 800 60 H I L CNN "DK_Datasheet_Link"
+F9 "/product-detail/en/littelfuse-inc/PGB1010603MR/F2594CT-ND/813072" 200 900 60 H I L CNN "DK_Detail_Page"
+F10 "TVS DIODE 24V 150V 0603" 200 1000 60 H I L CNN "Description"
+F11 "Littelfuse Inc." 200 1100 60 H I L CNN "Manufacturer"
+F12 "Active" 200 1200 60 H I L CNN "Status"
+DRAW
+P 3 0 1 0 0 0 0 -50 -25 -75 N
+P 3 0 1 0 0 0 0 50 25 75 N
+P 4 0 1 0 -100 50 -100 -50 0 0 -100 50 F
+P 4 0 1 0 100 50 100 -50 0 0 100 50 F
+X ~ 1 -200 0 100 R 50 50 1 1 P
+X ~ 2 200 0 100 L 50 50 1 1 P
+ENDDRAW
+ENDDEF
+#
 # power_+3V3
 #
 DEF power_+3V3 #PWR 0 0 Y Y 1 F P

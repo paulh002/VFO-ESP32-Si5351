@@ -768,4 +768,74 @@ Text GLabel 7750 3800 2    50   Input ~ 0
 EN
 Text GLabel 7750 4750 2    50   Input ~ 0
 IO0
+$Comp
+L power:GND #PWR?
+U 1 1 61918278
+P 3800 2800
+AR Path="/614AF034/61918278" Ref="#PWR?"  Part="1" 
+AR Path="/614CC1BF/61918278" Ref="#PWR07"  Part="1" 
+F 0 "#PWR07" H 3800 2550 50  0001 C CNN
+F 1 "GND" H 3805 2627 50  0000 C CNN
+F 2 "" H 3800 2800 50  0001 C CNN
+F 3 "" H 3800 2800 50  0001 C CNN
+	1    3800 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 6191868F
+P 3500 2800
+AR Path="/614AF034/6191868F" Ref="#PWR?"  Part="1" 
+AR Path="/614CC1BF/6191868F" Ref="#PWR05"  Part="1" 
+F 0 "#PWR05" H 3500 2550 50  0001 C CNN
+F 1 "GND" H 3505 2627 50  0000 C CNN
+F 2 "" H 3500 2800 50  0001 C CNN
+F 3 "" H 3500 2800 50  0001 C CNN
+	1    3500 2800
+	1    0    0    -1  
+$EndComp
+Text GLabel 3800 2400 1    50   Input ~ 0
+D-
+Text GLabel 3500 2400 1    50   Input ~ 0
+D+
+$Comp
+L dk_TVS-Diodes:PGB1010603MR D3
+U 1 1 61994C49
+P 3500 2600
+F 0 "D3" V 3447 2703 60  0000 L CNN
+F 1 "PGB1010603MR" V 3553 2703 60  0000 L CNN
+F 2 "digikey-footprints:0603" H 3700 2800 60  0001 L CNN
+F 3 "https://www.littelfuse.com/data/en/data_sheets/littelfuse_pulseguard-esd_pgb1.pdf" H 3700 2900 60  0001 L CNN
+F 4 "F2594CT-ND" H 3700 3000 60  0001 L CNN "Digi-Key_PN"
+F 5 "PGB1010603MR" H 3700 3100 60  0001 L CNN "MPN"
+F 6 "Circuit Protection" H 3700 3200 60  0001 L CNN "Category"
+F 7 "TVS - Diodes" H 3700 3300 60  0001 L CNN "Family"
+F 8 "https://www.littelfuse.com/data/en/data_sheets/littelfuse_pulseguard-esd_pgb1.pdf" H 3700 3400 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/littelfuse-inc/PGB1010603MR/F2594CT-ND/813072" H 3700 3500 60  0001 L CNN "DK_Detail_Page"
+F 10 "TVS DIODE 24V 150V 0603" H 3700 3600 60  0001 L CNN "Description"
+F 11 "Littelfuse Inc." H 3700 3700 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 3700 3800 60  0001 L CNN "Status"
+	1    3500 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L dk_TVS-Diodes:PGB1010603MR D4
+U 1 1 6199685E
+P 3800 2600
+F 0 "D4" V 3747 2703 60  0000 L CNN
+F 1 "PGB1010603MR" V 3853 2703 60  0000 L CNN
+F 2 "digikey-footprints:0603" H 4000 2800 60  0001 L CNN
+F 3 "https://www.littelfuse.com/data/en/data_sheets/littelfuse_pulseguard-esd_pgb1.pdf" H 4000 2900 60  0001 L CNN
+F 4 "F2594CT-ND" H 4000 3000 60  0001 L CNN "Digi-Key_PN"
+F 5 "PGB1010603MR" H 4000 3100 60  0001 L CNN "MPN"
+F 6 "Circuit Protection" H 4000 3200 60  0001 L CNN "Category"
+F 7 "TVS - Diodes" H 4000 3300 60  0001 L CNN "Family"
+F 8 "https://www.littelfuse.com/data/en/data_sheets/littelfuse_pulseguard-esd_pgb1.pdf" H 4000 3400 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/littelfuse-inc/PGB1010603MR/F2594CT-ND/813072" H 4000 3500 60  0001 L CNN "DK_Detail_Page"
+F 10 "TVS DIODE 24V 150V 0603" H 4000 3600 60  0001 L CNN "Description"
+F 11 "Littelfuse Inc." H 4000 3700 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 4000 3800 60  0001 L CNN "Status"
+	1    3800 2600
+	0    1    1    0   
+$EndComp
 $EndSCHEMATC

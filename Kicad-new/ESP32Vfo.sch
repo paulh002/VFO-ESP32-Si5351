@@ -1294,23 +1294,6 @@ F 3 "~" H 7300 750 50  0001 C CNN
 	1    7300 750 
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:C C?
-U 1 1 6152C09C
-P 800 7000
-AR Path="/60FB3B0E/6152C09C" Ref="C?"  Part="1" 
-AR Path="/5515D395/6152C09C" Ref="C?"  Part="1" 
-AR Path="/6152C09C" Ref="C21"  Part="1" 
-F 0 "C21" H 685 6954 50  0000 R CNN
-F 1 "100n" H 685 7045 50  0000 R CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 838 6850 50  0001 C CNN
-F 3 "~" H 800 7000 50  0001 C CNN
-	1    800  7000
-	-1   0    0    1   
-$EndComp
-Wire Wire Line
-	1200 7150 800  7150
-Connection ~ 1200 7150
 $Sheet
 S 9100 1000 500  150 
 U 614CC1BF
@@ -1618,14 +1601,10 @@ Text GLabel 5100 2050 0    50   Input ~ 0
 V33
 Text GLabel 5100 2750 0    50   Input ~ 0
 V33
-Text GLabel 800  6850 1    50   Input ~ 0
-A5P
 Text GLabel 7050 2650 2    50   Input ~ 0
 SDI
 Text GLabel 7050 2550 2    50   Input ~ 0
 R2
-Text GLabel 7050 3250 2    50   Input ~ 0
-A5P
 $Comp
 L Device:R R?
 U 1 1 6175D20D
@@ -1710,4 +1689,24 @@ Text GLabel 7650 950  1    50   Input ~ 0
 T_CS
 Text GLabel 7050 1350 2    50   Input ~ 0
 Reset
+Text GLabel 9850 5050 0    50   Input ~ 0
+INT
+Text GLabel 7050 3250 2    50   Input ~ 0
+INT
+$Comp
+L Device:R R?
+U 1 1 61A22043
+P 9850 5200
+AR Path="/60FB3B0E/61A22043" Ref="R?"  Part="1" 
+AR Path="/5515D395/61A22043" Ref="R?"  Part="1" 
+AR Path="/61A22043" Ref="R49"  Part="1" 
+F 0 "R49" H 9920 5246 50  0000 L CNN
+F 1 "2k2" H 9920 5155 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 9780 5200 50  0001 C CNN
+F 3 "~" H 9850 5200 50  0001 C CNN
+	1    9850 5200
+	1    0    0    -1  
+$EndComp
+Text GLabel 9850 5350 3    50   Input ~ 0
+V33
 $EndSCHEMATC
