@@ -1,10 +1,5 @@
 # VFO-ESP32-Si5351 v3 
-A new PCB size 10cm x 5.6 cm 4 layers this can be lowcost produced.
-Supports 1 optical encoder and multiple rotary encoders through a pcf8574
-See kicad-new directory
-Software need to be adjust for this PCB. Will add it later to the repository
-
-![VFO](https://github.com/paulh002/VFO-ESP32-Si5351/blob/master/new-pcb.jpg)
+v3 is moved to other repository ESPVfo32 the version in this repo is based on older libraries of lvgl 7 and not maintained by me any more.
 
 # VFO-ESP32-Si5351 v2.43 beta
 In this version the GUI is changed to support touch using simple buttons at the bottom of the screen.
